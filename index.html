@@ -22,6 +22,17 @@
 
     :root {
       --font-main: "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg: #141a15;
+      --surface: #1d2520;
+      --fg: #d5d9c8;
+      --muted: #a8b09b;
+      --line: #465247;
+      --link: #9fb378;
+      --ring-outer: #8daa7f;
+      --ring-mid: #c1a06a;
+      --ring-inner: #7f9974;
+      --selection-bg: #324036;
+      --selection-fg: #e7ebdc;
     }
 
     * {
@@ -30,58 +41,220 @@
 
     body {
       margin: 0;
-      padding: 2rem 1rem;
-      max-width: 44rem;
+      padding: 1.25rem;
+      max-width: 50rem;
       margin-inline: auto;
-      font: 16px/1.5 var(--font-main);
-      color: #111;
-      background: #fff;
+      min-height: 100vh;
+      font: 16px/1.45 var(--font-main);
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 1.55rem;
+      letter-spacing: 0.01em;
+      font-weight: 600;
+    }
+
+    .site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.9rem;
+      justify-content: flex-end;
+      font-size: 0.96rem;
+    }
+
+    .site-nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .site-nav a:hover,
+    .site-nav a:focus-visible,
+    .site-nav a[aria-current="page"] {
+      color: var(--fg);
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.25rem;
+      align-items: end;
+      margin-bottom: 1.75rem;
+    }
+
+    @media (min-width: 54rem) {
+      .hero {
+        grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 1fr);
+        gap: 1.75rem;
+      }
+    }
+
+    .orb {
+      width: 4.6rem;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid var(--ring-outer);
+      position: relative;
+      margin: 0 0 1rem;
+    }
+
+    .orb::before,
+    .orb::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      border: 2px solid var(--ring-mid);
+    }
+
+    .orb::after {
+      inset: 6px;
+      border-color: var(--ring-inner);
     }
 
     h1 {
-      margin: 0 0 0.75rem;
-      line-height: 1.2;
-      font-size: 1.9rem;
+      margin: 0;
+      font-size: clamp(2.1rem, 6.5vw, 4.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.02em;
     }
 
-    p {
-      margin: 0.5rem 0;
-    }
-
-    ul {
-      margin: 0.5rem 0 0.75rem;
-      padding-left: 1.25rem;
-    }
-
-    li {
-      margin: 0.2rem 0;
+    .intro {
+      margin: 0;
+      max-width: 33ch;
+      font-size: clamp(1.05rem, 2.1vw, 1.48rem);
+      line-height: 1.35;
+      color: var(--muted);
     }
 
     a {
-      color: #0d4db8;
+      color: var(--link);
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
     }
 
-    .muted {
-      color: #444;
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 0 0 1.75rem;
+      padding: 0;
+    }
+
+    .chip {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 0.72rem;
+      background: var(--surface);
+      color: var(--muted);
+      padding: 0.22rem 0.56rem;
+      font-size: 0.93rem;
+      text-decoration: none;
+      line-height: 1.1;
+    }
+
+    h2 {
+      margin: 0 0 0.8rem;
+      font-size: 1.8rem;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .post-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .post-list li {
+      display: flex;
+      gap: 0.8rem;
+      align-items: baseline;
+      margin: 0 0 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    time {
+      color: var(--muted);
+      min-width: 6ch;
+    }
+
+    .notes {
+      margin-top: 1.45rem;
+      color: var(--muted);
+    }
+
+    ::selection {
+      color: var(--selection-fg);
+      background: var(--selection-bg);
+    }
+
+    @media (max-width: 40rem) {
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+      }
+
+      .site-nav {
+        justify-content: flex-start;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>Akash Plackal</h1>
-    <p class="muted">Software engineer focused on fast, reliable web experiences.</p>
+  <header class="site-header">
+    <a class="brand" href="/">aka.sh</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#writing">POSTS</a>
+      <a href="#topics">TOPICS</a>
+      <a href="#notes">LETTERS</a>
+      <a href="/about/">ABOUT</a>
+    </nav>
   </header>
+
   <main>
-    <p>I build polished software and fast web experiences.</p>
-    <p>I care about skills that are not replaced by AI: clear thinking, product judgment, and shipping reliable systems.
-    </p>
-    <p>I enjoy meeting new people, chatting, and sharing knowledge.</p>
-    <ul>
-      <li>I love the terminal workflow: Neovim + tmux.</li>
-      <li>This blog is my personal website.</li>
+    <section class="hero" aria-labelledby="home-title">
+      <div>
+        <div class="orb" aria-hidden="true"></div>
+        <h1 id="home-title">Akash Plackal</h1>
+      </div>
+      <p class="intro">I build fast, reliable software with a focus on real-world performance and simple tooling.</p>
+    </section>
+
+    <ul class="chips" id="topics" aria-label="Topics">
+      <li><a class="chip" href="#writing">PERFORMANCE</a></li>
+      <li><a class="chip" href="#writing">TERMINAL</a></li>
+      <li><a class="chip" href="#writing">SOFTWARE-ENGINEERING</a></li>
+      <li><a class="chip" href="#writing">HTML-FIRST</a></li>
+      <li><a class="chip" href="#writing">RELIABILITY</a></li>
+      <li><a class="chip" href="#writing">CSS</a></li>
     </ul>
-    <p><a href="/about/">About</a></p>
+
+    <section id="writing" aria-labelledby="writing-title">
+      <h2 id="writing-title">Writing</h2>
+      <ul class="post-list">
+        <li><time datetime="2026-02">2026-02:</time> <a href="/about/">Why this site stays HTML-first</a></li>
+        <li><time datetime="2026-01">2026-01:</time> <a href="#notes">Neovim + tmux for focused sessions</a></li>
+        <li><time datetime="2025-12">2025-12:</time> <a href="#notes">Latency budgets on slow networks</a></li>
+      </ul>
+    </section>
+
+    <p id="notes" class="notes">Minimal stack: one HTML response, inline CSS, optional JavaScript only.</p>
   </main>
 </body>
 

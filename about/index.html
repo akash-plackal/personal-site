@@ -22,6 +22,17 @@
 
     :root {
       --font-main: "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg: #141a15;
+      --surface: #1d2520;
+      --fg: #d5d9c8;
+      --muted: #a8b09b;
+      --line: #465247;
+      --link: #9fb378;
+      --ring-outer: #8daa7f;
+      --ring-mid: #c1a06a;
+      --ring-inner: #7f9974;
+      --selection-bg: #324036;
+      --selection-fg: #e7ebdc;
     }
 
     * {
@@ -30,58 +41,185 @@
 
     body {
       margin: 0;
-      padding: 2rem 1rem;
-      max-width: 44rem;
+      padding: 1.25rem;
+      max-width: 50rem;
       margin-inline: auto;
-      font: 16px/1.5 var(--font-main);
-      color: #111;
-      background: #fff;
+      min-height: 100vh;
+      font: 16px/1.45 var(--font-main);
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 1.55rem;
+      letter-spacing: 0.01em;
+      font-weight: 600;
+    }
+
+    .site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.9rem;
+      justify-content: flex-end;
+      font-size: 0.96rem;
+    }
+
+    .site-nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .site-nav a:hover,
+    .site-nav a:focus-visible,
+    .site-nav a[aria-current="page"] {
+      color: var(--fg);
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.25rem;
+      align-items: end;
+      margin-bottom: 1.4rem;
+    }
+
+    @media (min-width: 54rem) {
+      .hero {
+        grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 1fr);
+        gap: 1.75rem;
+      }
+    }
+
+    .orb {
+      width: 4.6rem;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid var(--ring-outer);
+      position: relative;
+      margin: 0 0 1rem;
+    }
+
+    .orb::before,
+    .orb::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      border: 2px solid var(--ring-mid);
+    }
+
+    .orb::after {
+      inset: 6px;
+      border-color: var(--ring-inner);
     }
 
     h1 {
-      margin: 0 0 0.75rem;
-      line-height: 1.2;
-      font-size: 1.9rem;
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      line-height: 0.97;
+      letter-spacing: -0.02em;
     }
 
-    p {
-      margin: 0.5rem 0;
-    }
-
-    ul {
-      margin: 0.5rem 0 0.75rem;
-      padding-left: 1.25rem;
-    }
-
-    li {
-      margin: 0.2rem 0;
+    .intro {
+      margin: 0;
+      max-width: 33ch;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      line-height: 1.35;
+      color: var(--muted);
     }
 
     a {
-      color: #0d4db8;
+      color: var(--link);
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
     }
 
-    .muted {
-      color: #444;
+    p {
+      margin: 0 0 0.9rem;
+      max-width: 66ch;
+      color: var(--muted);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      list-style: none;
+      margin: 1rem 0 1.4rem;
+      padding: 0;
+    }
+
+    .chip {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 0.72rem;
+      background: var(--surface);
+      color: var(--muted);
+      padding: 0.22rem 0.56rem;
+      font-size: 0.93rem;
+      line-height: 1.1;
+    }
+
+    ::selection {
+      color: var(--selection-fg);
+      background: var(--selection-bg);
+    }
+
+    @media (max-width: 40rem) {
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+      }
+
+      .site-nav {
+        justify-content: flex-start;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>About</h1>
-    <p class="muted">Polished software, simple tools, and useful notes.</p>
+  <header class="site-header">
+    <a class="brand" href="/">aka.sh</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/#writing">POSTS</a>
+      <a href="/#topics">TOPICS</a>
+      <a href="/#notes">LETTERS</a>
+      <a href="/about/" aria-current="page">ABOUT</a>
+    </nav>
   </header>
+
   <main>
-    <p>I am Akash Plackal. I build polished software and web experiences with a strong focus on speed and reliability.
-    </p>
-    <p>I believe the most durable skills are still human: communication, taste, problem framing, and consistent
-      execution.</p>
-    <ul>
-      <li>I enjoy meeting new people, chatting, and sharing knowledge.</li>
-      <li>I love working from the terminal with Neovim and tmux.</li>
-      <li>This site is my personal blog for ideas and random notes.</li>
+    <section class="hero" aria-labelledby="about-title">
+      <div>
+        <div class="orb" aria-hidden="true"></div>
+        <h1 id="about-title">About Akash</h1>
+      </div>
+      <p class="intro">I ship reliable products, optimize for speed, and prefer simple systems over layered complexity.</p>
+    </section>
+
+    <p>I work primarily on web products with a strong focus on first-load performance and long-term maintainability.</p>
+    <p>I enjoy terminal-first workflows, practical writing, and sharing implementation details from real projects.</p>
+
+    <ul class="chips" aria-label="Focus areas">
+      <li><span class="chip">PERFORMANCE</span></li>
+      <li><span class="chip">TERMINAL WORKFLOW</span></li>
+      <li><span class="chip">RELIABLE SYSTEMS</span></li>
+      <li><span class="chip">PRODUCT THINKING</span></li>
     </ul>
+
     <p><a href="/">Back to home</a></p>
   </main>
 </body>
