@@ -35,6 +35,37 @@
       --selection-fg: #e7ebdc;
     }
 
+    @view-transition {
+      navigation: auto;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    @keyframes vt-enter {
+      from { opacity: 0.985; }
+      to { opacity: 1; }
+    }
+
+    ::view-transition-group(root) {
+      animation: none;
+    }
+
+    ::view-transition-old(root) {
+      animation: none;
+    }
+
+    ::view-transition-new(root) {
+      animation: vt-enter 120ms ease-out both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-new(root) {
+        animation: none;
+      }
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -88,7 +119,7 @@
     .hero {
       display: grid;
       gap: 1.25rem;
-      align-items: end;
+      align-items: start;
       margin-bottom: 1.4rem;
     }
 
@@ -97,29 +128,6 @@
         grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 1fr);
         gap: 1.75rem;
       }
-    }
-
-    .orb {
-      width: 4.6rem;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 2px solid var(--ring-outer);
-      position: relative;
-      margin: 0 0 1rem;
-    }
-
-    .orb::before,
-    .orb::after {
-      content: "";
-      position: absolute;
-      inset: 3px;
-      border-radius: 50%;
-      border: 2px solid var(--ring-mid);
-    }
-
-    .orb::after {
-      inset: 6px;
-      border-color: var(--ring-inner);
     }
 
     h1 {
@@ -135,6 +143,20 @@
       font-size: clamp(1rem, 2vw, 1.35rem);
       line-height: 1.35;
       color: var(--muted);
+    }
+
+    .about-hero-media {
+      margin: 0;
+    }
+
+    .about-photo {
+      display: block;
+      width: min(100%, 22rem);
+      height: auto;
+      border-radius: 0.55rem;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      view-transition-name: hero-image;
     }
 
     a {
@@ -204,10 +226,15 @@
   <main>
     <section class="hero" aria-labelledby="about-title">
       <div>
-        <div class="orb" aria-hidden="true"></div>
         <h1 id="about-title">About Akash</h1>
+        <p class="intro">I ship reliable products, optimize for speed, and prefer simple systems over layered complexity.</p>
       </div>
-      <p class="intro">I ship reliable products, optimize for speed, and prefer simple systems over layered complexity.</p>
+      <figure class="about-hero-media">
+        <img class="about-photo" src="/assets/hero-about-720.webp"
+          srcset="/assets/hero-about-720.webp 720w, /assets/hero-about-1080.webp 1080w"
+          sizes="(min-width: 54rem) 22rem, 88vw" width="1080" height="1434"
+          alt="Portrait of Akash Plackal." loading="eager" fetchpriority="high" decoding="async">
+      </figure>
     </section>
 
     <p>I work primarily on web products with a strong focus on first-load performance and long-term maintainability.</p>

@@ -35,6 +35,37 @@
       --selection-fg: #e7ebdc;
     }
 
+    @view-transition {
+      navigation: auto;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    @keyframes vt-enter {
+      from { opacity: 0.985; }
+      to { opacity: 1; }
+    }
+
+    ::view-transition-group(root) {
+      animation: none;
+    }
+
+    ::view-transition-old(root) {
+      animation: none;
+    }
+
+    ::view-transition-new(root) {
+      animation: vt-enter 120ms ease-out both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-new(root) {
+        animation: none;
+      }
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -162,6 +193,7 @@
       transform: scale(0.98);
       transform-origin: center;
       z-index: 1;
+      view-transition-name: hero-image;
     }
 
     a {
