@@ -99,29 +99,6 @@
       }
     }
 
-    .orb {
-      width: 4.6rem;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 2px solid var(--ring-outer);
-      position: relative;
-      margin: 0 0 1rem;
-    }
-
-    .orb::before,
-    .orb::after {
-      content: "";
-      position: absolute;
-      inset: 3px;
-      border-radius: 50%;
-      border: 2px solid var(--ring-mid);
-    }
-
-    .orb::after {
-      inset: 6px;
-      border-color: var(--ring-inner);
-    }
-
     h1 {
       margin: 0;
       font-size: clamp(2.1rem, 6.5vw, 4.2rem);
@@ -135,6 +112,56 @@
       font-size: clamp(1.05rem, 2.1vw, 1.48rem);
       line-height: 1.35;
       color: var(--muted);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 0.9rem;
+      justify-items: start;
+    }
+
+    .hero-portrait {
+      width: clamp(8.5rem, 19vw, 17rem);
+      aspect-ratio: 1 / 1;
+      position: relative;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--bg);
+      border: 2px solid var(--ring-outer);
+    }
+
+    .hero-portrait::before,
+    .hero-portrait::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .hero-portrait::before {
+      inset: 4px;
+      border: 2px solid var(--ring-mid);
+    }
+
+    .hero-portrait::after {
+      inset: 8px;
+      border: 2px solid var(--ring-inner);
+    }
+
+    .hero-photo {
+      position: absolute;
+      top: 13px;
+      left: 13px;
+      width: calc(100% - 26px);
+      height: calc(100% - 26px);
+      display: block;
+      object-fit: cover;
+      object-position: 50% 44%;
+      border-radius: 50%;
+      transform: scale(0.98);
+      transform-origin: center;
+      z-index: 1;
     }
 
     a {
@@ -230,10 +257,17 @@
   <main>
     <section class="hero" aria-labelledby="home-title">
       <div>
-        <div class="orb" aria-hidden="true"></div>
         <h1 id="home-title">Akash Plackal</h1>
       </div>
-      <p class="intro">I build fast, reliable software with a focus on real-world performance and simple tooling.</p>
+      <div class="hero-side">
+        <div class="hero-portrait">
+          <img class="hero-photo" src="/assets/hero-avatar-384.webp"
+            srcset="/assets/hero-avatar-384.webp 384w, /assets/hero-avatar-640.webp 640w" sizes="(min-width: 54rem) 12rem, 40vw"
+            width="640" height="640" alt="Portrait of Akash Plackal." loading="eager" fetchpriority="high"
+            decoding="async">
+        </div>
+        <p class="intro">I build fast, reliable software with a focus on real-world performance and simple tooling.</p>
+      </div>
     </section>
 
     <ul class="chips" id="topics" aria-label="Topics">
