@@ -1,39 +1,89 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About | Akash Plackal</title>
   <meta name="description" content="About Akash Plackal.">
   <style>
-    * { box-sizing: border-box; }
+    @font-face {
+      font-family: "Iosevka Local";
+      src: local("Iosevka"), local("Iosevka Term"), local("Iosevka Slab"),
+        url("/assets/fonts/iosevka-slab-latin-400.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: optional;
+      unicode-range:
+        U+0020-007E, U+00A0, U+00A9, U+00AE, U+00B0, U+00B7, U+00D7, U+00F7,
+        U+0131, U+2013, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022, U+2026,
+        U+20AC, U+2122;
+    }
+
+    :root {
+      --font-main: "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 2rem 1rem;
       max-width: 44rem;
       margin-inline: auto;
-      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font: 16px/1.5 var(--font-main);
       color: #111;
       background: #fff;
     }
+
     h1 {
       margin: 0 0 0.75rem;
       line-height: 1.2;
       font-size: 1.9rem;
     }
-    p { margin: 0.5rem 0; }
-    a { color: #0d4db8; }
-    .muted { color: #444; }
+
+    p {
+      margin: 0.5rem 0;
+    }
+
+    ul {
+      margin: 0.5rem 0 0.75rem;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin: 0.2rem 0;
+    }
+
+    a {
+      color: #0d4db8;
+    }
+
+    .muted {
+      color: #444;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <h1>About</h1>
-    <p class="muted">A tiny page with no JavaScript and no external dependencies.</p>
+    <p class="muted">Polished software, simple tools, and useful notes.</p>
   </header>
   <main>
-    <p>I am Akash Plackal, and I care about fast, reliable products.</p>
+    <p>I am Akash Plackal. I build polished software and web experiences with a strong focus on speed and reliability.
+    </p>
+    <p>I believe the most durable skills are still human: communication, taste, problem framing, and consistent
+      execution.</p>
+    <ul>
+      <li>I enjoy meeting new people, chatting, and sharing knowledge.</li>
+      <li>I love working from the terminal with Neovim and tmux.</li>
+      <li>This site is my personal blog for ideas and random notes.</li>
+    </ul>
     <p><a href="/">Back to home</a></p>
   </main>
 </body>
+
 </html>
