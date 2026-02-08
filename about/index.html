@@ -60,9 +60,24 @@
       animation: vt-enter 120ms ease-out both;
     }
 
+    ::view-transition-group(hero-avatar) {
+      animation-duration: 220ms;
+      animation-timing-function: cubic-bezier(0.22, 0.78, 0.22, 1);
+    }
+
+    ::view-transition-old(hero-avatar),
+    ::view-transition-new(hero-avatar) {
+      animation-duration: 220ms;
+      mix-blend-mode: normal;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
         animation: none;
+      }
+
+      .about-photo {
+        view-transition-name: none;
       }
     }
 
@@ -156,6 +171,7 @@
       border-radius: 0.55rem;
       border: 1px solid var(--line);
       background: var(--surface);
+      view-transition-name: hero-avatar;
     }
 
     a {

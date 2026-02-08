@@ -65,9 +65,24 @@
       animation: vt-enter 120ms ease-out both;
     }
 
+    ::view-transition-group(hero-avatar) {
+      animation-duration: 220ms;
+      animation-timing-function: cubic-bezier(0.22, 0.78, 0.22, 1);
+    }
+
+    ::view-transition-old(hero-avatar),
+    ::view-transition-new(hero-avatar) {
+      animation-duration: 220ms;
+      mix-blend-mode: normal;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
         animation: none;
+      }
+
+      .hero-portrait {
+        view-transition-name: none;
       }
     }
 
@@ -162,6 +177,7 @@
       position: relative;
       isolation: isolate;
       overflow: visible;
+      view-transition-name: hero-avatar;
       --avatar-shape: polygon(97.50% 50.00%, 97.06% 53.08%, 95.85% 56.04%, 94.14% 58.78%, 92.26% 61.32%,
           90.56% 63.77%, 89.26% 66.26%, 88.42% 68.95%, 87.89% 71.88%, 87.42% 75.00%, 86.69% 78.16%,
           85.46% 81.10%, 83.59% 83.59%, 81.10% 85.46%, 78.16% 86.69%, 75.00% 87.42%, 71.88% 87.89%,
