@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Terminal flow abstract</title>
+  <desc id="desc">A stylized terminal-like visual with flowing command lines.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#101814"/>
+      <stop offset="100%" stop-color="#0e1512"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9fb378"/>
+      <stop offset="100%" stop-color="#7f9974"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="420" fill="url(#bg)"/>
+  <rect x="50" y="48" width="860" height="324" rx="14" fill="#121d18" stroke="#324038"/>
+  <circle cx="90" cy="76" r="6" fill="#c48f68"/>
+  <circle cx="112" cy="76" r="6" fill="#9fb378"/>
+  <circle cx="134" cy="76" r="6" fill="#7f9974"/>
+  <g fill="#8fa58a" opacity=".82" font-family="ui-monospace, Menlo, monospace" font-size="18">
+    <text x="90" y="124">$ nvim notes.md</text>
+    <text x="90" y="164">$ tmux new -s focus</text>
+    <text x="90" y="204">$ rg --files | fzf</text>
+    <text x="90" y="244">$ git commit -m "ship small"</text>
+    <text x="90" y="284">$ ./measure.sh --slow-4g</text>
+  </g>
+  <path d="M510 306c66-98 154-132 320-166" fill="none" stroke="url(#accent)" stroke-width="6" stroke-linecap="round" opacity=".84"/>
+  <circle cx="830" cy="140" r="12" fill="#c1a06a"/>
+</svg>

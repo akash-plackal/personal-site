@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why This Site Stays HTML-First | Akash Plackal</title>
+  <meta name="description" content="Notes on keeping a personal site HTML-first for speed and reliability.">
+  <style>
+    @font-face {
+      font-family: "Iosevka Local";
+      src: local("Iosevka"), local("Iosevka Term"), local("Iosevka Slab"),
+        url("/assets/fonts/iosevka-slab-latin-400.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: optional;
+      unicode-range:
+        U+0020-007E, U+00A0, U+00A9, U+00AE, U+00B0, U+00B7, U+00D7, U+00F7,
+        U+0131, U+2013, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022, U+2026,
+        U+20AC, U+2122;
+    }
+
+    :root {
+      --font-main: "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg: #141a15;
+      --surface: #1d2520;
+      --fg: #d5d9c8;
+      --muted: #a8b09b;
+      --line: #465247;
+      --link: #9fb378;
+      --selection-bg: #324036;
+      --selection-fg: #e7ebdc;
+    }
+
+    @view-transition {
+      navigation: auto;
+    }
+
+    @keyframes vt-article-enter {
+      from {
+        opacity: 0.985;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    ::view-transition-group(root) {
+      animation: none;
+    }
+
+    ::view-transition-old(root) {
+      animation: none;
+    }
+
+    ::view-transition-new(root) {
+      animation: vt-article-enter 140ms ease-out both;
+    }
+
+    ::view-transition-group(title-html-first),
+    ::view-transition-group(article-hero) {
+      animation-duration: 260ms;
+      animation-timing-function: cubic-bezier(0.2, 0.78, 0.2, 1);
+    }
+
+    ::view-transition-old(title-html-first),
+    ::view-transition-new(title-html-first),
+    ::view-transition-old(article-hero),
+    ::view-transition-new(article-hero) {
+      mix-blend-mode: normal;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-new(root) {
+        animation: none;
+      }
+
+      h1,
+      .hero-image {
+        view-transition-name: none;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem 1rem;
+      min-height: 100vh;
+      font: 16px/1.55 var(--font-main);
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    main {
+      max-width: 44rem;
+      margin: 0 auto;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-top: 0.35rem;
+      margin-bottom: 1.85rem;
+      color: var(--muted);
+      font-size: 1.12rem;
+    }
+
+    .back {
+      color: var(--link);
+      font-weight: 600;
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
+    }
+
+    h1 {
+      margin: 0 0 1rem;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      font-size: clamp(2rem, 6.4vw, 3.1rem);
+      max-width: 20ch;
+      view-transition-name: title-html-first;
+    }
+
+    .hero-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 0.6rem;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      margin: 0 0 1.2rem;
+      view-transition-name: article-hero;
+    }
+
+    p {
+      margin: 0 0 0.95rem;
+      color: var(--muted);
+      max-width: 66ch;
+      font-size: 1.16rem;
+      line-height: 1.62;
+    }
+
+    .lead {
+      font-style: italic;
+      color: var(--fg);
+    }
+
+    .dialogue strong {
+      color: var(--fg);
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
+    }
+
+    ::selection {
+      color: var(--selection-fg);
+      background: var(--selection-bg);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="meta-row">
+      <a class="back" href="/">&larr; back</a>
+      <time datetime="2026-02-11">2026-02-11</time>
+    </div>
+
+    <h1>Why This Site Stays HTML-First</h1>
+
+    <img class="hero-image" src="/assets/articles/signal-grid.svg" width="960" height="420"
+      alt="Abstract signal style artwork.">
+
+    <p class="lead">The fastest page is the one that can explain itself before JavaScript wakes up. That is the entire
+      idea behind this site.</p>
+
+    <p>Every page starts from a strict rule: useful content must be in the first HTML response. If I can read and navigate
+      without waiting for scripts, the baseline experience is already good.</p>
+
+    <p class="dialogue"><strong>Developer:</strong> Do we need another layer here?</p>
+    <p class="dialogue"><strong>Kid:</strong> Only if it helps the page show up faster.</p>
+
+    <p>That tiny conversation is how most decisions are made. Fancy additions are allowed, but only after they survive the
+      cost check: bytes, requests, and layout stability on a cold load.</p>
+
+    <p>HTML-first keeps the system honest. It is easier to measure, easier to maintain, and far less likely to break when
+      conditions are imperfect.</p>
+
+    <p><a href="/">Back to home</a></p>
+  </main>
+</body>
+
+</html>

@@ -76,12 +76,34 @@
       mix-blend-mode: normal;
     }
 
+    ::view-transition-group(title-html-first),
+    ::view-transition-group(title-neovim-tmux),
+    ::view-transition-group(title-latency-budgets) {
+      animation-duration: 260ms;
+      animation-timing-function: cubic-bezier(0.2, 0.78, 0.2, 1);
+    }
+
+    ::view-transition-old(title-html-first),
+    ::view-transition-new(title-html-first),
+    ::view-transition-old(title-neovim-tmux),
+    ::view-transition-new(title-neovim-tmux),
+    ::view-transition-old(title-latency-budgets),
+    ::view-transition-new(title-latency-budgets) {
+      mix-blend-mode: normal;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
         animation: none;
       }
 
       .hero-portrait {
+        view-transition-name: none;
+      }
+
+      .article-link-html-first,
+      .article-link-neovim-tmux,
+      .article-link-latency-budgets {
         view-transition-name: none;
       }
     }
@@ -265,7 +287,7 @@
 
     h2 {
       margin: 0 0 0.8rem;
-      font-size: 1.8rem;
+      font-size: 2rem;
       line-height: 1.2;
       font-weight: 600;
     }
@@ -282,6 +304,20 @@
       align-items: baseline;
       margin: 0 0 0.45rem;
       flex-wrap: wrap;
+      font-size: 1.12rem;
+      line-height: 1.35;
+    }
+
+    .article-link-html-first {
+      view-transition-name: title-html-first;
+    }
+
+    .article-link-neovim-tmux {
+      view-transition-name: title-neovim-tmux;
+    }
+
+    .article-link-latency-budgets {
+      view-transition-name: title-latency-budgets;
     }
 
     time {
@@ -360,9 +396,9 @@
     <section id="writing" aria-labelledby="writing-title">
       <h2 id="writing-title">Writing</h2>
       <ul class="post-list">
-        <li><time datetime="2026-02">2026-02:</time> <a href="/about/">Why this site stays HTML-first</a></li>
-        <li><time datetime="2026-01">2026-01:</time> <a href="#notes">Neovim + tmux for focused sessions</a></li>
-        <li><time datetime="2025-12">2025-12:</time> <a href="#notes">Latency budgets on slow networks</a></li>
+        <li><time datetime="2026-02">2026-02:</time> <a class="article-link-html-first" href="/articles/why-this-site-stays-html-first/">Why This Site Stays HTML-First</a></li>
+        <li><time datetime="2026-01">2026-01:</time> <a class="article-link-neovim-tmux" href="/articles/neovim-tmux-focused-sessions/">Neovim + Tmux for Focused Sessions</a></li>
+        <li><time datetime="2025-12">2025-12:</time> <a class="article-link-latency-budgets" href="/articles/latency-budgets-on-slow-networks/">Latency Budgets on Slow Networks</a></li>
       </ul>
     </section>
 
