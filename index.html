@@ -293,10 +293,12 @@
       </div>
       <div class="hero-side">
         <div class="hero-portrait">
-          <img class="hero-photo" src="/assets/hero-avatar-384.webp"
-            srcset="/assets/hero-avatar-384.webp 384w, /assets/hero-avatar-640.webp 640w" sizes="(min-width: 54rem) 12rem, 40vw"
-            width="640" height="640" alt="Portrait of Akash Plackal." loading="eager" fetchpriority="high"
-            decoding="async">
+          <picture>
+            <source type="image/avif" srcset="/assets/hero-avatar-384.avif 384w, /assets/hero-avatar-640.avif 640w"
+              sizes="(min-width: 54rem) 12rem, 40vw">
+            <img class="hero-photo" src="/assets/hero-avatar-384.avif" width="640" height="640"
+              alt="Portrait of Akash Plackal." loading="eager" fetchpriority="high" decoding="async">
+          </picture>
         </div>
         <p class="intro">I build fast, reliable software with a focus on real-world performance and simple tooling.</p>
       </div>
