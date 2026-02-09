@@ -404,6 +404,41 @@
 
     <p id="notes" class="notes">Minimal stack: one HTML response, inline CSS, optional JavaScript only.</p>
   </main>
+  <script>
+    (() => {
+      if (!window.PointerEvent) return;
+
+      const hasModifier = (e) => e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+
+      document.addEventListener(
+        "pointerdown",
+        (e) => {
+          if (e.defaultPrevented || e.button !== 0 || !e.isPrimary || hasModifier(e)) return;
+
+          const a = e.target.closest("a[href]");
+          if (!a || a.hasAttribute("download")) return;
+
+          const target = (a.getAttribute("target") || "").toLowerCase();
+          if (target && target !== "_self") return;
+
+          let url;
+          try {
+            url = new URL(a.href, location.href);
+          } catch {
+            return;
+          }
+
+          if (url.origin !== location.origin) return;
+          if (url.protocol !== "http:" && url.protocol !== "https:") return;
+          if (url.href === location.href) return;
+
+          e.preventDefault();
+          location.href = url.href;
+        },
+        { capture: true }
+      );
+    })();
+  </script>
 </body>
 
 </html>

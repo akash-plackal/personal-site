@@ -184,26 +184,56 @@
 
     <h1>Latency Budgets on Slow Networks</h1>
 
-    <img class="hero-image" src="/assets/articles/latency-map.svg" width="960" height="420"
-      alt="Abstract network latency map artwork.">
+    <img class="hero-image" src="/assets/articles/latency-map.svg" width="960" height="420" alt="Abstract network latency map artwork.">
 
-    <p class="lead">Bandwidth can hide waste on good Wi-Fi, but latency always tells the truth. On poor links, every extra
-      handshake is visible.</p>
+    <p class="lead">Bandwidth can hide waste on good Wi-Fi, but latency always tells the truth. On poor links, every extra handshake is visible.</p>
 
-    <p>I start each feature with a request budget and a byte budget. If the page cannot paint meaningful content in one
-      early response, the design is not finished yet.</p>
+    <p>I start each feature with a request budget and a byte budget. If the page cannot paint meaningful content in one early response, the design is not finished yet.</p>
 
     <p class="dialogue"><strong>Developer:</strong> It is only one more request.</p>
     <p class="dialogue"><strong>Kid:</strong> One more request for every user, every time.</p>
+    <p>That frame keeps tradeoffs grounded. A little visual polish is worth it sometimes, but only when the cost is known and controlled.</p>
 
-    <p>That frame keeps tradeoffs grounded. A little visual polish is worth it sometimes, but only when the cost is known
-      and controlled.</p>
-
-    <p>Latency budgets are not a restriction for creativity. They are a tool that protects the user experience when the
-      network is unreliable.</p>
+    <p>Latency budgets are not a restriction for creativity. They are a tool that protects the user experience when the network is unreliable.</p>
 
     <p><a href="/">Back to home</a></p>
   </main>
+  <script>
+    (() => {
+      if (!window.PointerEvent) return;
+    
+      const hasModifier = (e) => e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+    
+      document.addEventListener(
+        "pointerdown",
+        (e) => {
+          if (e.defaultPrevented || e.button !== 0 || !e.isPrimary || hasModifier(e)) return;
+    
+          const a = e.target.closest("a[href]");
+          if (!a || a.hasAttribute("download")) return;
+    
+          const target = (a.getAttribute("target") || "").toLowerCase();
+          if (target && target !== "_self") return;
+    
+          let url;
+          try {
+            url = new URL(a.href, location.href);
+          } catch {
+            return;
+          }
+    
+          if (url.origin !== location.origin) return;
+          if (url.protocol !== "http:" && url.protocol !== "https:") return;
+          if (url.href === location.href) return;
+    
+          e.preventDefault();
+          location.href = url.href;
+        },
+        { capture: true }
+      );
+    })();
+    
+  </script>
 </body>
 
 </html>

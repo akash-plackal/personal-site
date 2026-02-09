@@ -184,26 +184,56 @@
 
     <h1>Neovim + Tmux for Focused Sessions</h1>
 
-    <img class="hero-image" src="/assets/articles/terminal-flow.svg" width="960" height="420"
-      alt="Abstract terminal workflow artwork.">
+    <img class="hero-image" src="/assets/articles/terminal-flow.svg" width="960" height="420" alt="Abstract terminal workflow artwork.">
 
-    <p class="lead">A focused setup is less about plugins and more about repeatability. I want the same screen shape every
-      morning.</p>
+    <p class="lead">A focused setup is less about plugins and more about repeatability. I want the same screen shape every morning.</p>
 
-    <p>My baseline is simple: editor on the left, test watcher on the right, logs below, and one scratch pane for quick
-      command trials. The layout almost never changes.</p>
+    <p>My baseline is simple: editor on the left, test watcher on the right, logs below, and one scratch pane for quick command trials. The layout almost never changes.</p>
 
     <p class="dialogue"><strong>Developer:</strong> Should I install another extension?</p>
     <p class="dialogue"><strong>Kid:</strong> First learn one command you can use 200 times.</p>
+    <p>That rule keeps the stack stable. Neovim handles editing, tmux handles context, and shell tools fill the gaps. On a remote server, this still feels native and fast.</p>
 
-    <p>That rule keeps the stack stable. Neovim handles editing, tmux handles context, and shell tools fill the gaps. On a
-      remote server, this still feels native and fast.</p>
-
-    <p>Consistency beats novelty for daily work. Once the workflow is predictable, interruptions become less expensive and
-      deep work resumes faster.</p>
+    <p>Consistency beats novelty for daily work. Once the workflow is predictable, interruptions become less expensive and deep work resumes faster.</p>
 
     <p><a href="/">Back to home</a></p>
   </main>
+  <script>
+    (() => {
+      if (!window.PointerEvent) return;
+    
+      const hasModifier = (e) => e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+    
+      document.addEventListener(
+        "pointerdown",
+        (e) => {
+          if (e.defaultPrevented || e.button !== 0 || !e.isPrimary || hasModifier(e)) return;
+    
+          const a = e.target.closest("a[href]");
+          if (!a || a.hasAttribute("download")) return;
+    
+          const target = (a.getAttribute("target") || "").toLowerCase();
+          if (target && target !== "_self") return;
+    
+          let url;
+          try {
+            url = new URL(a.href, location.href);
+          } catch {
+            return;
+          }
+    
+          if (url.origin !== location.origin) return;
+          if (url.protocol !== "http:" && url.protocol !== "https:") return;
+          if (url.href === location.href) return;
+    
+          e.preventDefault();
+          location.href = url.href;
+        },
+        { capture: true }
+      );
+    })();
+    
+  </script>
 </body>
 
 </html>

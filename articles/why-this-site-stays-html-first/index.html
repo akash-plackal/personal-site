@@ -184,26 +184,56 @@
 
     <h1>Why This Site Stays HTML-First</h1>
 
-    <img class="hero-image" src="/assets/articles/signal-grid.svg" width="960" height="420"
-      alt="Abstract signal style artwork.">
+    <img class="hero-image" src="/assets/articles/signal-grid.svg" width="960" height="420" alt="Abstract signal style artwork.">
 
-    <p class="lead">The fastest page is the one that can explain itself before JavaScript wakes up. That is the entire
-      idea behind this site.</p>
+    <p class="lead">The fastest page is the one that can explain itself before JavaScript wakes up. That is the entire idea behind this site.</p>
 
-    <p>Every page starts from a strict rule: useful content must be in the first HTML response. If I can read and navigate
-      without waiting for scripts, the baseline experience is already good.</p>
+    <p>Every page starts from a strict rule: useful content must be in the first HTML response. If I can read and navigate without waiting for scripts, the baseline experience is already good.</p>
 
     <p class="dialogue"><strong>Developer:</strong> Do we need another layer here?</p>
     <p class="dialogue"><strong>Kid:</strong> Only if it helps the page show up faster.</p>
+    <p>That tiny conversation is how most decisions are made. Fancy additions are allowed, but only after they survive the cost check: bytes, requests, and layout stability on a cold load.</p>
 
-    <p>That tiny conversation is how most decisions are made. Fancy additions are allowed, but only after they survive the
-      cost check: bytes, requests, and layout stability on a cold load.</p>
-
-    <p>HTML-first keeps the system honest. It is easier to measure, easier to maintain, and far less likely to break when
-      conditions are imperfect.</p>
+    <p>HTML-first keeps the system honest. It is easier to measure, easier to maintain, and far less likely to break when conditions are imperfect.</p>
 
     <p><a href="/">Back to home</a></p>
   </main>
+  <script>
+    (() => {
+      if (!window.PointerEvent) return;
+    
+      const hasModifier = (e) => e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+    
+      document.addEventListener(
+        "pointerdown",
+        (e) => {
+          if (e.defaultPrevented || e.button !== 0 || !e.isPrimary || hasModifier(e)) return;
+    
+          const a = e.target.closest("a[href]");
+          if (!a || a.hasAttribute("download")) return;
+    
+          const target = (a.getAttribute("target") || "").toLowerCase();
+          if (target && target !== "_self") return;
+    
+          let url;
+          try {
+            url = new URL(a.href, location.href);
+          } catch {
+            return;
+          }
+    
+          if (url.origin !== location.origin) return;
+          if (url.protocol !== "http:" && url.protocol !== "https:") return;
+          if (url.href === location.href) return;
+    
+          e.preventDefault();
+          location.href = url.href;
+        },
+        { capture: true }
+      );
+    })();
+    
+  </script>
 </body>
 
 </html>
