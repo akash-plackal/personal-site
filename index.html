@@ -375,9 +375,8 @@
                 alt="Portrait of Akash Plackal." loading="eager" fetchpriority="high" decoding="async">
             </picture>
           </div>
-          <img class="hero-popout" src="/assets/avatar-head-only-192.png"
-            srcset="/assets/avatar-head-only-192.png 192w, /assets/avatar-head-only-272.png 272w"
-            sizes="(min-width: 54rem) 9rem, 36vw" width="272" height="257" alt="" aria-hidden="true" loading="eager"
+          <img class="hero-popout" src="/assets/avatar-head-only-272.png" width="272" height="257" alt=""
+            aria-hidden="true" loading="eager"
             fetchpriority="low" decoding="async">
         </div>
         <p class="intro">I build fast, reliable software with a focus on real-world performance and simple tooling.</p>
@@ -396,49 +395,17 @@
     <section id="writing" aria-labelledby="writing-title">
       <h2 id="writing-title">Writing</h2>
       <ul class="post-list">
-        <li><time datetime="2026-02">2026-02:</time> <a class="article-link-html-first" href="/articles/why-this-site-stays-html-first/">Why This Site Stays HTML-First</a></li>
-        <li><time datetime="2026-01">2026-01:</time> <a class="article-link-neovim-tmux" href="/articles/neovim-tmux-focused-sessions/">Neovim + Tmux for Focused Sessions</a></li>
-        <li><time datetime="2025-12">2025-12:</time> <a class="article-link-latency-budgets" href="/articles/latency-budgets-on-slow-networks/">Latency Budgets on Slow Networks</a></li>
+        <li><time datetime="2026-02">2026-02:</time> <a class="article-link-html-first"
+            href="/articles/why-this-site-stays-html-first/">Why This Site Stays HTML-First</a></li>
+        <li><time datetime="2026-01">2026-01:</time> <a class="article-link-neovim-tmux"
+            href="/articles/neovim-tmux-focused-sessions/">Neovim + Tmux for Focused Sessions</a></li>
+        <li><time datetime="2025-12">2025-12:</time> <a class="article-link-latency-budgets"
+            href="/articles/latency-budgets-on-slow-networks/">Latency Budgets on Slow Networks</a></li>
       </ul>
     </section>
 
     <p id="notes" class="notes">Minimal stack: one HTML response, inline CSS, optional JavaScript only.</p>
   </main>
-  <script>
-    (() => {
-      if (!window.PointerEvent) return;
-
-      const hasModifier = (e) => e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
-
-      document.addEventListener(
-        "pointerdown",
-        (e) => {
-          if (e.defaultPrevented || e.button !== 0 || !e.isPrimary || hasModifier(e)) return;
-
-          const a = e.target.closest("a[href]");
-          if (!a || a.hasAttribute("download")) return;
-
-          const target = (a.getAttribute("target") || "").toLowerCase();
-          if (target && target !== "_self") return;
-
-          let url;
-          try {
-            url = new URL(a.href, location.href);
-          } catch {
-            return;
-          }
-
-          if (url.origin !== location.origin) return;
-          if (url.protocol !== "http:" && url.protocol !== "https:") return;
-          if (url.href === location.href) return;
-
-          e.preventDefault();
-          location.href = url.href;
-        },
-        { capture: true }
-      );
-    })();
-  </script>
 </body>
 
 </html>
