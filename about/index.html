@@ -62,17 +62,17 @@
     }
 
     ::view-transition-new(root) {
-      animation: vt-enter 120ms ease-out both;
+      animation: vt-enter 100ms ease-out both;
     }
 
     ::view-transition-group(hero-avatar) {
-      animation-duration: 750ms;
+      animation-duration: 280ms;
       animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     ::view-transition-old(hero-avatar),
     ::view-transition-new(hero-avatar) {
-      animation-duration: 750ms;
+      animation-duration: 280ms;
       mix-blend-mode: normal;
     }
 
@@ -83,7 +83,6 @@
 
       .about-photo {
         view-transition-name: none;
-        animation: none;
       }
     }
 
@@ -178,19 +177,6 @@
       border: 1px solid var(--line);
       background: var(--surface);
       view-transition-name: hero-avatar;
-      animation: hero-in 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    }
-
-    @keyframes hero-in {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
     }
 
     a {
