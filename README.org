@@ -1,6 +1,6 @@
-* Personal Site
+* Hello, this is my personal website.
 
-** One-time global tools (no repo npm deps)
+** One-time install (no repo npm deps)
 
 #+begin_src sh
 npm i -g html-minifier-terser@7.2.0
