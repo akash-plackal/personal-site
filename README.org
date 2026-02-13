@@ -1,2 +1,34 @@
+* Personal Site
 
-hello this is my personal site.
+** One-time global tools (no repo npm deps)
+
+#+begin_src sh
+npm i -g html-minifier-terser@7.2.0
+#+end_src
+
+** Build
+
+#+begin_src sh
+make build
+#+end_src
+
+Build output is written to =dist/=.
+
+** Budget check only
+
+#+begin_src sh
+make check
+#+end_src
+
+** Local preview
+
+#+begin_src sh
+make serve
+#+end_src
+
+Then open =http://localhost:8080=.
+
+** Cloudflare Pages
+
+- Build command: =./scripts/build.sh=
+- Build output directory: =dist=
