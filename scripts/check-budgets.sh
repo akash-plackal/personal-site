@@ -32,13 +32,13 @@ while IFS= read -r -d '' file; do
 
   html_gz="$(gzip -c "$file" | wc -c | to_bytes)"
 
-  if rg -q "<style" "$file"; then
+  if grep -qi "<style" "$file"; then
     css_gz="$(extract_inline style "$file" | gzip -c | wc -c | to_bytes)"
   else
     css_gz=0
   fi
 
-  if rg -q "<script" "$file"; then
+  if grep -qi "<script" "$file"; then
     js_gz="$(extract_inline script "$file" | gzip -c | wc -c | to_bytes)"
   else
     js_gz=0

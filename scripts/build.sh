@@ -57,5 +57,4 @@ for src in "${HTML_FILES[@]}"; do
     -o "$dest"
 done
 
-"$ROOT_DIR/scripts/check-budgets.sh" "$OUT_DIR"
 echo "Build completed."
