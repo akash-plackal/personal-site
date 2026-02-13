@@ -4,14 +4,25 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="${1:-$ROOT_DIR/dist}"
 MINIFIER_BIN="${HTML_MINIFIER_BIN:-html-minifier-terser}"
+MINIFIER_PKG="${HTML_MINIFIER_PKG:-html-minifier-terser@7.2.0}"
 
 if [[ "$OUT_DIR" != /* ]]; then
   OUT_DIR="$ROOT_DIR/$OUT_DIR"
 fi
 
 if ! command -v "$MINIFIER_BIN" >/dev/null 2>&1; then
-  echo "Missing global dependency: $MINIFIER_BIN" >&2
-  echo "Install it globally: npm i -g html-minifier-terser@7.2.0" >&2
+  if [[ "${CF_PAGES:-0}" == "1" ]] && command -v npm >/dev/null 2>&1; then
+    echo "Missing $MINIFIER_BIN. Installing globally for Cloudflare build..."
+    npm i -g "$MINIFIER_PKG"
+  else
+    echo "Missing global dependency: $MINIFIER_BIN" >&2
+    echo "Install it globally: npm i -g $MINIFIER_PKG" >&2
+    exit 1
+  fi
+fi
+
+if ! command -v "$MINIFIER_BIN" >/dev/null 2>&1; then
+  echo "Failed to resolve minifier binary after install: $MINIFIER_BIN" >&2
   exit 1
 fi
 
