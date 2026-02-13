@@ -6,7 +6,7 @@
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; script-src 'sha256-XhHd/IgY7NdWMptLvI9vwzOdkvZ35YEP4BLTrMHYEG0='; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; script-src 'sha256-wqkRuP8L3oxTvkHFCX5b3a91W0OtBtyfl9Yu6fs/P7Q='; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests
 
 /
   Cache-Control: public, max-age=0, must-revalidate
