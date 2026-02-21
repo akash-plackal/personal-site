@@ -1,275 +1,413 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script type="speculationrules">{"prerender":[{"source":"document","where":{"href_matches":"/*"},"eagerness":"eager"}]}</script>
-  <title>Latency Budgets on Slow Networks | Akash Plackal</title>
-  <meta name="description" content="Practical notes on setting latency budgets for real users on slow links.">
-  <style>
-    @font-face {
-      font-family: "Iosevka Local";
-      src: local("Iosevka"), local("Iosevka Term"), local("Iosevka Slab"),
-        url("/assets/fonts/iosevka-slab-latin-400.woff2") format("woff2");
-      font-style: normal;
-      font-weight: 400;
-      font-display: optional;
-      unicode-range:
-        U+0020-007E, U+00A0, U+00A9, U+00AE, U+00B0, U+00B7, U+00D7, U+00F7,
-        U+0131, U+2013, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022, U+2026,
-        U+20AC, U+2122;
-    }
-
-    :root {
-      --font-main: "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      --bg: #141a15;
-      --surface: #1d2520;
-      --fg: #d5d9c8;
-      --muted: #a8b09b;
-      --line: #465247;
-      --link: #9fb378;
-      --selection-bg: #324036;
-      --selection-fg: #e7ebdc;
-    }
-
-    @view-transition {
-      navigation: auto;
-    }
-
-    @keyframes vt-article-enter {
-      from {
-        opacity: 0.985;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="speculationrules">
+      {
+        "prerender": [
+          {
+            "source": "document",
+            "where": { "href_matches": "/*" },
+            "eagerness": "eager"
+          }
+        ]
+      }
+    </script>
+    <title>Latency Budgets on Slow Networks | Akash Plackal</title>
+    <meta
+      name="description"
+      content="Practical notes on setting latency budgets for real users on slow links."
+    />
+    <style>
+      @font-face {
+        font-family: "Iosevka Local";
+        src:
+          local("Iosevka"),
+          local("Iosevka Term"),
+          local("Iosevka Slab"),
+          url("/assets/fonts/iosevka-slab-latin-400.woff2") format("woff2");
+        font-style: normal;
+        font-weight: 400;
+        font-display: optional;
+        unicode-range:
+          U+0020-007E, U+00A0, U+00A9, U+00AE, U+00B0, U+00B7, U+00D7, U+00F7,
+          U+0131, U+2013, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022,
+          U+2026, U+20AC, U+2122;
       }
 
-      to {
-        opacity: 1;
+      :root {
+        --font-main:
+          "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont,
+          sans-serif;
+        --bg: #141a15;
+        --surface: #1d2520;
+        --fg: #d5d9c8;
+        --muted: #a8b09b;
+        --line: #465247;
+        --link: #9fb378;
+        --selection-bg: #324036;
+        --selection-fg: #e7ebdc;
       }
-    }
 
-    ::view-transition-group(root) {
-      animation: none;
-    }
+      @view-transition {
+        navigation: auto;
+      }
 
-    ::view-transition-old(root) {
-      animation: none;
-    }
+      @keyframes vt-article-enter {
+        from {
+          opacity: 0.985;
+        }
 
-    ::view-transition-new(root) {
-      animation: vt-article-enter 100ms ease-out both;
-    }
+        to {
+          opacity: 1;
+        }
+      }
 
-    ::view-transition-group(title-latency-budgets),
-    ::view-transition-group(article-hero) {
-      animation-duration: 220ms;
-      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    ::view-transition-old(title-latency-budgets),
-    ::view-transition-new(title-latency-budgets),
-    ::view-transition-old(article-hero),
-    ::view-transition-new(article-hero) {
-      mix-blend-mode: normal;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      ::view-transition-new(root) {
+      ::view-transition-group(root) {
         animation: none;
       }
 
-      h1,
-      .hero-image {
-        view-transition-name: none;
+      ::view-transition-old(root) {
+        animation: none;
       }
-    }
 
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      padding: 1.5rem 1rem;
-      min-height: 100vh;
-      font: 16px/1.55 var(--font-main);
-      color: var(--fg);
-      background: var(--bg);
-    }
+      ::view-transition-new(root) {
+        animation: vt-article-enter 100ms ease-out both;
+      }
 
-    main {
-      max-width: 44rem;
-      margin: 0 auto;
-    }
+      ::view-transition-group(title-latency-budgets),
+      ::view-transition-group(article-hero) {
+        animation-duration: 220ms;
+        animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
 
-    .meta-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      margin-top: 0.35rem;
-      margin-bottom: 1.85rem;
-      color: var(--muted);
-      font-size: 1.12rem;
-    }
+      ::view-transition-old(title-latency-budgets),
+      ::view-transition-new(title-latency-budgets),
+      ::view-transition-old(article-hero),
+      ::view-transition-new(article-hero) {
+        mix-blend-mode: normal;
+      }
 
-    .back {
-      color: var(--link);
-      font-weight: 600;
-      text-decoration-color: var(--line);
-      text-decoration-style: dotted;
-      text-underline-offset: 0.16em;
-      text-decoration-thickness: 0.07em;
-    }
+      @media (prefers-reduced-motion: reduce) {
+        ::view-transition-new(root) {
+          animation: none;
+        }
 
-    h1 {
-      margin: 0 0 1rem;
-      line-height: 1.05;
-      letter-spacing: -0.01em;
-      font-size: clamp(2rem, 6.4vw, 3.1rem);
-      max-width: 20ch;
-      view-transition-name: title-latency-budgets;
-    }
+        h1,
+        .hero-image {
+          view-transition-name: none;
+        }
+      }
 
-    .hero-image {
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 0.6rem;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      margin: 0 0 1.2rem;
-      view-transition-name: article-hero;
-    }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 1.5rem 1rem;
+        min-height: 100vh;
+        font: 16px/1.55 var(--font-main);
+        color: var(--fg);
+        background: var(--bg);
+      }
 
-    p {
-      margin: 0 0 0.95rem;
-      color: var(--muted);
-      max-width: 66ch;
-      font-size: 1.16rem;
-      line-height: 1.62;
-    }
+      main {
+        max-width: 44rem;
+        margin: 0 auto;
+      }
 
-    .lead {
-      font-style: italic;
-      color: var(--fg);
-    }
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        margin-top: 0.35rem;
+        margin-bottom: 1.85rem;
+        color: var(--muted);
+        font-size: 1.12rem;
+      }
 
-    .dialogue strong {
-      color: var(--fg);
-      font-weight: 700;
-    }
+      .back {
+        color: var(--link);
+        font-weight: 600;
+        text-decoration-color: var(--line);
+        text-decoration-style: dotted;
+        text-underline-offset: 0.16em;
+        text-decoration-thickness: 0.07em;
+      }
 
-    a {
-      color: var(--link);
-      text-decoration-color: var(--line);
-      text-decoration-style: dotted;
-      text-underline-offset: 0.16em;
-      text-decoration-thickness: 0.07em;
-    }
+      h1 {
+        margin: 0 0 1rem;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        font-size: clamp(2rem, 6.4vw, 3.1rem);
+        max-width: 20ch;
+        view-transition-name: title-latency-budgets;
+      }
 
-    .giscus-wrap {
-      max-width: 44rem;
-      margin-inline: auto;
-    }
+      .hero-image {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 0.6rem;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        margin: 0 0 1.2rem;
+        view-transition-name: article-hero;
+      }
 
-    .giscus {
-      margin-top: 2rem;
-      padding: 0;
-      border: none;
-      background: transparent;
-      font-family: var(--font-main);
-      color: var(--fg);
-    }
+      p {
+        margin: 0 0 0.95rem;
+        color: var(--muted);
+        max-width: 66ch;
+        font-size: 1.16rem;
+        line-height: 1.62;
+      }
 
-    .giscus-frame {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color-scheme: dark;
-    }
+      .lead {
+        font-style: italic;
+        color: var(--fg);
+      }
 
-    .giscus .giscus-tabs {
-      border-bottom: 1px solid var(--line) !important;
-    }
+      .dialogue strong {
+        color: var(--fg);
+        font-weight: 700;
+      }
 
-    .giscus .giscus-tab {
-      border: 1px solid var(--line) !important;
-      border-bottom: none !important;
-      background: var(--surface) !important;
-      color: var(--muted) !important;
-    }
+      a {
+        color: var(--link);
+        text-decoration-color: var(--line);
+        text-decoration-style: dotted;
+        text-underline-offset: 0.16em;
+        text-decoration-thickness: 0.07em;
+      }
 
-    .giscus .giscus-tab[aria-selected="true"] {
-      background: var(--bg) !important;
-      color: var(--fg) !important;
-    }
+      .giscus-wrap {
+        max-width: 44rem;
+        margin-inline: auto;
+      }
 
-    .giscus .giscus-input {
-      border: 1px solid var(--line) !important;
-      background: var(--surface) !important;
-      color: var(--fg) !important;
-    }
+      .giscus {
+        margin-top: 2rem;
+        padding: 0;
+        border: none;
+        background: transparent;
+        font-family: var(--font-main);
+        color: var(--fg);
+      }
 
-    .giscus .giscus-comment {
-      border: none !important;
-      border-bottom: 1px solid var(--line) !important;
-    }
+      .giscus-frame {
+        width: 100%;
+        border: none;
+        background: transparent;
+        color-scheme: dark;
+      }
 
-    .giscus .giscus-comment-box {
-      border: 1px solid var(--line) !important;
-      background: var(--surface) !important;
-    }
+      .giscus .giscus-tabs {
+        border-bottom: 1px solid var(--line) !important;
+      }
 
-    .giscus .giscus-button {
-      border: 1px solid var(--line) !important;
-      background: var(--surface) !important;
-      color: var(--fg) !important;
-    }
+      .giscus .giscus-tab {
+        border: 1px solid var(--line) !important;
+        border-bottom: none !important;
+        background: var(--surface) !important;
+        color: var(--muted) !important;
+      }
 
-    .giscus-frame:focus-visible {
-      outline: 2px solid var(--ring-outer);
-      outline-offset: 2px;
-    }
+      .giscus .giscus-tab[aria-selected="true"] {
+        background: var(--bg) !important;
+        color: var(--fg) !important;
+      }
 
-    ::selection {
-      color: var(--selection-fg);
-      background: var(--selection-bg);
-    }
-  </style>
-</head>
+      .giscus .giscus-input {
+        border: 1px solid var(--line) !important;
+        background: var(--surface) !important;
+        color: var(--fg) !important;
+      }
 
-<body>
-  <main>
-    <div class="meta-row">
-      <a class="back" href="/">&larr; back</a>
-      <time datetime="2025-12-09">2025-12-09</time>
+      .giscus .giscus-comment {
+        border: none !important;
+        border-bottom: 1px solid var(--line) !important;
+      }
+
+      .giscus .giscus-comment-box {
+        border: 1px solid var(--line) !important;
+        background: var(--surface) !important;
+      }
+
+      .giscus .giscus-button {
+        border: 1px solid var(--line) !important;
+        background: var(--surface) !important;
+        color: var(--fg) !important;
+      }
+
+      .giscus-frame:focus-visible {
+        outline: 2px solid var(--ring-outer);
+        outline-offset: 2px;
+      }
+
+      ::selection {
+        color: var(--selection-fg);
+        background: var(--selection-bg);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div class="meta-row">
+        <a class="back" href="/">&larr; back</a>
+        <time datetime="2025-12-09">2025-12-09</time>
+      </div>
+
+      <h1>Latency Budgets on Slow Networks</h1>
+
+      <img
+        class="hero-image"
+        src="/assets/articles/latency-map.svg"
+        width="960"
+        height="420"
+        alt="Abstract network latency map artwork."
+      />
+
+      <p class="lead">
+        Bandwidth can hide waste on good Wi-Fi, but latency always tells the
+        truth. On poor links, every extra handshake is visible.
+      </p>
+
+      <p>
+        I start each feature with a request budget and a byte budget. If the
+        page cannot paint meaningful content in one early response, the design
+        is not finished yet.
+      </p>
+
+      <p class="dialogue">
+        <strong>Developer:</strong> It is only one more request.
+      </p>
+      <p class="dialogue">
+        <strong>Kid:</strong> One more request for every user, every time.
+      </p>
+      <p>
+        That frame keeps tradeoffs grounded. A little visual polish is worth it
+        sometimes, but only when the cost is known and controlled.
+      </p>
+
+      <p>
+        Latency budgets are not a restriction for creativity. They are a tool
+        that protects the user experience when the network is unreliable.
+      </p>
+
+      <p><a href="/">Back to home</a></p>
+    </main>
+    <script>
+      (() => {
+        const DATA =
+          "T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE=";
+        const AC = window.AudioContext || window.webkitAudioContext;
+        const FALLBACK = document
+          .createElement("audio")
+          .canPlayType('audio/ogg; codecs="opus"')
+          ? "data:audio/ogg;base64," + DATA
+          : "/assets/click-sound.wav";
+        let ctx,
+          buf,
+          decoding = false,
+          last = 0;
+        const fallback = new Audio(FALLBACK);
+        const V = 0.24,
+          THROTTLE = 28;
+        fallback.preload = "auto";
+        fallback.volume = V;
+        const boot = () => {
+          if (!AC || buf || decoding) return;
+          decoding = true;
+          ctx || (ctx = new AC());
+          try {
+            const b = atob(DATA),
+              u = new Uint8Array(b.length);
+            for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+            ctx
+              .decodeAudioData(u.buffer.slice(0))
+              .then((x) => {
+                buf = x;
+              })
+              .catch(() => {})
+              .finally(() => {
+                decoding = false;
+              });
+          } catch {
+            decoding = false;
+          }
+        };
+        boot();
+        const playFallback = () => {
+          try {
+            fallback.currentTime = 0;
+            const p = fallback.play();
+            p && p.catch && p.catch(() => {});
+          } catch {}
+        };
+        const play = () => {
+          const now = performance.now();
+          if (now - last < THROTTLE) return;
+          last = now;
+          if (!AC) {
+            playFallback();
+            return;
+          }
+          ctx || (ctx = new AC());
+          const fire = () => {
+            if (!buf) {
+              playFallback();
+              return;
+            }
+            try {
+              const s = ctx.createBufferSource(),
+                g = ctx.createGain();
+              g.gain.value = V;
+              s.buffer = buf;
+              s.connect(g).connect(ctx.destination);
+              s.start(0);
+            } catch {
+              playFallback();
+            }
+          };
+          if (ctx.state === "suspended") {
+            ctx.resume().then(fire).catch(playFallback);
+            return;
+          }
+          fire();
+        };
+        document.addEventListener(
+          "pointerdown",
+          (e) => {
+            if (!e.isPrimary || !(e.target instanceof Element)) return;
+            if (e.pointerType === "mouse" && e.button !== 0) return;
+            if (!e.target.closest("a[href]")) return;
+            play();
+          },
+          { capture: true },
+        );
+      })();
+    </script>
+    <div class="giscus-wrap">
+      <script
+        src="https://giscus.app/client.js"
+        data-repo="akash-plackal/personal-site"
+        data-repo-id="R_kgDORJxwdQ"
+        data-category="General"
+        data-category-id="DIC_kwDORJxwdc4C2xrV"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark_dimmed"
+        data-lang="en"
+        crossorigin="anonymous"
+        async
+      ></script>
     </div>
-
-    <h1>Latency Budgets on Slow Networks</h1>
-
-    <img class="hero-image" src="/assets/articles/latency-map.svg" width="960" height="420"
-      alt="Abstract network latency map artwork.">
-
-    <p class="lead">Bandwidth can hide waste on good Wi-Fi, but latency always tells the truth. On poor links, every
-      extra handshake is visible.</p>
-
-    <p>I start each feature with a request budget and a byte budget. If the page cannot paint meaningful content in one
-      early response, the design is not finished yet.</p>
-
-    <p class="dialogue"><strong>Developer:</strong> It is only one more request.</p>
-    <p class="dialogue"><strong>Kid:</strong> One more request for every user, every time.</p>
-    <p>That frame keeps tradeoffs grounded. A little visual polish is worth it sometimes, but only when the cost is
-      known and controlled.</p>
-
-    <p>Latency budgets are not a restriction for creativity. They are a tool that protects the user experience when the
-      network is unreliable.</p>
-
-    <p><a href="/">Back to home</a></p>
-  </main>
-  <script>(()=>{const DATA="T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE=";const AC=window.AudioContext||window.webkitAudioContext;const FALLBACK=document.createElement("audio").canPlayType('audio/ogg; codecs="opus"')?"data:audio/ogg;base64,"+DATA:"/assets/click-sound.wav";let ctx,buf,decoding=false,last=0;const fallback=new Audio(FALLBACK);const V=.24,THROTTLE=28;fallback.preload="auto";fallback.volume=V;const boot=()=>{if(!AC||buf||decoding)return;decoding=true;ctx||(ctx=new AC);try{const b=atob(DATA),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);ctx.decodeAudioData(u.buffer.slice(0)).then(x=>{buf=x}).catch(()=>{}).finally(()=>{decoding=false})}catch{decoding=false}};boot();const playFallback=()=>{try{fallback.currentTime=0;const p=fallback.play();p&&p.catch&&p.catch(()=>{})}catch{}};const play=()=>{const now=performance.now();if(now-last<THROTTLE)return;last=now;if(!AC){playFallback();return}ctx||(ctx=new AC);const fire=()=>{if(!buf){playFallback();return}try{const s=ctx.createBufferSource(),g=ctx.createGain();g.gain.value=V;s.buffer=buf;s.connect(g).connect(ctx.destination);s.start(0)}catch{playFallback()}};if(ctx.state==="suspended"){ctx.resume().then(fire).catch(playFallback);return}fire()};document.addEventListener("pointerdown",e=>{if(!e.isPrimary||!(e.target instanceof Element))return;if(e.pointerType==="mouse"&&e.button!==0)return;if(!e.target.closest("a[href]"))return;play()},{capture:true})})();
-</script>
-<div class="giscus-wrap">
-  <script src="https://giscus.app/client.js" data-repo="akash-plackal/personal-site" data-repo-id="R_kgDORJxwdQ" data-category="General" data-category-id="DIC_kwDORJxwdc4C2xrV" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="dark_dimmed" data-lang="en" crossorigin="anonymous" async></script>
-</div>
-</body>
-
+  </body>
 </html>
