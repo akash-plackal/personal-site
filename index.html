@@ -732,12 +732,36 @@
           }
           fire();
         };
+        // Play sound on page load if flagged by previous page
+        const pending = sessionStorage.getItem("__click");
+        if (pending && performance.now() < 500) {
+          sessionStorage.removeItem("__click");
+          play();
+        }
         document.addEventListener(
           "pointerdown",
           (e) => {
             if (!e.isPrimary || !(e.target instanceof Element)) return;
             if (e.pointerType === "mouse" && e.button !== 0) return;
-            if (!e.target.closest("a[href]")) return;
+            const a = e.target.closest("a[href]");
+            if (!a) return;
+            const href = a.getAttribute("href");
+            // Only instant-navigate for local links, no modifiers
+            if (
+              e.pointerType === "mouse" &&
+              href &&
+              (href.startsWith("/") || href.startsWith("./")) &&
+              !e.ctrlKey &&
+              !e.metaKey &&
+              !e.shiftKey &&
+              !e.altKey &&
+              a.target !== "_blank"
+            ) {
+              sessionStorage.setItem("__click", "1");
+              window.location.href = href;
+              return;
+            }
+            // Touch or external links: play sound normally
             play();
           },
           { capture: true },
