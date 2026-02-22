@@ -3,7 +3,7 @@
 ** One-time install (no repo npm deps)
 
 #+begin_src sh
-npm i -g html-minifier-terser@7.2.0
+npm i -g html-minifier-next
 #+end_src
 
 ** Build
@@ -13,6 +13,11 @@ make build
 #+end_src
 
 Build output is written to =dist/=.
+Default minification mode is =max= (smallest output). Use =safe= mode if needed:
+
+#+begin_src sh
+HTML_MINIFIER_MODE=safe make build
+#+end_src
 
 ** Budget check only
 
