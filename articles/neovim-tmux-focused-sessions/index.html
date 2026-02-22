@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="speculationrules">
       {
-        "prerender": [
+        "prefetch": [
           {
             "source": "document",
             "where": { "href_matches": "/*" },
             "eagerness": "immediate"
+          }
+        ],
+        "prerender": [
+          {
+            "source": "document",
+            "where": { "href_matches": "/*" },
+            "eagerness": "eager"
           }
         ]
       }

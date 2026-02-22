@@ -12,4 +12,4 @@ clean:
 	rm -rf dist
 
 serve: build
-	python -m http.server --directory dist 8080
+	python3 -m http.server --directory dist 8080
