@@ -6,7 +6,7 @@
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; frame-src https://giscus.app; img-src 'self' data: https://avatars.githubusercontent.com; media-src 'self' data:; object-src 'none'; script-src 'self' 'sha256-wqkRuP8L3oxTvkHFCX5b3a91W0OtBtyfl9Yu6fs/P7Q=' 'sha256-c5ua1rNWbCpeUdNaQS+rDflLOEwNgkh0H0nuDj2l5gA=' https://giscus.app; style-src 'self' 'unsafe-inline' https://giscus.app; connect-src 'self' https://api.github.com https://github.com https://*.githubusercontent.com; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; frame-src https://giscus.app; img-src 'self' data: https://avatars.githubusercontent.com; media-src 'self' data:; object-src 'none'; script-src 'self' 'sha256-wqkRuP8L3oxTvkHFCX5b3a91W0OtBtyfl9Yu6fs/P7Q=' 'sha256-18LD98Y8nVSIC5Jcu9govirsbZi0KqJmO4HAJ1zGAMg=' https://giscus.app; style-src 'self' 'unsafe-inline' https://giscus.app; connect-src 'self' https://api.github.com https://github.com https://*.githubusercontent.com; upgrade-insecure-requests
 
 /
   Cache-Control: public, max-age=0, must-revalidate
