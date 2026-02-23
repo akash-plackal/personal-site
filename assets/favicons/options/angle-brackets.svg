@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Angle brackets code favicon">
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="#1a1f1b" stroke="#3f4b42" stroke-width="2" />
+  <path d="M25 21L16 32L25 43" fill="none" stroke="#9fb378" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M39 21L48 32L39 43" fill="none" stroke="#9fb378" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M34 20L30 44" fill="none" stroke="#9fb378" stroke-width="4" stroke-linecap="round" />
+</svg>
