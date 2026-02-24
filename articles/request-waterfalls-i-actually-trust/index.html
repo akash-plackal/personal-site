@@ -14,10 +14,10 @@
         ]
       }
     </script>
-    <title>Why This Site Stays HTML-First | Akash Plackal</title>
+    <title>Request Waterfalls I Actually Trust | Akash Plackal</title>
     <meta
       name="description"
-      content="Notes on keeping a personal site HTML-first for speed and reliability."
+      content="How I read network waterfalls under slow conditions without fooling myself."
     />
     <style>
       @font-face {
@@ -76,14 +76,14 @@
         animation: vt-article-enter 100ms ease-out both;
       }
 
-      ::view-transition-group(title-html-first),
+      ::view-transition-group(title-request-waterfalls),
       ::view-transition-group(article-hero) {
         animation-duration: 220ms;
         animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
-      ::view-transition-old(title-html-first),
-      ::view-transition-new(title-html-first),
+      ::view-transition-old(title-request-waterfalls),
+      ::view-transition-new(title-request-waterfalls),
       ::view-transition-old(article-hero),
       ::view-transition-new(article-hero) {
         mix-blend-mode: normal;
@@ -103,6 +103,7 @@
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         padding: 1.5rem 1rem;
@@ -149,7 +150,7 @@
         letter-spacing: -0.01em;
         font-size: clamp(2rem, 6.4vw, 3.1rem);
         max-width: 20ch;
-        view-transition-name: title-html-first;
+        view-transition-name: title-request-waterfalls;
       }
 
       .hero-image {
@@ -394,7 +395,7 @@
       }
 
       .giscus-frame:focus-visible {
-        outline: 2px solid var(--ring-outer);
+        outline: 2px solid var(--link);
         outline-offset: 2px;
       }
 
@@ -415,57 +416,106 @@
       <main>
         <div class="meta-row">
           <a class="back" href="/">&larr; back</a>
-          <time datetime="2026-02-11">2026-02-11</time>
+          <time datetime="2026-02-22">2026-02-22</time>
         </div>
 
-        <h1>Why This Site Stays HTML-First</h1>
+        <h1>Request Waterfalls I Actually Trust</h1>
 
         <img
           class="hero-image"
-          src="/assets/articles/signal-grid.svg"
+          src="/assets/articles/request-waterfalls-hero.svg"
           width="960"
           height="420"
-          alt="Abstract signal style artwork."
+          alt="Request waterfall timing bars and network lanes."
         />
 
         <p class="lead">
-          The fastest page is the one that can explain itself before JavaScript
-          wakes up. That is the entire idea behind this site.
+          A waterfall is only useful when it matches what a user feels. The
+          pretty screenshot is not the result. The repeatable bottleneck is.
         </p>
 
-        <h2 id="keep-meaningful-content-in-html">
-          Keep Meaningful Content in HTML
+        <h2 id="start-with-a-cold-baseline">Start with a Cold Baseline</h2>
+
+        <p>
+          I start with a blank profile, disabled cache, and Slow 4G throttling.
+          If a page feels fast only on my warm desktop tab, I treat the result
+          as invalid. The first visit is where architecture gets exposed.
+        </p>
+
+        <p>
+          Then I check whether the browser had enough meaningful HTML before it
+          had enough JavaScript. If the answer is yes, your baseline is safe. If
+          the answer is no, your app is still negotiating with the network
+          before it can explain itself.
+        </p>
+
+        <h2 id="follow-the-first-blocking-chain">
+          Follow the First Blocking Chain
         </h2>
 
         <p>
-          Every page starts from a strict rule: useful content must be in the
-          first HTML response. If I can read and navigate without waiting for
-          scripts, the baseline experience is already good.
+          The first thing I scan is not total page weight. I look at the first
+          blocking chain from HTML to first paint: DNS, TLS, document TTFB,
+          critical bytes in the HTML, then any required render work. This path
+          is where user trust is built.
         </p>
-
-        <h2 id="run-every-feature-through-a-cost-check">
-          Run Every Feature Through a Cost Check
-        </h2>
 
         <p class="dialogue">
-          <strong>Developer:</strong> Do we need another layer here?
+          <strong>Developer:</strong> But the total load time is still low.
         </p>
         <p class="dialogue">
-          <strong>Kid:</strong> Only if it helps the page show up faster.
-        </p>
-        <p>
-          That tiny conversation is how most decisions are made. Fancy additions
-          are allowed, but only after they survive the cost check: bytes,
-          requests, and layout stability on a cold load.
+          <strong>Kid:</strong> Low for who, and on what connection?
         </p>
 
-        <h2 id="optimize-for-reliability-over-novelty">
-          Optimize for Reliability over Novelty
-        </h2>
+        <h2 id="watch-for-hidden-queueing">Watch for Hidden Queueing</h2>
 
         <p>
-          HTML-first keeps the system honest. It is easier to measure, easier to
-          maintain, and far less likely to break when conditions are imperfect.
+          I also watch for hidden queueing. One deferred script can still sit in
+          the critical network window and move milestones like DOMContentLoaded
+          or load. Even if paint is fine, that shift can mislead measurements
+          and trigger unnecessary regressions in dashboards.
+        </p>
+
+        <p>
+          On static sites, the most common mistake is scattering tiny assets.
+          Each file looks cheap in isolation, but the handshake and
+          prioritization costs stack up. I would rather send one richer HTML
+          document than force the browser to coordinate five tiny requests.
+        </p>
+
+        <h2 id="compare-traces-side-by-side">Compare Traces Side by Side</h2>
+
+        <p>
+          I annotate waterfalls in plain language: "first paint depends on X,"
+          "hero image starts too late," "third-party frame waits on main
+          thread." Numbers matter, but naming the dependency chain prevents the
+          same bug from reappearing in a new form later.
+        </p>
+
+        <p>
+          Another habit: I compare two traces side by side and ask only one
+          question, "what moved earlier or later?" That keeps analysis honest.
+          When many variables change at once, every optimization story sounds
+          plausible, and most of them are wrong.
+        </p>
+
+        <h2 id="optimize-for-explainability">Optimize for Explainability</h2>
+
+        <p>
+          For this site, a good waterfall has three properties. The HTML arrives
+          quickly, the first paint happens without waiting for app logic, and
+          any enhancement script can fail without breaking reading or navigation.
+        </p>
+
+        <p>
+          If I cannot explain a trace in one sentence, I keep reducing. Faster
+          systems are usually simpler systems with fewer opportunities for the
+          browser to hesitate.
+        </p>
+
+        <p>
+          Waterfalls are not there to impress. They are there to reveal whether
+          your assumptions survive contact with latency.
         </p>
 
         <p><a href="/">Back to home</a></p>
@@ -476,18 +526,28 @@
         <nav aria-label="Article sections">
           <ol class="toc-list">
             <li class="toc-item">
-              <a class="toc-link" href="#keep-meaningful-content-in-html"
-                >Keep Meaningful Content in HTML</a
+              <a class="toc-link" href="#start-with-a-cold-baseline"
+                >Start with a Cold Baseline</a
               >
             </li>
             <li class="toc-item">
-              <a class="toc-link" href="#run-every-feature-through-a-cost-check"
-                >Run Every Feature Through a Cost Check</a
+              <a class="toc-link" href="#follow-the-first-blocking-chain"
+                >Follow the First Blocking Chain</a
               >
             </li>
             <li class="toc-item">
-              <a class="toc-link" href="#optimize-for-reliability-over-novelty"
-                >Optimize for Reliability over Novelty</a
+              <a class="toc-link" href="#watch-for-hidden-queueing"
+                >Watch for Hidden Queueing</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#compare-traces-side-by-side"
+                >Compare Traces Side by Side</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#optimize-for-explainability"
+                >Optimize for Explainability</a
               >
             </li>
           </ol>

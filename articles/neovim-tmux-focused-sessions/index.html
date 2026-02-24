@@ -112,9 +112,15 @@
         background: var(--bg);
       }
 
-      main {
-        max-width: 44rem;
+      .article-shell {
+        max-width: 82rem;
         margin: 0 auto;
+      }
+
+      main {
+        max-width: 50rem;
+        margin: 0 auto;
+        min-width: 0;
       }
 
       .meta-row {
@@ -122,7 +128,7 @@
         justify-content: space-between;
         align-items: baseline;
         gap: 1rem;
-        margin-top: 0.35rem;
+        margin-top: 1.1rem;
         margin-bottom: 1.85rem;
         color: var(--muted);
         font-size: 1.12rem;
@@ -165,6 +171,21 @@
         line-height: 1.62;
       }
 
+      h2 {
+        margin: 1.85rem 0 0.65rem;
+        color: var(--fg);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        font-size: clamp(1.4rem, 3vw, 1.72rem);
+        max-width: 30ch;
+      }
+
+      h1[id],
+      h2[id],
+      h3[id] {
+        scroll-margin-top: 2.6rem;
+      }
+
       .lead {
         font-style: italic;
         color: var(--fg);
@@ -183,8 +204,138 @@
         text-decoration-thickness: 0.07em;
       }
 
+      .toc {
+        display: none;
+      }
+
+      .toc-title {
+        margin: 0 0 0.75rem;
+        color: var(--fg);
+        font-size: 1.52rem;
+        line-height: 1.1;
+      }
+
+      .toc-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .toc-item + .toc-item {
+        margin-top: 0.55rem;
+      }
+
+      .toc-link {
+        color: var(--muted);
+        text-decoration: none;
+        line-height: 1.3;
+        font-size: 1.03rem;
+      }
+
+      .toc-link:hover,
+      .toc-link:focus-visible {
+        color: var(--fg);
+        text-decoration: underline;
+        text-decoration-color: var(--line);
+        text-decoration-style: dotted;
+        text-underline-offset: 0.16em;
+        text-decoration-thickness: 0.07em;
+      }
+
+      @media (min-width: 75rem) {
+        .article-shell {
+          display: grid;
+          grid-template-columns: minmax(12.5rem, 16rem) minmax(0, 50rem) minmax(12.5rem, 16rem);
+          justify-content: center;
+          gap: 0;
+          align-items: start;
+        }
+
+        main {
+          grid-column: 2;
+          max-width: none;
+          margin: 0;
+        }
+
+        .toc {
+          grid-column: 3;
+          display: block;
+          justify-self: end;
+          margin-left: 2rem;
+          position: sticky;
+          top: 3rem;
+        }
+      }
+
+      .reading-progress {
+        position: fixed;
+        top: 0.62rem;
+        left: 0.9rem;
+        right: 0.9rem;
+        height: 6px;
+        border-radius: 999px;
+        --progress: 0%;
+        background: transparent;
+        pointer-events: none;
+        z-index: 40;
+        overflow: visible;
+        isolation: isolate;
+      }
+
+      .reading-progress::before {
+        content: "";
+        position: absolute;
+        left: -0.9rem;
+        right: -0.9rem;
+        top: -10px;
+        height: 26px;
+        background: var(--bg);
+        z-index: 0;
+      }
+
+      .reading-progress::after {
+        content: "";
+        position: absolute;
+        left: var(--progress);
+        right: 0;
+        top: 50%;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(70, 82, 71, 0.65);
+        transform: translateY(-50%);
+        z-index: 1;
+      }
+
+      .reading-progress-indicator {
+        position: absolute;
+        left: 0;
+        top: -4px;
+        width: 0%;
+        height: 14px;
+        border-radius: 999px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 72 14%27%3E%3Cpath d=%27M0 7C6 1 12 1 18 7C24 13 30 13 36 7C42 1 48 1 54 7C60 13 66 13 72 7%27 fill=%27none%27 stroke=%27%23d5d9c8%27 stroke-width=%273.4%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E");
+        background-repeat: repeat-x;
+        background-size: 72px 14px;
+        background-position: left center;
+        will-change: width;
+        z-index: 2;
+      }
+
+      .reading-progress-marker {
+        position: absolute;
+        top: -13px;
+        left: 0;
+        width: 2px;
+        height: 32px;
+        border-radius: 1px;
+        background: var(--fg);
+        transform: translateX(-1px);
+        opacity: 0.95;
+        z-index: 3;
+      }
+
       .giscus-wrap {
-        max-width: 44rem;
+        max-width: 50rem;
         margin-inline: auto;
       }
 
@@ -255,54 +406,98 @@
   </head>
 
   <body>
-    <main>
-      <div class="meta-row">
-        <a class="back" href="/">&larr; back</a>
-        <time datetime="2026-01-17">2026-01-17</time>
-      </div>
+    <div class="reading-progress" aria-hidden="true">
+      <div class="reading-progress-indicator"></div>
+      <div class="reading-progress-marker"></div>
+    </div>
 
-      <h1>Neovim + Tmux for Focused Sessions</h1>
+    <div class="article-shell">
+      <main>
+        <div class="meta-row">
+          <a class="back" href="/">&larr; back</a>
+          <time datetime="2026-01-17">2026-01-17</time>
+        </div>
 
-      <img
-        class="hero-image"
-        src="/assets/articles/terminal-flow.svg"
-        width="960"
-        height="420"
-        alt="Abstract terminal workflow artwork."
-      />
+        <h1>Neovim + Tmux for Focused Sessions</h1>
 
-      <p class="lead">
-        A focused setup is less about plugins and more about repeatability. I
-        want the same screen shape every morning.
-      </p>
+        <img
+          class="hero-image"
+          src="/assets/articles/terminal-flow.svg"
+          width="960"
+          height="420"
+          alt="Abstract terminal workflow artwork."
+        />
 
-      <p>
-        My baseline is simple: editor on the left, test watcher on the right,
-        logs below, and one scratch pane for quick command trials. The layout
-        almost never changes.
-      </p>
+        <p class="lead">
+          A focused setup is less about plugins and more about repeatability. I
+          want the same screen shape every morning.
+        </p>
 
-      <p class="dialogue">
-        <strong>Developer:</strong> Should I install another extension?
-      </p>
-      <p class="dialogue">
-        <strong>Kid:</strong> First learn one command you can use 200 times.
-      </p>
-      <p>
-        That rule keeps the stack stable. Neovim handles editing, tmux handles
-        context, and shell tools fill the gaps. On a remote server, this still
-        feels native and fast.
-      </p>
+        <h2 id="lock-a-repeatable-pane-layout">
+          Lock a Repeatable Pane Layout
+        </h2>
 
-      <p>
-        Consistency beats novelty for daily work. Once the workflow is
-        predictable, interruptions become less expensive and deep work resumes
-        faster.
-      </p>
+        <p>
+          My baseline is simple: editor on the left, test watcher on the right,
+          logs below, and one scratch pane for quick command trials. The layout
+          almost never changes.
+        </p>
 
-      <p><a href="/">Back to home</a></p>
-    </main>
-    <script src="/assets/nav-audio.js" defer></script>
+        <h2 id="prioritize-command-depth-over-plugin-count">
+          Prioritize Command Depth over Plugin Count
+        </h2>
+
+        <p class="dialogue">
+          <strong>Developer:</strong> Should I install another extension?
+        </p>
+        <p class="dialogue">
+          <strong>Kid:</strong> First learn one command you can use 200 times.
+        </p>
+        <p>
+          That rule keeps the stack stable. Neovim handles editing, tmux handles
+          context, and shell tools fill the gaps. On a remote server, this still
+          feels native and fast.
+        </p>
+
+        <h2 id="make-consistency-the-productivity-feature">
+          Make Consistency the Productivity Feature
+        </h2>
+
+        <p>
+          Consistency beats novelty for daily work. Once the workflow is
+          predictable, interruptions become less expensive and deep work resumes
+          faster.
+        </p>
+
+        <p><a href="/">Back to home</a></p>
+      </main>
+
+      <aside class="toc" aria-label="Table of contents">
+        <p class="toc-title">Table of Contents</p>
+        <nav aria-label="Article sections">
+          <ol class="toc-list">
+            <li class="toc-item">
+              <a class="toc-link" href="#lock-a-repeatable-pane-layout"
+                >Lock a Repeatable Pane Layout</a
+              >
+            </li>
+            <li class="toc-item">
+              <a
+                class="toc-link"
+                href="#prioritize-command-depth-over-plugin-count"
+                >Prioritize Command Depth over Plugin Count</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#make-consistency-the-productivity-feature"
+                >Make Consistency the Productivity Feature</a
+              >
+            </li>
+          </ol>
+        </nav>
+      </aside>
+    </div>
+    <script src="/assets/nav-audio.js?v=20260224m5" defer></script>
     <div class="giscus-wrap">
       <script
         src="https://giscus.app/client.js"

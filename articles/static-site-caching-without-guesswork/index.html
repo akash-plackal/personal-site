@@ -14,10 +14,10 @@
         ]
       }
     </script>
-    <title>Why This Site Stays HTML-First | Akash Plackal</title>
+    <title>Static Site Caching Without Guesswork | Akash Plackal</title>
     <meta
       name="description"
-      content="Notes on keeping a personal site HTML-first for speed and reliability."
+      content="A practical approach to immutable asset caching and predictable HTML freshness."
     />
     <style>
       @font-face {
@@ -76,14 +76,14 @@
         animation: vt-article-enter 100ms ease-out both;
       }
 
-      ::view-transition-group(title-html-first),
+      ::view-transition-group(title-static-site-caching),
       ::view-transition-group(article-hero) {
         animation-duration: 220ms;
         animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
-      ::view-transition-old(title-html-first),
-      ::view-transition-new(title-html-first),
+      ::view-transition-old(title-static-site-caching),
+      ::view-transition-new(title-static-site-caching),
       ::view-transition-old(article-hero),
       ::view-transition-new(article-hero) {
         mix-blend-mode: normal;
@@ -103,6 +103,7 @@
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         padding: 1.5rem 1rem;
@@ -148,8 +149,8 @@
         line-height: 1.05;
         letter-spacing: -0.01em;
         font-size: clamp(2rem, 6.4vw, 3.1rem);
-        max-width: 20ch;
-        view-transition-name: title-html-first;
+        max-width: 22ch;
+        view-transition-name: title-static-site-caching;
       }
 
       .hero-image {
@@ -394,7 +395,7 @@
       }
 
       .giscus-frame:focus-visible {
-        outline: 2px solid var(--ring-outer);
+        outline: 2px solid var(--link);
         outline-offset: 2px;
       }
 
@@ -415,57 +416,113 @@
       <main>
         <div class="meta-row">
           <a class="back" href="/">&larr; back</a>
-          <time datetime="2026-02-11">2026-02-11</time>
+          <time datetime="2026-02-16">2026-02-16</time>
         </div>
 
-        <h1>Why This Site Stays HTML-First</h1>
+        <h1>Static Site Caching Without Guesswork</h1>
 
         <img
           class="hero-image"
-          src="/assets/articles/signal-grid.svg"
+          src="/assets/articles/static-cache-hero.svg"
           width="960"
           height="420"
-          alt="Abstract signal style artwork."
+          alt="Static cache layers and refresh flow diagram."
         />
 
         <p class="lead">
-          The fastest page is the one that can explain itself before JavaScript
-          wakes up. That is the entire idea behind this site.
+          Caching looks simple until a deploy goes live and half your users run
+          old bytes while the other half hit the new build. Predictable caching
+          is less about clever directives and more about strict separation.
         </p>
 
-        <h2 id="keep-meaningful-content-in-html">
-          Keep Meaningful Content in HTML
+        <h2 id="separate-html-from-assets">Separate HTML from Assets</h2>
+
+        <p>
+          I split the world into two buckets. Bucket one is HTML: short-lived,
+          revalidated often, allowed to change frequently. Bucket two is assets:
+          immutable, fingerprinted, and aggressively cached. Mixing those two
+          policies is where confusion begins.
+        </p>
+
+        <p>
+          On static hosting this separation is easier than on many dynamic
+          stacks, but only if you make it explicit. If your HTML references
+          stable asset URLs that get overwritten in place, long cache lifetimes
+          become a trap. If your assets are fingerprinted, long cache lifetimes
+          become a feature.
+        </p>
+
+        <h2 id="verify-wire-headers-after-deploy">
+          Verify Wire Headers After Deploy
         </h2>
 
         <p>
-          Every page starts from a strict rule: useful content must be in the
-          first HTML response. If I can read and navigate without waiting for
-          scripts, the baseline experience is already good.
+          The payoff is immediate on repeat visits. Browser cache can satisfy
+          most asset fetches without network round trips, leaving only the
+          document to negotiate freshness. That shrinks latency variance and
+          makes navigation feel consistent.
         </p>
-
-        <h2 id="run-every-feature-through-a-cost-check">
-          Run Every Feature Through a Cost Check
-        </h2>
 
         <p class="dialogue">
-          <strong>Developer:</strong> Do we need another layer here?
+          <strong>Developer:</strong> Should we just set everything to one year?
         </p>
         <p class="dialogue">
-          <strong>Kid:</strong> Only if it helps the page show up faster.
-        </p>
-        <p>
-          That tiny conversation is how most decisions are made. Fancy additions
-          are allowed, but only after they survive the cost check: bytes,
-          requests, and layout stability on a cold load.
+          <strong>Kid:</strong> Only if everything is immutable. Most things are
+          not.
         </p>
 
-        <h2 id="optimize-for-reliability-over-novelty">
-          Optimize for Reliability over Novelty
+        <p>
+          I also avoid cargo-cult directives. A header is useful only when the
+          file lifecycle matches it. "immutable" on a mutable path is
+          effectively a bug report scheduled for later.
+        </p>
+
+        <p>
+          Another practical habit is checking response headers after deployment,
+          not just in local config. CDNs and platform defaults can merge or
+          override directives, and the final wire response is the only source
+          that matters.
+        </p>
+
+        <h2 id="match-directives-to-file-lifecycle">
+          Match Directives to File Lifecycle
         </h2>
 
         <p>
-          HTML-first keeps the system honest. It is easier to measure, easier to
-          maintain, and far less likely to break when conditions are imperfect.
+          For HTML, I prefer short cache with stale-while-revalidate. Users get
+          fast responses while the edge refreshes quietly. For assets, I prefer
+          long max-age and immutable because the filename itself encodes version.
+        </p>
+
+        <p>
+          The biggest mistake I see is attaching correctness to hope. If your
+          invalidation model depends on every layer behaving perfectly every
+          time, you do not have a model yet. You have luck.
+        </p>
+
+        <h2 id="reduce-cache-state-complexity">
+          Reduce Cache-State Complexity
+        </h2>
+
+        <p>
+          Good caching should reduce decision count. You should know exactly
+          which class a file belongs to before it ships. If the answer is
+          ambiguous, simplify the delivery path until it is not.
+        </p>
+
+        <p>
+          On this site, predictable caching keeps first visits honest and repeat
+          visits fast. The browser does less work, the network does fewer trips,
+          and I spend less time investigating random stale states.
+        </p>
+
+        <h2 id="treat-reliability-as-performance">
+          Treat Reliability as Performance
+        </h2>
+
+        <p>
+          Reliability is a performance feature. The fastest page is the one that
+          behaves the same way tomorrow as it did today.
         </p>
 
         <p><a href="/">Back to home</a></p>
@@ -476,18 +533,28 @@
         <nav aria-label="Article sections">
           <ol class="toc-list">
             <li class="toc-item">
-              <a class="toc-link" href="#keep-meaningful-content-in-html"
-                >Keep Meaningful Content in HTML</a
+              <a class="toc-link" href="#separate-html-from-assets"
+                >Separate HTML from Assets</a
               >
             </li>
             <li class="toc-item">
-              <a class="toc-link" href="#run-every-feature-through-a-cost-check"
-                >Run Every Feature Through a Cost Check</a
+              <a class="toc-link" href="#verify-wire-headers-after-deploy"
+                >Verify Wire Headers After Deploy</a
               >
             </li>
             <li class="toc-item">
-              <a class="toc-link" href="#optimize-for-reliability-over-novelty"
-                >Optimize for Reliability over Novelty</a
+              <a class="toc-link" href="#match-directives-to-file-lifecycle"
+                >Match Directives to File Lifecycle</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#reduce-cache-state-complexity"
+                >Reduce Cache-State Complexity</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#treat-reliability-as-performance"
+                >Treat Reliability as Performance</a
               >
             </li>
           </ol>

@@ -122,7 +122,10 @@
 
       ::view-transition-group(title-html-first),
       ::view-transition-group(title-neovim-tmux),
-      ::view-transition-group(title-latency-budgets) {
+      ::view-transition-group(title-latency-budgets),
+      ::view-transition-group(title-request-waterfalls),
+      ::view-transition-group(title-cold-cache-checklist),
+      ::view-transition-group(title-static-site-caching) {
         animation-duration: 220ms;
         animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
       }
@@ -132,7 +135,13 @@
       ::view-transition-old(title-neovim-tmux),
       ::view-transition-new(title-neovim-tmux),
       ::view-transition-old(title-latency-budgets),
-      ::view-transition-new(title-latency-budgets) {
+      ::view-transition-new(title-latency-budgets),
+      ::view-transition-old(title-request-waterfalls),
+      ::view-transition-new(title-request-waterfalls),
+      ::view-transition-old(title-cold-cache-checklist),
+      ::view-transition-new(title-cold-cache-checklist),
+      ::view-transition-old(title-static-site-caching),
+      ::view-transition-new(title-static-site-caching) {
         mix-blend-mode: normal;
       }
 
@@ -147,7 +156,10 @@
 
         .article-link-html-first,
         .article-link-neovim-tmux,
-        .article-link-latency-budgets {
+        .article-link-latency-budgets,
+        .article-link-request-waterfalls,
+        .article-link-cold-cache-checklist,
+        .article-link-static-site-caching {
           view-transition-name: none;
         }
       }
@@ -352,6 +364,18 @@
         view-transition-name: title-latency-budgets;
       }
 
+      .article-link-request-waterfalls {
+        view-transition-name: title-request-waterfalls;
+      }
+
+      .article-link-cold-cache-checklist {
+        view-transition-name: title-cold-cache-checklist;
+      }
+
+      .article-link-static-site-caching {
+        view-transition-name: title-static-site-caching;
+      }
+
       time {
         color: var(--muted);
         min-width: 6ch;
@@ -482,6 +506,30 @@
           <li>
             <time datetime="2026-02">2026-02:</time>
             <a
+              class="article-link-request-waterfalls"
+              href="/articles/request-waterfalls-i-actually-trust/"
+              >Request Waterfalls I Actually Trust</a
+            >
+          </li>
+          <li>
+            <time datetime="2026-02">2026-02:</time>
+            <a
+              class="article-link-cold-cache-checklist"
+              href="/articles/cold-cache-checklist-before-i-ship/"
+              >Cold-Cache Checklist Before I Ship</a
+            >
+          </li>
+          <li>
+            <time datetime="2026-02">2026-02:</time>
+            <a
+              class="article-link-static-site-caching"
+              href="/articles/static-site-caching-without-guesswork/"
+              >Static Site Caching Without Guesswork</a
+            >
+          </li>
+          <li>
+            <time datetime="2026-02">2026-02:</time>
+            <a
               class="article-link-html-first"
               href="/articles/why-this-site-stays-html-first/"
               >Why This Site Stays HTML-First</a
@@ -510,7 +558,7 @@
         Minimal stack: one HTML response, inline CSS, optional JavaScript only.
       </p>
     </main>
-    <script src="/assets/nav-audio.js" defer></script>
+    <script src="/assets/nav-audio.js?v=20260224m5" defer></script>
     <script
       src="https://giscus.app/client.js"
       data-repo="akash-plackal/personal-site"

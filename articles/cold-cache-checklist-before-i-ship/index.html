@@ -14,10 +14,10 @@
         ]
       }
     </script>
-    <title>Why This Site Stays HTML-First | Akash Plackal</title>
+    <title>Cold-Cache Checklist Before I Ship | Akash Plackal</title>
     <meta
       name="description"
-      content="Notes on keeping a personal site HTML-first for speed and reliability."
+      content="A practical pre-ship checklist for first-visit performance on slow networks."
     />
     <style>
       @font-face {
@@ -76,14 +76,14 @@
         animation: vt-article-enter 100ms ease-out both;
       }
 
-      ::view-transition-group(title-html-first),
+      ::view-transition-group(title-cold-cache-checklist),
       ::view-transition-group(article-hero) {
         animation-duration: 220ms;
         animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
-      ::view-transition-old(title-html-first),
-      ::view-transition-new(title-html-first),
+      ::view-transition-old(title-cold-cache-checklist),
+      ::view-transition-new(title-cold-cache-checklist),
       ::view-transition-old(article-hero),
       ::view-transition-new(article-hero) {
         mix-blend-mode: normal;
@@ -103,6 +103,7 @@
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         padding: 1.5rem 1rem;
@@ -148,8 +149,8 @@
         line-height: 1.05;
         letter-spacing: -0.01em;
         font-size: clamp(2rem, 6.4vw, 3.1rem);
-        max-width: 20ch;
-        view-transition-name: title-html-first;
+        max-width: 22ch;
+        view-transition-name: title-cold-cache-checklist;
       }
 
       .hero-image {
@@ -394,7 +395,7 @@
       }
 
       .giscus-frame:focus-visible {
-        outline: 2px solid var(--ring-outer);
+        outline: 2px solid var(--link);
         outline-offset: 2px;
       }
 
@@ -415,57 +416,125 @@
       <main>
         <div class="meta-row">
           <a class="back" href="/">&larr; back</a>
-          <time datetime="2026-02-11">2026-02-11</time>
+          <time datetime="2026-02-20">2026-02-20</time>
         </div>
 
-        <h1>Why This Site Stays HTML-First</h1>
+        <h1>Cold-Cache Checklist Before I Ship</h1>
 
         <img
           class="hero-image"
-          src="/assets/articles/signal-grid.svg"
+          src="/assets/articles/cold-cache-checklist-hero.svg"
           width="960"
           height="420"
-          alt="Abstract signal style artwork."
+          alt="Checklist cards and timing icon for cold-cache validation."
         />
 
         <p class="lead">
-          The fastest page is the one that can explain itself before JavaScript
-          wakes up. That is the entire idea behind this site.
+          I stopped asking "is it fast on my machine" and started asking "does
+          it still feel immediate on first visit, with nothing cached, on a weak
+          connection?" That changed almost every decision.
         </p>
 
-        <h2 id="keep-meaningful-content-in-html">
-          Keep Meaningful Content in HTML
+        <h2 id="lock-the-baseline">Lock the Baseline</h2>
+
+        <p>
+          Before shipping any page, I run a cold-cache checklist. It is not
+          elegant, but it keeps me from shipping a layout that looks clean in a
+          demo and drags in production.
+        </p>
+
+        <p>
+          First check: meaningful HTML in the initial response. If the first
+          document cannot stand on its own, I treat the design as unfinished.
+          Content that appears only after script execution is not dependable
+          content.
+        </p>
+
+        <h2 id="protect-the-early-network-window">
+          Protect the Early Network Window
         </h2>
 
         <p>
-          Every page starts from a strict rule: useful content must be in the
-          first HTML response. If I can read and navigate without waiting for
-          scripts, the baseline experience is already good.
+          Second check: request count at startup. I count what the browser must
+          fetch before a user can orient themselves. One more "tiny" request is
+          still one more handshake, one more queue slot, and one more chance to
+          miss an early paint window.
         </p>
 
-        <h2 id="run-every-feature-through-a-cost-check">
-          Run Every Feature Through a Cost Check
-        </h2>
+        <p>
+          Third check: CSS that can explain the screen immediately. I keep
+          critical rules in the document and avoid making layout dependent on
+          late stylesheets. Stability beats convenience every time.
+        </p>
 
         <p class="dialogue">
-          <strong>Developer:</strong> Do we need another layer here?
+          <strong>Developer:</strong> But the optimization is only 4 KB.
         </p>
         <p class="dialogue">
-          <strong>Kid:</strong> Only if it helps the page show up faster.
-        </p>
-        <p>
-          That tiny conversation is how most decisions are made. Fancy additions
-          are allowed, but only after they survive the cost check: bytes,
-          requests, and layout stability on a cold load.
+          <strong>Kid:</strong> 4 KB plus one request plus one parse plus one
+          more thing to fail.
         </p>
 
-        <h2 id="optimize-for-reliability-over-novelty">
-          Optimize for Reliability over Novelty
+        <h2 id="enforce-enhancement-discipline">
+          Enforce Enhancement Discipline
         </h2>
 
         <p>
-          HTML-first keeps the system honest. It is easier to measure, easier to
-          maintain, and far less likely to break when conditions are imperfect.
+          Fourth check: no JavaScript dependency for reading. I allow JavaScript
+          for enhancement, motion polish, or optional behavior. I do not allow
+          it to gate navigation or core text. If script download stalls, the
+          page should still be usable.
+        </p>
+
+        <p>
+          Fifth check: image discipline. Every image gets explicit dimensions,
+          sensible format, and a clear priority. If an image is not needed for
+          the first decision on the page, it should not compete with the first
+          decision on the network.
+        </p>
+
+        <h2 id="measure-navigation-and-caching">
+          Measure Navigation and Caching
+        </h2>
+
+        <p>
+          Sixth check: trace comparison. I record one baseline run, change one
+          thing, and re-run. If I cannot point to a concrete trace improvement,
+          I assume the change is noise and roll it back.
+        </p>
+
+        <p>
+          Seventh check: interaction after navigation. Back and forward flows
+          should feel instant when the browser can restore from memory. I verify
+          BFCache behavior because users navigate in loops, not in perfect
+          single-page journeys.
+        </p>
+
+        <p>
+          Eighth check: real wording in the UI. Dense, useful copy improves
+          perceived speed because users can act immediately. Empty hero sections,
+          delayed text, and decorative placeholders make fast systems feel slow.
+        </p>
+
+        <p>
+          Ninth check: cache headers that match intent. Immutable assets need
+          long cache lifetimes, while HTML needs controlled freshness. If these
+          rules are blurry, performance drifts over time and every deployment
+          behaves a little differently.
+        </p>
+
+        <h2 id="ship-by-removing-one-thing">Ship by Removing One Thing</h2>
+
+        <p>
+          Tenth check: remove one thing before shipping. It can be a request, a
+          decorative effect, or a redundant wrapper. Performance usually
+          improves most when we delete confidently rather than optimize
+          endlessly.
+        </p>
+
+        <p>
+          The checklist is boring by design. Boring systems are predictable, and
+          predictable systems are fast for real people on bad days.
         </p>
 
         <p><a href="/">Back to home</a></p>
@@ -476,18 +545,28 @@
         <nav aria-label="Article sections">
           <ol class="toc-list">
             <li class="toc-item">
-              <a class="toc-link" href="#keep-meaningful-content-in-html"
-                >Keep Meaningful Content in HTML</a
+              <a class="toc-link" href="#lock-the-baseline"
+                >Lock the Baseline</a
               >
             </li>
             <li class="toc-item">
-              <a class="toc-link" href="#run-every-feature-through-a-cost-check"
-                >Run Every Feature Through a Cost Check</a
+              <a class="toc-link" href="#protect-the-early-network-window"
+                >Protect the Early Network Window</a
               >
             </li>
             <li class="toc-item">
-              <a class="toc-link" href="#optimize-for-reliability-over-novelty"
-                >Optimize for Reliability over Novelty</a
+              <a class="toc-link" href="#enforce-enhancement-discipline"
+                >Enforce Enhancement Discipline</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#measure-navigation-and-caching"
+                >Measure Navigation and Caching</a
+              >
+            </li>
+            <li class="toc-item">
+              <a class="toc-link" href="#ship-by-removing-one-thing"
+                >Ship by Removing One Thing</a
               >
             </li>
           </ol>
