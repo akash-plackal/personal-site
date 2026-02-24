@@ -102,6 +102,7 @@
     const indicator = document.querySelector(".reading-progress-indicator");
     const marker = document.querySelector(".reading-progress-marker");
     if (!(indicator instanceof HTMLElement)) return;
+    const SHOW_THRESHOLD_PX = 56;
     let raf = 0;
     const update = () => {
       raf = 0;
@@ -109,6 +110,10 @@
       const value = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
       if (track instanceof HTMLElement) {
         track.style.setProperty("--progress", `${(value * 100).toFixed(2)}%`);
+        track.classList.toggle(
+          "is-visible",
+          max > 0 && window.scrollY > SHOW_THRESHOLD_PX,
+        );
       }
       indicator.style.width = `${(value * 100).toFixed(2)}%`;
       if (marker instanceof HTMLElement) {
