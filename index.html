@@ -162,6 +162,16 @@
         .article-link-static-site-caching {
           view-transition-name: none;
         }
+
+        .hero-portrait,
+        .hero-popout,
+        .hero-portrait::before,
+        .site-nav a::before,
+        .chip::before,
+        .post-list a::before {
+          animation: none;
+          transition: none;
+        }
       }
 
       @media (prefers-reduced-motion: no-preference) {
@@ -212,6 +222,9 @@
       .site-nav a {
         color: var(--muted);
         text-decoration: none;
+        position: relative;
+        display: inline-block;
+        isolation: isolate;
       }
 
       .site-nav a:hover,
@@ -262,6 +275,29 @@
         isolation: isolate;
         overflow: visible;
         view-transition-name: hero-avatar;
+        transition: transform 220ms ease-out;
+      }
+
+      .hero-portrait::before {
+        content: "";
+        position: absolute;
+        inset: -0.36rem -0.24rem -0.3rem -0.28rem;
+        border-radius: 58% 62% 40% 44% / 66% 64% 36% 34%;
+        background: radial-gradient(
+          94% 90% at 50% 36%,
+          rgba(159, 179, 120, 0.34),
+          rgba(159, 179, 120, 0.2) 70%,
+          rgba(159, 179, 120, 0.07) 100%
+        );
+        opacity: 0;
+        transform: scale(0.95) rotate(-1.5deg);
+        box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.26);
+        transition:
+          opacity 220ms ease-out,
+          transform 220ms ease-out,
+          box-shadow 220ms ease-out;
+        pointer-events: none;
+        z-index: 0;
       }
 
       .hero-mask {
@@ -272,6 +308,10 @@
         position: relative;
         z-index: 2;
         clip-path: url(#avatar-clip);
+        box-shadow: 0 0 0 1px rgba(159, 179, 120, 0.08);
+        transition:
+          box-shadow 220ms ease-out,
+          filter 220ms ease-out;
       }
 
       .hero-portrait picture {
@@ -295,9 +335,39 @@
         width: 57%;
         height: auto;
         transform: translateX(-50%);
+        opacity: 0.94;
         z-index: 1;
         pointer-events: none;
         user-select: none;
+        transition:
+          transform 220ms ease-out,
+          opacity 220ms ease-out;
+      }
+
+      .hero-portrait:hover,
+      .hero-portrait:focus-visible {
+        transform: translateY(-1px);
+      }
+
+      .hero-portrait:hover::before,
+      .hero-portrait:focus-visible::before {
+        opacity: 1;
+        transform: scale(1) rotate(-0.5deg);
+        box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.38);
+      }
+
+      .hero-portrait:hover .hero-mask,
+      .hero-portrait:focus-visible .hero-mask {
+        box-shadow:
+          0 0 0 1px rgba(159, 179, 120, 0.3),
+          0 12px 22px rgba(0, 0, 0, 0.18);
+        filter: brightness(1.02);
+      }
+
+      .hero-portrait:hover .hero-popout,
+      .hero-portrait:focus-visible .hero-popout {
+        transform: translateX(-50%) translateY(-1px) scale(1.01);
+        opacity: 1;
       }
 
       a {
@@ -306,6 +376,97 @@
         text-decoration-style: dotted;
         text-underline-offset: 0.16em;
         text-decoration-thickness: 0.07em;
+      }
+
+      .chip,
+      .post-list a {
+        position: relative;
+        display: inline-block;
+        isolation: isolate;
+      }
+
+      .site-nav a,
+      .chip,
+      .post-list a {
+        transition:
+          color 160ms ease-out,
+          transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          text-decoration-color 120ms ease-out;
+      }
+
+      .site-nav a {
+        --shape-radius: 30%;
+        --shape-pad-inline: 0.72rem;
+        --shape-pad-block: 0.3rem;
+      }
+
+      .chip {
+        --shape-radius: 999px;
+        --shape-pad-inline: 0.78rem;
+        --shape-pad-block: 0.3rem;
+      }
+
+      .post-list a {
+        --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
+        --shape-pad-inline: 0.62rem;
+        --shape-pad-block: 0.36rem;
+      }
+
+      .post-list li:nth-child(even) a {
+        --shape-radius: 28%;
+        --shape-pad-block: 0.3rem;
+      }
+
+      .site-nav a::before,
+      .chip::before,
+      .post-list a::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: calc(100% + var(--shape-pad-inline, 0.62rem));
+        height: calc(100% + var(--shape-pad-block, 0.28rem));
+        border-radius: var(--shape-radius, 999px);
+        clip-path: var(--shape-clip, none);
+        background: rgba(159, 179, 120, 0.12);
+        box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.88)
+          rotate(var(--shape-rotate, 0deg));
+        transform-origin: center;
+        transition:
+          transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 170ms ease-out;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .site-nav a:hover::before,
+      .site-nav a:focus-visible::before,
+      .site-nav a[aria-current="page"]::before,
+      .chip:hover::before,
+      .chip:focus-visible::before,
+      .post-list a:hover::before,
+      .post-list a:focus-visible::before {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1)
+          rotate(var(--shape-rotate, 0deg));
+      }
+
+      .chip:hover,
+      .chip:focus-visible {
+        color: var(--fg);
+        border-color: var(--ring-outer);
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus-visible,
+      .chip:hover,
+      .chip:focus-visible,
+      .post-list a:hover,
+      .post-list a:focus-visible {
+        text-decoration-color: transparent;
+        transform: translateY(-1px);
       }
 
       .chips {
