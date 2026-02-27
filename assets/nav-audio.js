@@ -153,22 +153,7 @@
         !e.altKey &&
         a.target !== "_blank"
       ) {
-        if (
-          href === "/" &&
-          window.location.pathname !== "/" &&
-          window.history.length > 1 &&
-          document.referrer
-        ) {
-          try {
-            if (new URL(document.referrer).origin === window.location.origin) {
-              markClick();
-              window.history.back();
-              return;
-            }
-          } catch {}
-        }
         markClick();
-        window.location.href = href;
         return;
       }
       play();
