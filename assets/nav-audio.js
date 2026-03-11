@@ -97,6 +97,34 @@
     play();
   };
 
+  const getInternalNavLink = (event) => {
+    if (!(event.target instanceof Element)) return null;
+    const link = event.target.closest("a[href]");
+    if (!(link instanceof HTMLAnchorElement)) return null;
+    if (link.target && link.target !== "_self") return null;
+    if (link.hasAttribute("download")) return null;
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+      return null;
+    }
+
+    let url;
+    try {
+      url = new URL(link.href, window.location.href);
+    } catch {
+      return null;
+    }
+
+    if (url.origin !== window.location.origin) return null;
+    if (
+      url.pathname === window.location.pathname &&
+      url.search === window.location.search
+    ) {
+      return null;
+    }
+
+    return link;
+  };
+
   const setupReadingProgress = () => {
     const track = document.querySelector(".reading-progress");
     const indicator = document.querySelector(".reading-progress-indicator");
@@ -136,41 +164,20 @@
   setupReadingProgress();
 
   document.addEventListener(
+    "click",
+    (e) => {
+      if (e.defaultPrevented || getInternalNavLink(e) === null) return;
+      markClick();
+    },
+    { capture: true },
+  );
+
+  document.addEventListener(
     "pointerdown",
     (e) => {
-      if (!e.isPrimary || !(e.target instanceof Element)) return;
+      if (!e.isPrimary) return;
       if (e.pointerType === "mouse" && e.button !== 0) return;
-      const a = e.target.closest("a[href]");
-      if (!a) return;
-      const href = a.getAttribute("href");
-      if (
-        e.pointerType === "mouse" &&
-        href &&
-        (href.startsWith("/") || href.startsWith("./")) &&
-        !e.ctrlKey &&
-        !e.metaKey &&
-        !e.shiftKey &&
-        !e.altKey &&
-        a.target !== "_blank"
-      ) {
-        if (
-          href === "/" &&
-          window.location.pathname !== "/" &&
-          window.history.length > 1 &&
-          document.referrer
-        ) {
-          try {
-            if (new URL(document.referrer).origin === window.location.origin) {
-              markClick();
-              window.history.back();
-              return;
-            }
-          } catch {}
-        }
-        markClick();
-        window.location.href = href;
-        return;
-      }
+      if (getInternalNavLink(e)) return;
       play();
     },
     { capture: true },
