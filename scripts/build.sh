@@ -73,4 +73,6 @@ for src in "${HTML_FILES[@]}"; do
     -o "$dest"
 done
 
+"$ROOT_DIR/scripts/csp-hashes.sh" "$OUT_DIR"
+
 echo "Build completed."
