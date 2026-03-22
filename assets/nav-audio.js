@@ -77,7 +77,8 @@
     "pointerdown",
     (e) => {
       if (!e.isPrimary) return;
-      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (e.pointerType !== "mouse") return;
+      if (e.button !== 0) return;
       if (!(e.target instanceof Element)) return;
       const a = e.target.closest("a[href]");
       if (!a) return;
