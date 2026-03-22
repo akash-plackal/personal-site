@@ -57,14 +57,54 @@
     }
 
     @keyframes vt-article-enter {
-      from {
-        opacity: 0.985;
+        0% { opacity: 0; transform: translateY(8px); }
+        100% { opacity: 1; transform: translateY(0); }
       }
 
-      to {
-        opacity: 1;
+      @keyframes title-enter {
+        0% { opacity: 0; transform: translateY(30px); filter: blur(4px); }
+        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
       }
-    }
+
+      @keyframes hero-enter {
+        0% { opacity: 0; transform: scale(0.92) translateY(20px); filter: blur(8px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+      }
+
+      @keyframes meta-enter-l {
+        0% { opacity: 0; transform: translateX(-24px); }
+        100% { opacity: 1; transform: translateX(0); }
+      }
+
+      @keyframes meta-enter-r {
+        0% { opacity: 0; transform: translateX(20px); }
+        100% { opacity: 1; transform: translateX(0); }
+      }
+
+      @keyframes lead-enter {
+        0% { opacity: 0; transform: translateY(26px) scale(0.97); filter: blur(2px); }
+        100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+      }
+
+      @keyframes section-enter {
+        0% { opacity: 0; transform: translateX(-14px) translateY(10px); }
+        100% { opacity: 1; transform: translateX(0) translateY(0); }
+      }
+
+      @keyframes body-enter {
+        0% { opacity: 0; transform: translateY(18px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes toc-enter {
+        0% { opacity: 0; transform: translateX(28px); filter: blur(3px); }
+        100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+      }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
 
     ::view-transition {
       background-color: var(--bg);
@@ -80,15 +120,15 @@
     }
 
     ::view-transition-new(root) {
-      animation: vt-article-enter 100ms ease-out both;
+        animation: vt-article-enter 500ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
       mix-blend-mode: normal;
     }
 
     ::view-transition-group(title-html-first),
     ::view-transition-group(article-hero) {
-      animation-duration: 220ms;
-      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+        animation-duration: 450ms;
+        animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+      }
 
     ::view-transition-old(title-html-first),
     ::view-transition-new(title-html-first),
@@ -97,7 +137,69 @@
       mix-blend-mode: normal;
     }
 
-    @media (prefers-reduced-motion: reduce) {
+    
+      
+      @media (prefers-reduced-motion: no-preference) {
+        .back {
+          animation: meta-enter-l 500ms linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1) both;
+        }
+        .meta-row time {
+          animation: meta-enter-r 500ms linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1) both;
+          animation-delay: 40ms;
+        }
+        h1 {
+          animation: title-enter 600ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+          animation-delay: 80ms;
+        }
+        .hero-image {
+          animation: hero-enter 650ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
+          animation-delay: 180ms;
+        }
+        .lead {
+          animation: lead-enter 550ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+          animation-delay: 320ms;
+        }
+        main h2 {
+          animation: section-enter 500ms linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1) both;
+          animation-delay: 420ms;
+        }
+        main h2 ~ p {
+          animation: body-enter 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+          animation-delay: 480ms;
+        }
+        main h2:nth-of-type(2) {
+          animation-delay: 500ms;
+        }
+        main h2:nth-of-type(2) ~ p:not(h2:nth-of-type(3) ~ p) {
+          animation-delay: 550ms;
+        }
+        main h2:nth-of-type(3) {
+          animation-delay: 580ms;
+        }
+        main h2:nth-of-type(3) ~ p {
+          animation-delay: 630ms;
+        }
+        main h2:nth-of-type(4) {
+          animation-delay: 660ms;
+        }
+        main h2:nth-of-type(4) ~ p:not(h2:nth-of-type(5) ~ p) {
+          animation-delay: 710ms;
+        }
+        main h2:nth-of-type(5) {
+          animation-delay: 740ms;
+        }
+        main h2:nth-of-type(5) ~ p {
+          animation-delay: 790ms;
+        }
+        .toc {
+          animation: toc-enter 550ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
+          animation-delay: 400ms;
+        }
+      }
+
+
+
+      @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
         animation: none;
       }
@@ -110,9 +212,20 @@
       .back::before,
       .toc-link::before,
       main>p:last-of-type a::before {
-        animation: none;
-        transition: none;
-      }
+          animation: none;
+          transition: none;
+        }
+
+        h1,
+        .hero-image,
+        .lead,
+        .back,
+        .meta-row time,
+        .toc,
+        main h2,
+        main h2 ~ p {
+          animation: none;
+        }
     }
 
     * {
@@ -232,7 +345,7 @@
     main>p:last-of-type a {
       transition:
         color 160ms ease-out,
-        transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
         text-decoration-color 120ms ease-out;
     }
 
@@ -275,7 +388,7 @@
       transform: translate(-50%, -50%) scale(0.88);
       transform-origin: center;
       transition:
-        transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
         opacity 170ms ease-out,
         visibility 0s 170ms;
       pointer-events: none;
@@ -292,7 +405,7 @@
       visibility: visible;
       transform: translate(-50%, -50%) scale(1);
       transition:
-        transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
         opacity 170ms ease-out,
         visibility 0s;
     }
