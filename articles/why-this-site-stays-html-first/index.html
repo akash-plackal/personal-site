@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script type="speculationrules">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script type="speculationrules">
       {
         "prefetch": [
           {
@@ -11,572 +12,541 @@
             "where": { "href_matches": "/*" },
             "eagerness": "immediate"
           }
-        ],
-        "prerender": [
-          {
-            "source": "document",
-            "where": { "href_matches": "/*" },
-            "eagerness": "moderate"
-          }
         ]
       }
     </script>
-    <title>Why This Site Stays HTML-First | Akash Plackal</title>
-    <meta
-      name="description"
-      content="Notes on keeping a personal site HTML-first for speed and reliability."
-    />
-    <style>
-      @font-face {
-        font-family: "Iosevka Local";
-        src:
-          local("Iosevka"),
-          local("Iosevka Term"),
-          local("Iosevka Slab"),
-          url("/assets/fonts/iosevka-slab-latin-400.woff2") format("woff2");
-        font-style: normal;
-        font-weight: 400;
-        font-display: optional;
-        unicode-range:
-          U+0020-007E, U+00A0, U+00A9, U+00AE, U+00B0, U+00B7, U+00D7, U+00F7,
-          U+0131, U+2013, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022,
-          U+2026, U+20AC, U+2122;
+  <title>Why This Site Stays HTML-First | Akash Plackal</title>
+  <meta name="description" content="Notes on keeping a personal site HTML-first for speed and reliability." />
+  <style>
+    @font-face {
+      font-family: "Iosevka Local";
+      src:
+        local("Iosevka"),
+        local("Iosevka Term"),
+        local("Iosevka Slab"),
+        url("/assets/fonts/iosevka-slab-latin-400.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: optional;
+      unicode-range:
+        U+0020-007E, U+00A0, U+00A9, U+00AE, U+00B0, U+00B7, U+00D7, U+00F7,
+        U+0131, U+2013, U+2014, U+2018, U+2019, U+201C, U+201D, U+2022,
+        U+2026, U+20AC, U+2122;
+    }
+
+    :root {
+      --font-main:
+        "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont,
+        sans-serif;
+      --bg: #141a15;
+      --surface: #1d2520;
+      --fg: #d5d9c8;
+      --muted: #a8b09b;
+      --line: #465247;
+      --link: #9fb378;
+      --selection-bg: #324036;
+      --selection-fg: #e7ebdc;
+    }
+
+    @view-transition {
+      navigation: auto;
+    }
+
+    @keyframes vt-article-enter {
+      from {
+        opacity: 0.985;
       }
 
-      :root {
-        --font-main:
-          "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont,
-          sans-serif;
-        --bg: #141a15;
-        --surface: #1d2520;
-        --fg: #d5d9c8;
-        --muted: #a8b09b;
-        --line: #465247;
-        --link: #9fb378;
-        --selection-bg: #324036;
-        --selection-fg: #e7ebdc;
+      to {
+        opacity: 1;
       }
+    }
 
-      @view-transition {
-        navigation: auto;
-      }
+    ::view-transition-group(root) {
+      animation: none;
+    }
 
-      @keyframes vt-article-enter {
-        from {
-          opacity: 0.985;
-        }
+    ::view-transition-old(root) {
+      animation: none;
+    }
 
-        to {
-          opacity: 1;
-        }
-      }
+    ::view-transition-new(root) {
+      animation: vt-article-enter 100ms ease-out both;
+    }
 
-      ::view-transition-group(root) {
-        animation: none;
-      }
+    ::view-transition-group(title-html-first),
+    ::view-transition-group(article-hero) {
+      animation-duration: 220ms;
+      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-      ::view-transition-old(root) {
-        animation: none;
-      }
+    ::view-transition-old(title-html-first),
+    ::view-transition-new(title-html-first),
+    ::view-transition-old(article-hero),
+    ::view-transition-new(article-hero) {
+      mix-blend-mode: normal;
+    }
 
+    @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
-        animation: vt-article-enter 100ms ease-out both;
+        animation: none;
       }
 
-      ::view-transition-group(title-html-first),
-      ::view-transition-group(article-hero) {
-        animation-duration: 220ms;
-        animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      ::view-transition-old(title-html-first),
-      ::view-transition-new(title-html-first),
-      ::view-transition-old(article-hero),
-      ::view-transition-new(article-hero) {
-        mix-blend-mode: normal;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        ::view-transition-new(root) {
-          animation: none;
-        }
-
-        h1,
-        .hero-image {
-          view-transition-name: none;
-        }
-
-        .back::before,
-        .toc-link::before,
-        main > p:last-of-type a::before {
-          animation: none;
-          transition: none;
-        }
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        padding: 1.5rem 1rem;
-        min-height: 100vh;
-        font: 16px/1.55 var(--font-main);
-        color: var(--fg);
-        background: var(--bg);
-      }
-
-      .article-shell {
-        max-width: 82rem;
-        margin: 0 auto;
-      }
-
-      main {
-        max-width: 50rem;
-        margin: 0 auto;
-        min-width: 0;
-      }
-
-      .meta-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 1rem;
-        margin-top: 0.35rem;
-        margin-bottom: 1.85rem;
-        color: var(--muted);
-        font-size: 1.12rem;
-      }
-
-      .back {
-        color: var(--link);
-        font-weight: 600;
-        text-decoration-color: var(--line);
-        text-decoration-style: dotted;
-        text-underline-offset: 0.16em;
-        text-decoration-thickness: 0.07em;
-      }
-
-      h1 {
-        margin: 0 0 1rem;
-        line-height: 1.05;
-        letter-spacing: -0.01em;
-        font-size: clamp(2rem, 6.4vw, 3.1rem);
-        max-width: 20ch;
-        view-transition-name: title-html-first;
-      }
-
+      h1,
       .hero-image {
-        display: block;
-        width: 100%;
-        height: auto;
-        border-radius: 0.6rem;
-        border: 1px solid var(--line);
-        background: var(--surface);
-        margin: 0 0 1.2rem;
-        view-transition-name: article-hero;
-      }
-
-      p {
-        margin: 0 0 0.95rem;
-        color: var(--muted);
-        max-width: 66ch;
-        font-size: 1.16rem;
-        line-height: 1.62;
-      }
-
-      h2 {
-        margin: 1.85rem 0 0.65rem;
-        color: var(--fg);
-        line-height: 1.2;
-        letter-spacing: -0.01em;
-        font-size: clamp(1.4rem, 3vw, 1.72rem);
-        max-width: 30ch;
-      }
-
-      h1[id],
-      h2[id],
-      h3[id] {
-        scroll-margin-top: 2.6rem;
-      }
-
-      .lead {
-        font-style: italic;
-        color: var(--fg);
-      }
-
-      .dialogue strong {
-        color: var(--fg);
-        font-weight: 700;
-      }
-
-      a {
-        color: var(--link);
-        text-decoration-color: var(--line);
-        text-decoration-style: dotted;
-        text-underline-offset: 0.16em;
-        text-decoration-thickness: 0.07em;
-      }
-
-      .back,
-      .toc-link,
-      main > p:last-of-type a {
-        position: relative;
-        display: inline-block;
-        isolation: isolate;
-      }
-
-      .back,
-      .toc-link,
-      main > p:last-of-type a {
-        transition:
-          color 160ms ease-out,
-          transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
-          text-decoration-color 120ms ease-out;
-      }
-
-      .back {
-        --shape-radius: 30%;
-        --shape-pad-inline: 0.72rem;
-        --shape-pad-block: 0.3rem;
-      }
-
-      .toc-link {
-        --shape-radius: 999px;
-        --shape-pad-inline: 0.56rem;
-        --shape-pad-block: 0.24rem;
-      }
-
-      .toc-item:nth-child(even) .toc-link {
-        --shape-radius: 30%;
-      }
-
-      main > p:last-of-type a {
-        --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
-        --shape-pad-inline: 0.62rem;
-        --shape-pad-block: 0.36rem;
+        view-transition-name: none;
       }
 
       .back::before,
       .toc-link::before,
-      main > p:last-of-type a::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: calc(100% + var(--shape-pad-inline, 0.62rem));
-        height: calc(100% + var(--shape-pad-block, 0.28rem));
-        border-radius: var(--shape-radius, 999px);
-        background: rgba(159, 179, 120, 0.12);
-        box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.88);
-        transform-origin: center;
-        transition:
-          transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
-          opacity 170ms ease-out;
-        pointer-events: none;
-        z-index: -1;
+      main>p:last-of-type a::before {
+        animation: none;
+        transition: none;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem 1rem;
+      min-height: 100vh;
+      font: 16px/1.55 var(--font-main);
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    .article-shell {
+      max-width: 82rem;
+      margin: 0 auto;
+    }
+
+    main {
+      max-width: 50rem;
+      margin: 0 auto;
+      min-width: 0;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-top: 0.35rem;
+      margin-bottom: 1.85rem;
+      color: var(--muted);
+      font-size: 1.12rem;
+    }
+
+    .back {
+      color: var(--link);
+      font-weight: 600;
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
+    }
+
+    h1 {
+      margin: 0 0 1rem;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      font-size: clamp(2rem, 6.4vw, 3.1rem);
+      max-width: 20ch;
+      view-transition-name: title-html-first;
+    }
+
+    .hero-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 0.6rem;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      margin: 0 0 1.2rem;
+      view-transition-name: article-hero;
+    }
+
+    p {
+      margin: 0 0 0.95rem;
+      color: var(--muted);
+      max-width: 66ch;
+      font-size: 1.16rem;
+      line-height: 1.62;
+    }
+
+    h2 {
+      margin: 1.85rem 0 0.65rem;
+      color: var(--fg);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.4rem, 3vw, 1.72rem);
+      max-width: 30ch;
+    }
+
+    h1[id],
+    h2[id],
+    h3[id] {
+      scroll-margin-top: 2.6rem;
+    }
+
+    .lead {
+      font-style: italic;
+      color: var(--fg);
+    }
+
+    .dialogue strong {
+      color: var(--fg);
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
+    }
+
+    .back,
+    .toc-link,
+    main>p:last-of-type a {
+      position: relative;
+      display: inline-block;
+      isolation: isolate;
+    }
+
+    .back,
+    .toc-link,
+    main>p:last-of-type a {
+      transition:
+        color 160ms ease-out,
+        transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        text-decoration-color 120ms ease-out;
+    }
+
+    .back {
+      --shape-radius: 30%;
+      --shape-pad-inline: 0.72rem;
+      --shape-pad-block: 0.3rem;
+    }
+
+    .toc-link {
+      --shape-radius: 999px;
+      --shape-pad-inline: 0.56rem;
+      --shape-pad-block: 0.24rem;
+    }
+
+    .toc-item:nth-child(even) .toc-link {
+      --shape-radius: 30%;
+    }
+
+    main>p:last-of-type a {
+      --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
+      --shape-pad-inline: 0.62rem;
+      --shape-pad-block: 0.36rem;
+    }
+
+    .back::before,
+    .toc-link::before,
+    main>p:last-of-type a::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: calc(100% + var(--shape-pad-inline, 0.62rem));
+      height: calc(100% + var(--shape-pad-block, 0.28rem));
+      border-radius: var(--shape-radius, 999px);
+      background: rgba(159, 179, 120, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.88);
+      transform-origin: center;
+      transition:
+        transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 170ms ease-out;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .back:hover::before,
+    .back:focus-visible::before,
+    .toc-link:hover::before,
+    .toc-link:focus-visible::before,
+    main>p:last-of-type a:hover::before,
+    main>p:last-of-type a:focus-visible::before {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .back:hover,
+    .back:focus-visible,
+    .toc-link:hover,
+    .toc-link:focus-visible,
+    main>p:last-of-type a:hover,
+    main>p:last-of-type a:focus-visible {
+      text-decoration-color: transparent;
+      transform: translateY(-1px);
+    }
+
+    .toc {
+      display: none;
+    }
+
+    .toc-title {
+      margin: 0 0 0.75rem;
+      color: var(--fg);
+      font-size: 1.52rem;
+      line-height: 1.1;
+    }
+
+    .toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc-item+.toc-item {
+      margin-top: 0.55rem;
+    }
+
+    .toc-link {
+      color: var(--muted);
+      text-decoration: none;
+      line-height: 1.3;
+      font-size: 1.03rem;
+    }
+
+    .toc-link:hover,
+    .toc-link:focus-visible {
+      color: var(--fg);
+      text-decoration: underline;
+      text-decoration-color: var(--line);
+      text-decoration-style: dotted;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.07em;
+    }
+
+    @media (min-width: 75rem) {
+      .article-shell {
+        display: grid;
+        grid-template-columns: minmax(12.5rem, 16rem) minmax(0, 50rem) minmax(12.5rem, 16rem);
+        justify-content: center;
+        gap: 0;
+        align-items: start;
       }
 
-      .back:hover::before,
-      .back:focus-visible::before,
-      .toc-link:hover::before,
-      .toc-link:focus-visible::before,
-      main > p:last-of-type a:hover::before,
-      main > p:last-of-type a:focus-visible::before {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-
-      .back:hover,
-      .back:focus-visible,
-      .toc-link:hover,
-      .toc-link:focus-visible,
-      main > p:last-of-type a:hover,
-      main > p:last-of-type a:focus-visible {
-        text-decoration-color: transparent;
-        transform: translateY(-1px);
+      main {
+        grid-column: 2;
+        max-width: none;
+        margin: 0;
       }
 
       .toc {
-        display: none;
+        grid-column: 3;
+        display: block;
+        justify-self: end;
+        margin-left: 2rem;
+        position: sticky;
+        top: 3rem;
       }
+    }
 
-      .toc-title {
-        margin: 0 0 0.75rem;
-        color: var(--fg);
-        font-size: 1.52rem;
-        line-height: 1.1;
-      }
+    .reading-progress {
+      position: fixed;
+      top: 0.62rem;
+      left: 0.9rem;
+      right: 0.9rem;
+      height: 6px;
+      border-radius: 999px;
+      --progress: 0%;
+      background: transparent;
+      pointer-events: none;
+      z-index: 40;
+      overflow: visible;
+      isolation: isolate;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 160ms ease-out, visibility 0s linear 160ms;
+    }
 
-      .toc-list {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
+    .reading-progress.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
 
-      .toc-item + .toc-item {
-        margin-top: 0.55rem;
-      }
+    .reading-progress::before {
+      content: "";
+      position: absolute;
+      left: -0.9rem;
+      right: -0.9rem;
+      top: -10px;
+      height: 26px;
+      background: var(--bg);
+      z-index: 0;
+    }
 
-      .toc-link {
-        color: var(--muted);
-        text-decoration: none;
-        line-height: 1.3;
-        font-size: 1.03rem;
-      }
+    .reading-progress::after {
+      content: "";
+      position: absolute;
+      left: var(--progress);
+      right: 0;
+      top: 50%;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(70, 82, 71, 0.65);
+      transform: translateY(-50%);
+      z-index: 1;
+    }
 
-      .toc-link:hover,
-      .toc-link:focus-visible {
-        color: var(--fg);
-        text-decoration: underline;
-        text-decoration-color: var(--line);
-        text-decoration-style: dotted;
-        text-underline-offset: 0.16em;
-        text-decoration-thickness: 0.07em;
-      }
+    .reading-progress-indicator {
+      position: absolute;
+      left: 0;
+      top: -4px;
+      width: 0%;
+      height: 14px;
+      border-radius: 999px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 72 14%27%3E%3Cpath d=%27M0 7C6 1 12 1 18 7C24 13 30 13 36 7C42 1 48 1 54 7C60 13 66 13 72 7%27 fill=%27none%27 stroke=%27%23d5d9c8%27 stroke-width=%273.4%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-size: 72px 14px;
+      background-position: left center;
+      will-change: width;
+      z-index: 2;
+    }
 
-      @media (min-width: 75rem) {
-        .article-shell {
-          display: grid;
-          grid-template-columns: minmax(12.5rem, 16rem) minmax(0, 50rem) minmax(12.5rem, 16rem);
-          justify-content: center;
-          gap: 0;
-          align-items: start;
-        }
+    .reading-progress-marker {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      width: 2px;
+      height: 24px;
+      border-radius: 1px;
+      background: var(--fg);
+      transform: translateX(-1px);
+      opacity: 0.95;
+      z-index: 3;
+    }
 
-        main {
-          grid-column: 2;
-          max-width: none;
-          margin: 0;
-        }
+    .giscus-wrap {
+      max-width: 50rem;
+      margin-inline: auto;
+    }
 
-        .toc {
-          grid-column: 3;
-          display: block;
-          justify-self: end;
-          margin-left: 2rem;
-          position: sticky;
-          top: 3rem;
-        }
-      }
+    .giscus {
+      margin-top: 2rem;
+      padding: 0;
+      border: none;
+      background: transparent;
+      font-family: var(--font-main);
+      color: var(--fg);
+    }
 
-      .reading-progress {
-        position: fixed;
-        top: 0.62rem;
-        left: 0.9rem;
-        right: 0.9rem;
-        height: 6px;
-        border-radius: 999px;
-        --progress: 0%;
-        background: transparent;
-        pointer-events: none;
-        z-index: 40;
-        overflow: visible;
-        isolation: isolate;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 160ms ease-out, visibility 0s linear 160ms;
-      }
+    .giscus-frame {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color-scheme: dark;
+    }
 
-      .reading-progress.is-visible {
-        opacity: 1;
-        visibility: visible;
-        transition-delay: 0s;
-      }
+    .giscus-frame:focus-visible {
+      outline: 2px solid var(--ring-outer);
+      outline-offset: 2px;
+    }
 
-      .reading-progress::before {
-        content: "";
-        position: absolute;
-        left: -0.9rem;
-        right: -0.9rem;
-        top: -10px;
-        height: 26px;
-        background: var(--bg);
-        z-index: 0;
-      }
+    ::selection {
+      color: var(--selection-fg);
+      background: var(--selection-bg);
+    }
+  </style>
+</head>
 
-      .reading-progress::after {
-        content: "";
-        position: absolute;
-        left: var(--progress);
-        right: 0;
-        top: 50%;
-        height: 4px;
-        border-radius: 999px;
-        background: rgba(70, 82, 71, 0.65);
-        transform: translateY(-50%);
-        z-index: 1;
-      }
+<body>
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress-indicator"></div>
+    <div class="reading-progress-marker"></div>
+  </div>
 
-      .reading-progress-indicator {
-        position: absolute;
-        left: 0;
-        top: -4px;
-        width: 0%;
-        height: 14px;
-        border-radius: 999px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 72 14%27%3E%3Cpath d=%27M0 7C6 1 12 1 18 7C24 13 30 13 36 7C42 1 48 1 54 7C60 13 66 13 72 7%27 fill=%27none%27 stroke=%27%23d5d9c8%27 stroke-width=%273.4%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E");
-        background-repeat: repeat-x;
-        background-size: 72px 14px;
-        background-position: left center;
-        will-change: width;
-        z-index: 2;
-      }
+  <div class="article-shell">
+    <main>
+      <div class="meta-row">
+        <a class="back" href="/">&larr; back</a>
+        <time datetime="2026-02-11">2026-02-11</time>
+      </div>
 
-      .reading-progress-marker {
-        position: absolute;
-        top: -10px;
-        left: 0;
-        width: 2px;
-        height: 24px;
-        border-radius: 1px;
-        background: var(--fg);
-        transform: translateX(-1px);
-        opacity: 0.95;
-        z-index: 3;
-      }
+      <h1>Why This Site Stays HTML-First</h1>
 
-      .giscus-wrap {
-        max-width: 50rem;
-        margin-inline: auto;
-      }
+      <img class="hero-image" src="/assets/articles/signal-grid.svg" width="960" height="420"
+        alt="Abstract signal style artwork." />
 
-      .giscus {
-        margin-top: 2rem;
-        padding: 0;
-        border: none;
-        background: transparent;
-        font-family: var(--font-main);
-        color: var(--fg);
-      }
+      <p class="lead">
+        The fastest page is the one that can explain itself before JavaScript
+        wakes up. That is the entire idea behind this site.
+      </p>
 
-      .giscus-frame {
-        width: 100%;
-        border: none;
-        background: transparent;
-        color-scheme: dark;
-      }
-      .giscus-frame:focus-visible {
-        outline: 2px solid var(--ring-outer);
-        outline-offset: 2px;
-      }
+      <h2 id="keep-meaningful-content-in-html">
+        Keep Meaningful Content in HTML
+      </h2>
 
-      ::selection {
-        color: var(--selection-fg);
-        background: var(--selection-bg);
-      }
-    </style>
-  </head>
+      <p>
+        Every page starts from a strict rule: useful content must be in the
+        first HTML response. If I can read and navigate without waiting for
+        scripts, the baseline experience is already good.
+      </p>
 
-  <body>
-    <div class="reading-progress" aria-hidden="true">
-      <div class="reading-progress-indicator"></div>
-      <div class="reading-progress-marker"></div>
-    </div>
+      <h2 id="run-every-feature-through-a-cost-check">
+        Run Every Feature Through a Cost Check
+      </h2>
 
-    <div class="article-shell">
-      <main>
-        <div class="meta-row">
-          <a class="back" href="/">&larr; back</a>
-          <time datetime="2026-02-11">2026-02-11</time>
-        </div>
+      <p class="dialogue">
+        <strong>Developer:</strong> Do we need another layer here?
+      </p>
+      <p class="dialogue">
+        <strong>Kid:</strong> Only if it helps the page show up faster.
+      </p>
+      <p>
+        That tiny conversation is how most decisions are made. Fancy additions
+        are allowed, but only after they survive the cost check: bytes,
+        requests, and layout stability on a cold load.
+      </p>
 
-        <h1>Why This Site Stays HTML-First</h1>
+      <h2 id="optimize-for-reliability-over-novelty">
+        Optimize for Reliability over Novelty
+      </h2>
 
-        <img
-          class="hero-image"
-          src="/assets/articles/signal-grid.svg"
-          width="960"
-          height="420"
-          alt="Abstract signal style artwork."
-        />
+      <p>
+        HTML-first keeps the system honest. It is easier to measure, easier to
+        maintain, and far less likely to break when conditions are imperfect.
+      </p>
 
-        <p class="lead">
-          The fastest page is the one that can explain itself before JavaScript
-          wakes up. That is the entire idea behind this site.
-        </p>
+      <p><a href="/">Back to home</a></p>
+    </main>
 
-        <h2 id="keep-meaningful-content-in-html">
-          Keep Meaningful Content in HTML
-        </h2>
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-title">Table of Contents</p>
+      <nav aria-label="Article sections">
+        <ol class="toc-list">
+          <li class="toc-item">
+            <a class="toc-link" href="#keep-meaningful-content-in-html">Keep Meaningful Content in HTML</a>
+          </li>
+          <li class="toc-item">
+            <a class="toc-link" href="#run-every-feature-through-a-cost-check">Run Every Feature Through a Cost
+              Check</a>
+          </li>
+          <li class="toc-item">
+            <a class="toc-link" href="#optimize-for-reliability-over-novelty">Optimize for Reliability over Novelty</a>
+          </li>
+        </ol>
+      </nav>
+    </aside>
+  </div>
+  <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>
+  <script src="/assets/nav-audio.js?v=20260311m1" defer></script>
+  <div class="giscus-wrap">
+    <div class="giscus"></div>
+  </div>
+</body>
 
-        <p>
-          Every page starts from a strict rule: useful content must be in the
-          first HTML response. If I can read and navigate without waiting for
-          scripts, the baseline experience is already good.
-        </p>
-
-        <h2 id="run-every-feature-through-a-cost-check">
-          Run Every Feature Through a Cost Check
-        </h2>
-
-        <p class="dialogue">
-          <strong>Developer:</strong> Do we need another layer here?
-        </p>
-        <p class="dialogue">
-          <strong>Kid:</strong> Only if it helps the page show up faster.
-        </p>
-        <p>
-          That tiny conversation is how most decisions are made. Fancy additions
-          are allowed, but only after they survive the cost check: bytes,
-          requests, and layout stability on a cold load.
-        </p>
-
-        <h2 id="optimize-for-reliability-over-novelty">
-          Optimize for Reliability over Novelty
-        </h2>
-
-        <p>
-          HTML-first keeps the system honest. It is easier to measure, easier to
-          maintain, and far less likely to break when conditions are imperfect.
-        </p>
-
-        <p><a href="/">Back to home</a></p>
-      </main>
-
-      <aside class="toc" aria-label="Table of contents">
-        <p class="toc-title">Table of Contents</p>
-        <nav aria-label="Article sections">
-          <ol class="toc-list">
-            <li class="toc-item">
-              <a class="toc-link" href="#keep-meaningful-content-in-html"
-                >Keep Meaningful Content in HTML</a
-              >
-            </li>
-            <li class="toc-item">
-              <a class="toc-link" href="#run-every-feature-through-a-cost-check"
-                >Run Every Feature Through a Cost Check</a
-              >
-            </li>
-            <li class="toc-item">
-              <a class="toc-link" href="#optimize-for-reliability-over-novelty"
-                >Optimize for Reliability over Novelty</a
-              >
-            </li>
-          </ol>
-        </nav>
-      </aside>
-    </div>
-    <script src="/assets/nav-audio.js?v=20260311m1" defer></script>
-    <div class="giscus-wrap">
-      <script
-        src="https://giscus.app/client.js"
-        data-repo="akash-plackal/personal-site"
-        data-repo-id="R_kgDORJxwdQ"
-        data-category="General"
-        data-category-id="DIC_kwDORJxwdc4C2xrV"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="dark_dimmed"
-        data-lang="en"
-        crossorigin="anonymous"
-        async
-      ></script>
-    </div>
-  </body>
 </html>
