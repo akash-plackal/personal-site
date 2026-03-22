@@ -77,8 +77,7 @@
     "pointerdown",
     (e) => {
       if (!e.isPrimary) return;
-      if (e.pointerType !== "mouse") return;
-      if (e.button !== 0) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       if (!(e.target instanceof Element)) return;
       const a = e.target.closest("a[href]");
       if (!a) return;
@@ -94,7 +93,7 @@
         (!a.target || a.target === "_self")
       ) {
         try { sessionStorage.setItem("__click", "1"); } catch {}
-        window.location.href = href;
+        if (e.pointerType === "mouse") window.location.href = href;
       }
     },
     { capture: true },
