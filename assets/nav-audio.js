@@ -30,7 +30,7 @@
         .then((x) => {
           buf = x;
         })
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => {
           decoding = false;
         });
@@ -43,8 +43,8 @@
     try {
       fallback.currentTime = 0;
       const p = fallback.play();
-      p && p.catch && p.catch(() => {});
-    } catch {}
+      p && p.catch && p.catch(() => { });
+    } catch { }
   };
 
   const play = () => {
@@ -84,7 +84,7 @@
   const markClick = () => {
     try {
       sessionStorage.setItem(CLICK_KEY, String(Date.now()));
-    } catch {}
+    } catch { }
   };
 
   const playPending = () => {
@@ -92,7 +92,7 @@
     try {
       ts = Number(sessionStorage.getItem(CLICK_KEY) || 0);
       sessionStorage.removeItem(CLICK_KEY);
-    } catch {}
+    } catch { }
     if (!ts || Date.now() - ts > CLICK_TTL_MS) return;
     play();
   };
@@ -157,6 +157,16 @@
     window.addEventListener("resize", request);
     window.addEventListener("pageshow", request);
   };
+
+  // Fallback: if prerender activation skips the cross-document view
+  // transition, create a same-document one so the CSS animations on
+  // ::view-transition-new(root) still play.
+  document.addEventListener("pagereveal", (e) => {
+    if (e.viewTransition) return;                   // browser created one — done
+    if (!document.startViewTransition) return;       // API unsupported
+    if (!navigation?.activation?.from) return;       // not a cross-doc nav
+    document.startViewTransition(() => { });
+  });
 
   boot();
   playPending();
