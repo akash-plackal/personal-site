@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script type="speculationrules">
       {
-        "prefetch": [
+        "prerender": [
           {
             "source": "list",
             "urls": ["/about/"],
@@ -20,6 +20,7 @@
         ]
       }
     </script>
+  <script>if(!document.prerendering)document.documentElement.classList.add('entry')</script>
   <title>Akash Plackal</title>
   <meta name="description" content="Akash Plackal personal website. Built to be fast and reliable on slow networks." />
   <meta property="og:title" content="Akash Plackal" />
@@ -176,7 +177,7 @@
     }
 
     @media (prefers-reduced-motion: no-preference) {
-      .hero-portrait {
+      html.entry .hero-portrait {
         animation: hero-in 500ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
       }
     }
