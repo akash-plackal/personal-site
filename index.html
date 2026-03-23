@@ -20,10 +20,7 @@
         ]
       }
     </script>
-  <script>
-    if(!document.prerendering)document.documentElement.classList.add('entry');
-    addEventListener('pageswap',e=>{if(e.viewTransition)document.getAnimations({subtree:!0}).forEach(a=>{a instanceof CSSTransition&&a.finish()})});
-  </script>
+  <script>if(!document.prerendering)document.documentElement.classList.add('entry')</script>
   <title>Akash Plackal</title>
   <meta name="description" content="Akash Plackal personal website. Built to be fast and reliable on slow networks." />
   <meta property="og:title" content="Akash Plackal" />
@@ -279,7 +276,6 @@
       isolation: isolate;
       overflow: visible;
       view-transition-name: hero-avatar;
-      transition: transform 220ms ease-out;
     }
 
     .hero-portrait::before {
@@ -524,6 +520,15 @@
       flex-wrap: wrap;
       font-size: 1.12rem;
       line-height: 1.35;
+    }
+
+    .article-link-html-first,
+    .article-link-neovim-tmux,
+    .article-link-latency-budgets,
+    .article-link-request-waterfalls,
+    .article-link-cold-cache-checklist,
+    .article-link-static-site-caching {
+      transition: none;
     }
 
     .article-link-html-first {
