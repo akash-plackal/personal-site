@@ -93,7 +93,10 @@
         (!a.target || a.target === "_self")
       ) {
         try { sessionStorage.setItem("__click", "1"); } catch {}
-        if (e.pointerType === "mouse") window.location.href = href;
+        if (e.pointerType === "mouse") {
+          a.addEventListener("click", (ce) => ce.preventDefault(), { once: true, capture: true });
+          window.location.href = href;
+        }
       }
     },
     { capture: true },
