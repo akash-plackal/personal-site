@@ -121,18 +121,15 @@
     }
 
     ::view-transition-new(root) {
-        animation: vt-article-enter 500ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
+      animation: none;
       mix-blend-mode: normal;
     }
 
-    ::view-transition-group(title-html-first),
     ::view-transition-group(article-hero) {
         animation-duration: 450ms;
         animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
       }
 
-    ::view-transition-old(title-html-first),
-    ::view-transition-new(title-html-first),
     ::view-transition-old(article-hero),
     ::view-transition-new(article-hero) {
       mix-blend-mode: normal;
@@ -268,7 +265,6 @@
       letter-spacing: -0.01em;
       font-size: clamp(2rem, 6.4vw, 3.1rem);
       max-width: 20ch;
-      view-transition-name: title-html-first;
     }
 
     .hero-image {

@@ -109,20 +109,10 @@
     }
 
     ::view-transition-new(root) {
-      animation: vt-enter 500ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
+      animation: none;
       mix-blend-mode: normal;
     }
 
-    ::view-transition-group(hero-avatar) {
-      animation-duration: 450ms;
-      animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
-    }
-
-    ::view-transition-old(hero-avatar),
-    ::view-transition-new(hero-avatar) {
-      animation-duration: 450ms;
-      mix-blend-mode: normal;
-    }
 
     @media (prefers-reduced-motion: no-preference) {
       h1 {
@@ -268,7 +258,6 @@
       border-radius: 0.55rem;
       border: 1px solid var(--line);
       background: var(--surface);
-      view-transition-name: hero-avatar;
     }
 
     a {
@@ -348,6 +337,18 @@
     main>p:last-of-type a:focus-visible {
       text-decoration-color: transparent;
       transform: translateY(-1px);
+    }
+
+    html:active-view-transition .site-nav a,
+    html:active-view-transition main>p:last-of-type a {
+      transform: none;
+    }
+
+    html:active-view-transition .site-nav a::before,
+    html:active-view-transition main>p:last-of-type a::before {
+      opacity: 0;
+      visibility: hidden;
+      transition: none;
     }
 
     p {
