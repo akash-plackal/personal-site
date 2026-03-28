@@ -1,13 +1,5 @@
 /*
   Supports-Loading-Mode: credentialed-prerender
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Resource-Policy: same-origin
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; frame-src https://giscus.app; img-src 'self' data: https://avatars.githubusercontent.com; media-src 'self' data:; object-src 'none'; script-src 'self' 'sha256-REPLACED_BY_BUILD' https://giscus.app; style-src 'self' 'unsafe-inline' https://giscus.app; connect-src 'self' https://api.github.com https://github.com https://*.githubusercontent.com; upgrade-insecure-requests
   Cache-Control: public, max-age=60, s-maxage=31536000, stale-while-revalidate=86400, stale-if-error=604800
 
 /assets/*
