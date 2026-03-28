@@ -5,35 +5,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script type="speculationrules">
-      {
-        "prerender": [
-          {
-            "source": "document",
-            "where": { "href_matches": "/*" },
-            "eagerness": "immediate"
-          }
-        ]
-      }
-    </script>
-  <script>
-    try {
-      if (!document.prerendering) {
-        document.documentElement.classList.add("entry");
-      }
-    } catch {
-      document.documentElement.classList.add("entry");
+    {
+      "prerender": [
+        {
+          "source": "list",
+          "urls": ["/"],
+          "eagerness": "immediate"
+        }
+      ]
     }
   </script>
   <title>About | Akash Plackal</title>
   <meta name="description" content="About Akash Plackal." />
   <meta property="og:title" content="About | Akash Plackal" />
-  <meta property="og:description"
-    content="About Akash Plackal - software engineer focused on performance and simple tooling." />
+  <meta property="og:description" content="About Akash Plackal - software engineer focused on performance and simple tooling." />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="About | Akash Plackal" />
-  <meta name="twitter:description"
-    content="About Akash Plackal - software engineer focused on performance and simple tooling." />
   <style>
     @font-face {
       font-family: "Iosevka Local";
@@ -52,16 +38,14 @@
     }
 
     :root {
-      --font-main:
-        "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont,
-        sans-serif;
+      --font-main: "Iosevka Local", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       --bg: #141a15;
       --surface: #1d2520;
       --fg: #d5d9c8;
       --muted: #a8b09b;
       --line: #465247;
       --link: #9fb378;
-      --ring-outer: #8daa7f;
+      --ring: #8daa7f;
       --selection-bg: #324036;
       --selection-fg: #e7ebdc;
     }
@@ -74,110 +58,31 @@
       background: var(--bg);
     }
 
-    @keyframes vt-enter {
-      0% { opacity: 0; transform: translateY(8px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes title-enter {
-      0% { opacity: 0; transform: translateY(30px); filter: blur(4px); }
-      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-    }
-
-    @keyframes hero-enter {
-      0% { opacity: 0; transform: scale(0.92) translateY(20px); filter: blur(8px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-    }
-
-    @keyframes lead-enter {
-      0% { opacity: 0; transform: translateY(26px) scale(0.97); filter: blur(2px); }
-      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-    }
-
-    @keyframes body-enter {
-      0% { opacity: 0; transform: translateY(18px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes chips-enter {
-      0% { opacity: 0; transform: translateY(14px) scale(0.97); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
     ::view-transition {
-      background-color: var(--bg);
+      background: var(--bg);
     }
 
-    ::view-transition-group(root) {
-      animation: none;
-    }
-
-    ::view-transition-old(root) {
-      animation: none;
-      mix-blend-mode: normal;
-    }
-
+    ::view-transition-group(root),
+    ::view-transition-old(root),
     ::view-transition-new(root) {
       animation: none;
       mix-blend-mode: normal;
     }
 
     ::view-transition-group(hero-avatar) {
-      animation-duration: 420ms;
-      animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+      animation-duration: 320ms;
+      animation-timing-function: ease;
     }
 
     ::view-transition-old(hero-avatar),
     ::view-transition-new(hero-avatar) {
-      animation-duration: 420ms;
+      animation-duration: 320ms;
       mix-blend-mode: normal;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-      html.entry h1 {
-        animation: title-enter 600ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-        animation-delay: 80ms;
-      }
-      html.entry .intro {
-        animation: lead-enter 550ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-        animation-delay: 180ms;
-      }
-      html.entry .about-photo {
-        animation: hero-enter 650ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
-        animation-delay: 120ms;
-      }
-      html.entry main > .hero ~ p {
-        animation: body-enter 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-      }
-      html.entry main > p:nth-of-type(1) { animation-delay: 320ms; }
-      html.entry main > p:nth-of-type(2) { animation-delay: 370ms; }
-      html.entry .chips {
-        animation: chips-enter 500ms linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1) both;
-        animation-delay: 420ms;
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      ::view-transition-new(root) {
-        animation: none;
-      }
-
       .about-photo {
         view-transition-name: none;
-      }
-
-      .site-nav a::before,
-      main>p:last-of-type a::before {
-        animation: none;
-        transition: none;
-      }
-
-      h1,
-      .intro,
-      .about-photo,
-      main > .hero ~ p,
-      .chips {
-        animation: none;
       }
     }
 
@@ -187,13 +92,31 @@
 
     body {
       margin: 0;
-      padding: 1.25rem;
-      max-width: 50rem;
-      margin-inline: auto;
       min-height: 100vh;
-      font: 16px/1.45 var(--font-main);
+      max-width: 52rem;
+      margin-inline: auto;
+      padding: 1.25rem;
+      font: 16px/1.5 var(--font-main);
       color: var(--fg);
       background: var(--bg);
+    }
+
+    a {
+      color: var(--link);
+      text-decoration-color: var(--line);
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.08em;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: var(--fg);
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 3px;
+      border-radius: 0.25rem;
     }
 
     .site-header {
@@ -204,218 +127,67 @@
       margin-bottom: 2rem;
     }
 
+    .brand,
+    .site-nav a {
+      text-decoration: none;
+    }
+
     .brand {
       color: var(--fg);
-      text-decoration: none;
-      font-size: 1.55rem;
-      letter-spacing: 0.01em;
+      font-size: 1.5rem;
       font-weight: 600;
     }
 
     .site-nav {
       display: flex;
+      gap: 1rem;
       flex-wrap: wrap;
-      gap: 0.35rem 0.9rem;
-      justify-content: flex-end;
-      font-size: 0.96rem;
     }
 
-    .site-nav a {
-      color: var(--muted);
-      text-decoration: none;
-      position: relative;
-      display: inline-block;
-      isolation: isolate;
-    }
-
-    .site-nav a:hover,
-    .site-nav a:focus-visible,
-    .site-nav a[aria-current="page"] {
-      color: var(--fg);
+    main {
+      display: grid;
+      gap: 1.5rem;
     }
 
     .hero {
       display: grid;
       gap: 1.25rem;
       align-items: start;
-      margin-bottom: 1.4rem;
     }
 
-    @media (min-width: 54rem) {
+    @media (min-width: 48rem) {
       .hero {
-        grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 1fr);
-        gap: 1.75rem;
+        grid-template-columns: minmax(0, 1.15fr) 15rem;
       }
     }
 
     h1 {
-      margin: 0;
-      font-size: clamp(2rem, 6vw, 3.8rem);
-      line-height: 0.97;
+      margin: 0 0 0.75rem;
+      font-size: clamp(2.1rem, 6.5vw, 4rem);
+      line-height: 0.96;
       letter-spacing: -0.02em;
     }
 
-    .intro {
+    p {
       margin: 0;
-      max-width: 33ch;
-      font-size: clamp(1rem, 2vw, 1.35rem);
-      line-height: 1.35;
       color: var(--muted);
-    }
-
-    .about-hero-media {
-      margin: 0;
-      position: relative;
-      width: fit-content;
-      isolation: isolate;
+      max-width: 38rem;
     }
 
     .about-photo {
       display: block;
-      width: min(100%, 22rem);
-      height: auto;
-      border-radius: 0.55rem;
+      width: min(100%, 15rem);
+      aspect-ratio: 1;
+      object-fit: cover;
+      object-position: 50% 40%;
+      border-radius: 1rem;
       border: 1px solid var(--line);
       background: var(--surface);
       view-transition-name: hero-avatar;
     }
 
-    a {
-      color: var(--link);
-      text-decoration-color: var(--line);
-      text-decoration-style: dotted;
-      text-underline-offset: 0.16em;
-      text-decoration-thickness: 0.07em;
-    }
-
-    main>p:last-of-type a {
-      position: relative;
-      display: inline-block;
-      isolation: isolate;
-    }
-
-    .site-nav a,
-    main>p:last-of-type a {
-      transition:
-        color 160ms ease-out,
-        transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
-        text-decoration-color 120ms ease-out;
-    }
-
-    .site-nav a {
-      --shape-radius: 30%;
-      --shape-pad-inline: 0.72rem;
-      --shape-pad-block: 0.3rem;
-    }
-
-    main>p:last-of-type a {
-      --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
-      --shape-pad-inline: 0.62rem;
-      --shape-pad-block: 0.36rem;
-    }
-
-    .site-nav a::before,
-    main>p:last-of-type a::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: calc(100% + var(--shape-pad-inline, 0.62rem));
-      height: calc(100% + var(--shape-pad-block, 0.28rem));
-      border-radius: var(--shape-radius, 999px);
-      background: rgba(159, 179, 120, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
-      opacity: 0;
-      visibility: hidden;
-      transform: translate(-50%, -50%) scale(0.88);
-      transform-origin: center;
-      transition:
-        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
-        opacity 170ms ease-out,
-        visibility 0s 170ms;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .site-nav a:hover::before,
-    .site-nav a:focus-visible::before,
-    .site-nav a[aria-current="page"]::before,
-    main>p:last-of-type a:hover::before,
-    main>p:last-of-type a:focus-visible::before {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(-50%, -50%) scale(1);
-      transition:
-        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
-        opacity 170ms ease-out,
-        visibility 0s;
-    }
-
-    .site-nav a:hover,
-    .site-nav a:focus-visible,
-    main>p:last-of-type a:hover,
-    main>p:last-of-type a:focus-visible {
-      text-decoration-color: transparent;
-      transform: translateY(-1px);
-    }
-
-    html:active-view-transition .site-nav a,
-    html:active-view-transition main>p:last-of-type a {
-      transform: none;
-    }
-
-    html:active-view-transition .site-nav a::before,
-    html:active-view-transition main>p:last-of-type a::before {
-      opacity: 0;
-      visibility: hidden;
-      transition: none;
-    }
-
-    p {
-      margin: 0 0 0.9rem;
-      max-width: 66ch;
-      color: var(--muted);
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      list-style: none;
-      margin: 1rem 0 1.4rem;
-      padding: 0;
-    }
-
-    .chip {
-      display: inline-block;
-      border: 1px solid var(--line);
-      border-radius: 0.72rem;
-      background: var(--surface);
-      color: var(--muted);
-      padding: 0.22rem 0.56rem;
-      font-size: 0.93rem;
-      line-height: 1.1;
-    }
-
-    .giscus {
-      margin-top: 2rem;
-      padding: 0;
-      border: none;
-      background: transparent;
-      font-family: var(--font-main);
-      color: var(--fg);
-    }
-
-    .giscus-frame {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color-scheme: dark;
-    }
-
-    .giscus-frame:focus-visible {
-      outline: 2px solid var(--ring-outer);
-      outline-offset: 2px;
+    .back {
+      justify-self: start;
     }
 
     ::selection {
@@ -427,11 +199,6 @@
       .site-header {
         align-items: flex-start;
         flex-direction: column;
-        margin-bottom: 1.5rem;
-      }
-
-      .site-nav {
-        justify-content: flex-start;
       }
     }
   </style>
@@ -441,10 +208,8 @@
   <header class="site-header">
     <a class="brand" href="/">aka.sh</a>
     <nav class="site-nav" aria-label="Main navigation">
-      <a href="/#writing">POSTS</a>
-      <a href="/#topics">TOPICS</a>
-      <a href="/#notes">LETTERS</a>
-      <a href="/about/" aria-current="page">ABOUT</a>
+      <a href="/">Home</a>
+      <a href="/about/" aria-current="page">About</a>
     </nav>
   </header>
 
@@ -452,44 +217,17 @@
     <section class="hero" aria-labelledby="about-title">
       <div>
         <h1 id="about-title">About Akash</h1>
-        <p class="intro">
-          I ship reliable products, optimize for speed, and prefer simple
-          systems over layered complexity.
-        </p>
+        <p>I ship reliable products, optimize for speed, and prefer simple systems over layered complexity.</p>
       </div>
-      <figure class="about-hero-media">
-        <picture>
-          <source type="image/avif" srcset="
-                /assets/hero-about-720.avif   720w,
-                /assets/hero-about-1080.avif 1080w
-              " sizes="(min-width: 54rem) 22rem, 88vw" />
-          <img class="about-photo" src="/assets/hero-about-720.avif" width="1080" height="1434"
-            alt="Portrait of Akash Plackal." loading="eager" fetchpriority="high" decoding="async" />
-        </picture>
-      </figure>
+
+      <img class="about-photo" src="/assets/hero-avatar-640.avif" width="640" height="640"
+        alt="Portrait of Akash Plackal." fetchpriority="high" decoding="async" />
     </section>
 
-    <p>
-      I work primarily on web products with a strong focus on first-load
-      performance and long-term maintainability.
-    </p>
-    <p>
-      I enjoy terminal-first workflows, practical writing, and sharing
-      implementation details from real projects.
-    </p>
-
-    <ul class="chips" aria-label="Focus areas">
-      <li><span class="chip">PERFORMANCE</span></li>
-      <li><span class="chip">TERMINAL WORKFLOW</span></li>
-      <li><span class="chip">RELIABLE SYSTEMS</span></li>
-      <li><span class="chip">PRODUCT THINKING</span></li>
-    </ul>
-
-    <p><a href="/">Back to home</a></p>
+    <p>I work primarily on web products with a strong focus on first-load performance and long-term maintainability.</p>
+    <p>I enjoy terminal-first workflows, practical writing, and sharing implementation details from real projects.</p>
+    <p class="back"><a href="/">Back to home</a></p>
   </main>
-  <script>try{var k="__click";if(sessionStorage.getItem(k)){sessionStorage.removeItem(k);var a=new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE=");a.volume=.32;a.play().catch(function(){})}}catch(e){}</script>
-  <script src="/assets/nav-audio.js?v=20260311m1" defer></script>
-  <div class="giscus"></div>
 </body>
 
 </html>
