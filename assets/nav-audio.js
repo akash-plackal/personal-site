@@ -69,10 +69,9 @@
   }
 
   // ── Pointer handling ─────────────────────────────────────────
-  // On pointerdown: flag sessionStorage + navigate immediately.
-  // The NEW page's inline <script> picks up the flag and plays
-  // the click sound during HTML parsing (with inherited user
-  // activation from the navigation gesture).
+  // Only mark the click on pointerdown. Let the browser perform the
+  // actual navigation so prerender activation + cross-document view
+  // transitions stay eligible.
   document.addEventListener(
     "pointerdown",
     (e) => {
@@ -93,7 +92,6 @@
         (!a.target || a.target === "_self")
       ) {
         try { sessionStorage.setItem("__click", "1"); } catch {}
-        if (e.pointerType === "mouse") window.location.href = href;
       }
     },
     { capture: true },
