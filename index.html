@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script type="speculationrules">
       {
-        "prefetch": [
+        "prerender": [
           {
             "source": "list",
             "urls": ["/about/"],
@@ -110,13 +110,23 @@
       mix-blend-mode: normal;
     }
 
+    ::view-transition-group(hero-avatar) {
+      animation-duration: 420ms;
+      animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+    }
+
+    ::view-transition-old(hero-avatar),
+    ::view-transition-new(hero-avatar) {
+      animation-duration: 420ms;
+      mix-blend-mode: normal;
+    }
 
     @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
         animation: none;
       }
 
-      .hero-mask {
+      .hero-portrait {
         view-transition-name: none;
       }
 
@@ -231,6 +241,7 @@
       position: relative;
       isolation: isolate;
       overflow: visible;
+      view-transition-name: hero-avatar;
       transition: transform 220ms ease-out;
     }
 
