@@ -15,6 +15,15 @@
         ]
       }
     </script>
+  <script>
+    try {
+      if (!document.prerendering) {
+        document.documentElement.classList.add("entry");
+      }
+    } catch {
+      document.documentElement.classList.add("entry");
+    }
+  </script>
   <title>About | Akash Plackal</title>
   <meta name="description" content="About Akash Plackal." />
   <meta property="og:title" content="About | Akash Plackal" />
@@ -125,24 +134,24 @@
     }
 
     @media (prefers-reduced-motion: no-preference) {
-      h1 {
+      html.entry h1 {
         animation: title-enter 600ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
         animation-delay: 80ms;
       }
-      .intro {
+      html.entry .intro {
         animation: lead-enter 550ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
         animation-delay: 180ms;
       }
-      .about-photo {
+      html.entry .about-photo {
         animation: hero-enter 650ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
         animation-delay: 120ms;
       }
-      main > .hero ~ p {
+      html.entry main > .hero ~ p {
         animation: body-enter 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
       }
-      main > p:nth-of-type(1) { animation-delay: 320ms; }
-      main > p:nth-of-type(2) { animation-delay: 370ms; }
-      .chips {
+      html.entry main > p:nth-of-type(1) { animation-delay: 320ms; }
+      html.entry main > p:nth-of-type(2) { animation-delay: 370ms; }
+      html.entry .chips {
         animation: chips-enter 500ms linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1) both;
         animation-delay: 420ms;
       }
