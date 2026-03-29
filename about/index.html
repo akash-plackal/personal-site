@@ -608,62 +608,117 @@
 
     .accordion-group {
       display: grid;
-      gap: 0.75rem;
+      gap: 0.9rem;
       margin: 0 0 1.5rem;
     }
 
     .accordion {
-      border: 1px solid rgba(70, 82, 71, 0.72);
-      border-radius: 0.9rem;
-      background: rgba(29, 37, 32, 0.52);
+      border: 1px solid rgba(70, 82, 71, 0.58);
+      border-radius: 1.05rem;
+      background: rgba(29, 37, 32, 0.34);
       overflow: clip;
+      transition: border-color 160ms ease-out, background-color 160ms ease-out, box-shadow 160ms ease-out;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .accordion[open] {
+      border-color: rgba(141, 170, 127, 0.78);
+      background: rgba(29, 37, 32, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 0 0 1px rgba(141, 170, 127, 0.08);
     }
 
     .accordion summary {
       list-style: none;
       cursor: pointer;
-      padding: 0.95rem 1rem;
+      padding: 1rem 1.15rem;
       color: var(--fg);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      transition: background-color 160ms ease-out;
+    }
+
+    .accordion summary:hover,
+    .accordion summary:focus-visible {
+      outline: none;
+      background: rgba(159, 179, 120, 0.035);
     }
 
     .accordion summary::-webkit-details-marker {
       display: none;
     }
 
+    .accordion-label {
+      display: grid;
+      gap: 0.26rem;
+      min-width: 0;
+    }
+
     .accordion-title {
-      font-size: 1rem;
-      letter-spacing: 0.01em;
+      font-size: 1.52rem;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: inherit;
+      font-weight: 600;
     }
 
     .accordion-kicker {
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.77rem;
+      letter-spacing: 0.1em;
+      font-size: 0.76rem;
+      font-weight: 700;
     }
 
     .accordion-chevron {
-      color: var(--muted);
-      transition: transform 160ms ease-out;
+      width: 2.15rem;
+      height: 2.15rem;
+      border: 1px solid rgba(141, 170, 127, 0.72);
+      border-radius: 0.46rem;
+      color: var(--link);
+      background: rgba(159, 179, 120, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex: 0 0 auto;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1;
     }
 
-    .accordion[open] .accordion-chevron {
-      transform: rotate(90deg);
+    .accordion-icon-plus,
+    .accordion-icon-minus {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 300;
+      line-height: 1;
+      transform: none;
+      text-align: center;
+      width: 1em;
+    }
+
+    .accordion-icon-minus {
+      display: none;
+    }
+
+    .accordion[open] .accordion-icon-plus {
+      display: none;
+    }
+
+    .accordion[open] .accordion-icon-minus {
+      display: block;
     }
 
     .accordion-body {
-      padding: 0 1rem 1rem;
-      border-top: 1px solid rgba(70, 82, 71, 0.55);
+      padding: 0 1.15rem 1.05rem;
     }
 
     .accordion-body p {
-      margin: 0.8rem 0 0;
-      max-width: none;
+      margin: 0 0 0.15rem;
+      max-width: 66ch;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.6;
     }
 
     .accordion-section {
@@ -676,27 +731,29 @@
 
     .accordion-section h3,
     .accordion-section h4 {
-      margin: 0 0 0.45rem;
+      margin: 0 0 0.6rem;
       color: var(--fg);
-      font-size: 0.96rem;
+      font-size: 1.12rem;
       line-height: 1.2;
     }
 
     .accordion-section h4 {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--muted);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .accordion-section ul {
       margin: 0;
-      padding-left: 1.1rem;
+      padding-left: 1.2rem;
       color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
     }
 
-    .accordion-section li + li {
-      margin-top: 0.18rem;
+    .accordion-section li+li {
+      margin-top: 0.22rem;
     }
 
     .setup-card {
@@ -983,24 +1040,27 @@
     <section class="accordion-group" aria-label="Additional accordion sections">
       <details class="accordion" name="bottom-sections" open>
         <summary>
-          <span>
-            <span class="accordion-kicker">now</span><br />
+          <span class="accordion-label">
+            <span class="accordion-kicker">now</span>
             <span class="accordion-title">what i do</span>
           </span>
-          <span class="accordion-chevron" aria-hidden="true">›</span>
+          <span class="accordion-chevron" aria-hidden="true"><span class="accordion-icon-plus">+</span><span
+              class="accordion-icon-minus">−</span></span>
         </summary>
         <div class="accordion-body">
-          <p>I work as a software engineer at a startup called Mtechzilla, building and improving a hotel booking platform.</p>
+          <p>I work as a software engineer at a startup called Mtechzilla, building and improving a hotel booking
+            platform.</p>
         </div>
       </details>
 
       <details class="accordion" name="bottom-sections">
         <summary>
-          <span>
-            <span class="accordion-kicker">use</span><br />
+          <span class="accordion-label">
+            <span class="accordion-kicker">use</span>
             <span class="accordion-title">what i use</span>
           </span>
-          <span class="accordion-chevron" aria-hidden="true">›</span>
+          <span class="accordion-chevron" aria-hidden="true"><span class="accordion-icon-plus">+</span><span
+              class="accordion-icon-minus">−</span></span>
         </summary>
         <div class="accordion-body">
           <section class="accordion-section" aria-labelledby="use-hardware-title">
