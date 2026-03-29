@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Photos | Akash</title>
+  <meta name="description" content="Photo collection by Akash Plackal." />
+  <style>
+    :root {
+      --bg: #141a15;
+      --surface: #1d2520;
+      --fg: #d5d9c8;
+      --muted: #a8b09b;
+      --line: #465247;
+      --link: #9fb378;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg); }
+    body {
+      max-width: 60rem;
+      margin-inline: auto;
+      padding: 1.25rem;
+      min-height: 100vh;
+      font: 16px/1.5 var(--font-main);
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      max-width: 66ch;
+    }
+
+    a {
+      color: var(--link);
+      text-underline-offset: 0.15em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .grid img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 0.9rem;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Photos</h1>
+    <p>Mock photo gallery for now. Real photos can be swapped in later.</p>
+    <section class="grid" aria-label="Photo gallery">
+      <img src="/assets/mock-tour-1.svg" alt="Mock tourist photo 1." loading="lazy" decoding="async" />
+      <img src="/assets/mock-tour-2.svg" alt="Mock tourist photo 2." loading="lazy" decoding="async" />
+      <img src="/assets/mock-tour-3.svg" alt="Mock tourist photo 3." loading="lazy" decoding="async" />
+      <img src="/assets/mock-tour-4.svg" alt="Mock tourist photo 4." loading="lazy" decoding="async" />
+      <img src="/assets/mock-tour-1.svg" alt="Mock tourist photo 5." loading="lazy" decoding="async" />
+      <img src="/assets/mock-tour-4.svg" alt="Mock tourist photo 6." loading="lazy" decoding="async" />
+    </section>
+    <p style="margin-top:1.25rem;"><a href="/about/more/">Back to more</a></p>
+  </main>
+</body>
+
+</html>

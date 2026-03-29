@@ -143,6 +143,18 @@
       }
     }
 
+    @keyframes vt-page-in {
+      0% {
+        opacity: 0.985;
+        transform: translateY(4px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     ::view-transition {
       background-color: var(--bg);
     }
@@ -157,7 +169,7 @@
     }
 
     ::view-transition-new(root) {
-      animation: none;
+      animation: vt-page-in 240ms ease-out both;
       mix-blend-mode: normal;
     }
 
@@ -756,6 +768,34 @@
       margin-top: 0.22rem;
     }
 
+    .accordion-cta {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .accordion-button {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 0.8rem;
+      background: rgba(29, 37, 32, 0.72);
+      color: var(--fg);
+      padding: 0.7rem 0.95rem;
+      text-decoration: none;
+      text-decoration-color: transparent;
+      font-size: 0.98rem;
+      line-height: 1.2;
+      transition: transform 160ms ease-out, border-color 160ms ease-out, background-color 160ms ease-out;
+    }
+
+    .accordion-button:hover,
+    .accordion-button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--ring-outer);
+      background: rgba(29, 37, 32, 0.92);
+      outline: none;
+    }
+
     .setup-card {
       margin: 0 0 1.5rem;
     }
@@ -1106,6 +1146,10 @@
           </section>
         </div>
       </details>
+
+      <div class="accordion-cta">
+        <a class="accordion-button" href="/about/more/">know more about me</a>
+      </div>
     </section>
 
     <p><a href="/">Back to home</a></p>

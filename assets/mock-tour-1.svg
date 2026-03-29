@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Mock tourist street scene">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#b9d4e6"/>
+      <stop offset="100%" stop-color="#e8efe7"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#sky)"/>
+  <rect y="500" width="800" height="300" fill="#9a9f95"/>
+  <polygon points="330,800 470,800 430,300 370,300" fill="#c9c2b5"/>
+  <polygon points="0,800 250,800 290,260 0,220" fill="#5f6a63"/>
+  <polygon points="800,800 550,800 520,250 800,230" fill="#8d7a68"/>
+  <rect x="40" y="300" width="110" height="70" fill="#d9e4f0"/>
+  <rect x="610" y="320" width="100" height="64" fill="#d0d6db"/>
+  <rect x="360" y="350" width="80" height="130" fill="#8d4e3a"/>
+  <path d="M300 800 L400 500 L500 800" fill="#b8b1a7" opacity=".75"/>
+  <path d="M370 800 L400 500 L430 800" fill="#d8d1c4"/>
+  <circle cx="120" cy="170" r="44" fill="#ffffff" opacity=".5"/>
+</svg>
