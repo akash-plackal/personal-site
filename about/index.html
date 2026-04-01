@@ -169,6 +169,18 @@
       animation-duration: 420ms;
       animation-timing-function: inherit;
       mix-blend-mode: normal;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      overflow: clip;
+    }
+
+    ::view-transition-old(hero-avatar) {
+      object-position: 50% 40%;
+    }
+
+    ::view-transition-new(hero-avatar) {
+      object-position: 50% 28%;
     }
 
 
