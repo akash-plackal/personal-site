@@ -110,6 +110,18 @@
       mix-blend-mode: normal;
     }
 
+    ::view-transition-group(hero-avatar) {
+      animation-duration: 420ms;
+      animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+    }
+
+    ::view-transition-old(hero-avatar),
+    ::view-transition-new(hero-avatar) {
+      animation-duration: 420ms;
+      animation-timing-function: inherit;
+      mix-blend-mode: normal;
+    }
+
 
     @media (prefers-reduced-motion: reduce) {
       ::view-transition-new(root) {
@@ -263,6 +275,7 @@
       background: var(--surface);
       position: relative;
       z-index: 2;
+      view-transition-name: hero-avatar;
       clip-path: url(#avatar-clip);
       box-shadow: 0 0 0 1px rgba(159, 179, 120, 0.08);
       transition:

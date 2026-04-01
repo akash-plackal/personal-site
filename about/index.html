@@ -91,20 +91,6 @@
       }
     }
 
-    @keyframes hero-enter {
-      0% {
-        opacity: 0;
-        transform: scale(0.92) translateY(20px);
-        filter: blur(8px);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0);
-      }
-    }
-
     @keyframes lead-enter {
       0% {
         opacity: 0;
@@ -173,6 +159,18 @@
       mix-blend-mode: normal;
     }
 
+    ::view-transition-group(hero-avatar) {
+      animation-duration: 420ms;
+      animation-timing-function: linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+    }
+
+    ::view-transition-old(hero-avatar),
+    ::view-transition-new(hero-avatar) {
+      animation-duration: 420ms;
+      animation-timing-function: inherit;
+      mix-blend-mode: normal;
+    }
+
 
     @media (prefers-reduced-motion: no-preference) {
       h1 {
@@ -183,11 +181,6 @@
       .intro {
         animation: lead-enter 550ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
         animation-delay: 180ms;
-      }
-
-      .about-photo {
-        animation: hero-enter 650ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
-        animation-delay: 120ms;
       }
 
       main>.hero~p {
@@ -319,6 +312,7 @@
       position: relative;
       width: fit-content;
       isolation: isolate;
+      view-transition-name: hero-avatar;
     }
 
     .about-photo {
@@ -412,6 +406,11 @@
     html:active-view-transition .site-nav a,
     html:active-view-transition main>p:last-of-type a {
       transform: none;
+    }
+
+    html:active-view-transition .about-hero-media,
+    html:active-view-transition .about-photo {
+      animation: none;
     }
 
     html:active-view-transition .site-nav a::before,
