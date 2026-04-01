@@ -520,6 +520,12 @@
 
     .bio-value a {
       color: var(--link);
+      position: relative;
+      display: inline-block;
+      isolation: isolate;
+      --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
+      --shape-pad-inline: 0.62rem;
+      --shape-pad-block: 0.36rem;
     }
 
     .bio-note {
@@ -552,6 +558,8 @@
       color: var(--fg);
       text-decoration: none;
       text-decoration-color: transparent;
+      position: relative;
+      isolation: isolate;
       transition:
         transform 180ms ease-out,
         border-color 160ms ease-out,
@@ -559,12 +567,85 @@
         box-shadow 180ms ease-out;
     }
 
-    .card-link:hover,
-    .card-link:focus-visible {
+    .bio-value a::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: calc(100% + var(--shape-pad-inline, 0.62rem));
+      height: calc(100% + var(--shape-pad-block, 0.28rem));
+      border-radius: var(--shape-radius, 999px);
+      background: rgba(159, 179, 120, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, -50%) scale(0.88);
+      transform-origin: center;
+      transition:
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        opacity 170ms ease-out,
+        visibility 0s 170ms;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .tech-list .card-link {
+      --shape-radius: 0.8rem;
+      --shape-pad-inline: 0.42rem;
+      --shape-pad-block: 0.32rem;
+    }
+
+    .tech-list .card-link::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: calc(100% + var(--shape-pad-inline, 0.62rem));
+      height: calc(100% + var(--shape-pad-block, 0.28rem));
+      border-radius: var(--shape-radius, 999px);
+      background: rgba(159, 179, 120, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, -50%) scale(0.88);
+      transform-origin: center;
+      transition:
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        opacity 170ms ease-out,
+        visibility 0s 170ms;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .bio-value a:hover::before,
+    .bio-value a:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+      transition:
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        opacity 170ms ease-out,
+        visibility 0s;
+    }
+
+    .tech-list li:hover .card-link {
       transform: translateY(-1px);
-      border-color: var(--ring-outer);
-      background: rgba(29, 37, 32, 0.78);
-      box-shadow: 0 0 0 1px rgba(141, 170, 127, 0.18);
+    }
+
+    .tech-list li:hover .card-link::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+      transition:
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        opacity 170ms ease-out,
+        visibility 0s;
+    }
+
+    .bio-value a:hover,
+    .bio-value a:focus-visible {
+      text-decoration-color: transparent;
+      transform: translateY(-1px);
     }
 
     .card-icon {
@@ -648,6 +729,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      position: relative;
+      isolation: isolate;
       transition: background-color 160ms ease-out;
     }
 
@@ -655,6 +738,72 @@
     .accordion summary:focus-visible {
       outline: none;
       background: rgba(159, 179, 120, 0.035);
+    }
+
+    .accordion summary,
+    .accordion-button {
+      transition:
+        color 160ms ease-out,
+        transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        background-color 160ms ease-out,
+        border-color 160ms ease-out;
+    }
+
+    .accordion summary {
+      --shape-radius: 0.95rem;
+      --shape-pad-inline: -0.05rem;
+      --shape-pad-block: -0.05rem;
+    }
+
+    .accordion-button {
+      --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
+      --shape-pad-inline: 0.62rem;
+      --shape-pad-block: 0.36rem;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .accordion summary::before,
+    .accordion-button::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: calc(100% + var(--shape-pad-inline, 0.62rem));
+      height: calc(100% + var(--shape-pad-block, 0.28rem));
+      border-radius: var(--shape-radius, 999px);
+      background: rgba(159, 179, 120, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, -50%) scale(0.88);
+      transform-origin: center;
+      transition:
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        opacity 170ms ease-out,
+        visibility 0s 170ms;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .accordion summary:hover::before,
+    .accordion summary:focus-visible::before,
+    .accordion-button:hover::before,
+    .accordion-button:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+      transition:
+        transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+        opacity 170ms ease-out,
+        visibility 0s;
+    }
+
+    .accordion summary:hover,
+    .accordion summary:focus-visible,
+    .accordion-button:hover,
+    .accordion-button:focus-visible {
+      transform: translateY(-1px);
     }
 
     .accordion summary::-webkit-details-marker {
@@ -733,67 +882,268 @@
       line-height: 1.6;
     }
 
-    .accordion-section {
-      margin-top: 0.9rem;
-    }
-
-    .accordion-section:first-child {
+    .use-layout {
+      display: grid;
+      gap: 0.9rem;
       margin-top: 0.8rem;
     }
 
-    .accordion-section h3,
-    .accordion-section h4 {
-      margin: 0 0 0.6rem;
-      color: var(--fg);
-      font-size: 1.12rem;
-      line-height: 1.2;
+    @media (min-width: 42rem) {
+      .use-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    .accordion-section h4 {
+    .use-card {
+      margin: 0;
+      min-width: 0;
+      padding: 0.9rem;
+      border: 1px solid rgba(70, 82, 71, 0.72);
+      border-radius: 0.9rem;
+      background: rgba(20, 26, 21, 0.42);
+    }
+
+    .use-card-wide {
+      grid-column: 1 / -1;
+    }
+
+    .use-card-head {
+      display: grid;
+      gap: 0.22rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .use-card-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .use-card-title {
+      margin: 0;
+      color: var(--fg);
+      font-size: 1.12rem;
+      line-height: 1.15;
+    }
+
+    .use-card-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+
+    .use-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .use-list li {
+      display: grid;
+      gap: 0.08rem;
+      padding-left: 0.9rem;
+      position: relative;
+      color: var(--fg);
+    }
+
+    .use-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62rem;
+      width: 0.34rem;
+      height: 0.34rem;
+      border-radius: 999px;
+      background: var(--link);
+      box-shadow: 0 0 0 0.18rem rgba(159, 179, 120, 0.1);
+    }
+
+    .use-item-title {
+      color: var(--fg);
+      line-height: 1.25;
+    }
+
+    .use-item-meta {
+      color: var(--muted);
       font-size: 0.9rem;
+      line-height: 1.3;
+    }
+
+    .use-stack {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 42rem) {
+      .use-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .use-stack-group {
+      display: grid;
+      gap: 0.35rem;
+      align-content: start;
+    }
+
+    .use-stack-label {
       color: var(--muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
-    }
-
-    .accordion-section ul {
+      font-size: 0.78rem;
+      font-weight: 700;
       margin: 0;
-      padding-left: 1.2rem;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .accordion-section li+li {
-      margin-top: 0.22rem;
     }
 
     .accordion-cta {
-      margin-top: 1rem;
+      margin-top: 1.15rem;
       display: flex;
-      justify-content: flex-start;
+      justify-content: center;
     }
 
     .accordion-button {
+      --button-radius: 0.82rem;
       display: inline-block;
-      border: 1px solid var(--line);
-      border-radius: 0.8rem;
-      background: rgba(29, 37, 32, 0.72);
-      color: var(--fg);
-      padding: 0.7rem 0.95rem;
+      max-width: 100%;
       text-decoration: none;
       text-decoration-color: transparent;
-      font-size: 0.98rem;
-      line-height: 1.2;
-      transition: transform 160ms ease-out, border-color 160ms ease-out, background-color 160ms ease-out;
+      position: relative;
+      isolation: isolate;
+      transform: translateY(0);
+      transition:
+        transform 150ms cubic-bezier(0, 0, 0.58, 1),
+        filter 150ms cubic-bezier(0, 0, 0.58, 1);
+    }
+
+    .accordion-button::before {
+      display: none;
+    }
+
+    .accordion-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: calc(var(--button-radius) + 0.12rem);
+      background:
+        linear-gradient(180deg, rgba(84, 95, 79, 0.95), rgba(58, 67, 54, 0.98));
+      border: 1px solid rgba(141, 170, 127, 0.28);
+      box-shadow:
+        0 0 0 1px rgba(141, 170, 127, 0.06),
+        0 0.48rem 0 0 rgba(17, 22, 18, 0.94),
+        0 0.72rem 1rem rgba(0, 0, 0, 0.16);
+      transform: translateY(0.38rem);
+      z-index: -2;
+      transition:
+        transform 150ms cubic-bezier(0, 0, 0.58, 1),
+        box-shadow 150ms cubic-bezier(0, 0, 0.58, 1),
+        background-color 160ms ease-out,
+        border-color 160ms ease-out;
+    }
+
+    .accordion-button-cap {
+      display: grid;
+      gap: 0.18rem;
+      justify-items: center;
+      padding: 0.56rem 0.72rem 0.66rem;
+      border-radius: var(--button-radius);
+      border: 1px solid rgba(159, 179, 120, 0.18);
+      background:
+        linear-gradient(180deg, rgba(82, 91, 78, 0.98), rgba(43, 51, 44, 0.98));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.34),
+        0 0 0 1px rgba(16, 20, 17, 0.28);
+      transform: translateY(0);
+      transition:
+        transform 150ms cubic-bezier(0, 0, 0.58, 1),
+        background-color 150ms cubic-bezier(0, 0, 0.58, 1),
+        box-shadow 150ms cubic-bezier(0, 0, 0.58, 1),
+        border-color 150ms cubic-bezier(0, 0, 0.58, 1);
+    }
+
+    .accordion-button-face {
+      display: grid;
+      gap: 0.24rem;
+      justify-items: center;
+      min-width: min(100%, 15.5rem);
+      padding: 0.42rem 1rem 0.5rem;
+      border-radius: calc(var(--button-radius) - 0.02rem);
+      background:
+        linear-gradient(180deg, rgba(32, 38, 33, 0.92), rgba(56, 63, 57, 0.92));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .accordion-button-kicker {
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .accordion-button-label {
+      font-size: clamp(1.02rem, 2.5vw, 1.34rem);
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--selection-fg);
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+    }
+
+    .accordion-button-label::before {
+      content: "> ";
+      color: var(--link);
     }
 
     .accordion-button:hover,
     .accordion-button:focus-visible {
-      transform: translateY(-1px);
-      border-color: var(--ring-outer);
-      background: rgba(29, 37, 32, 0.92);
+      transform: translateY(0.16rem);
       outline: none;
+    }
+
+    .accordion-button:hover::after,
+    .accordion-button:focus-visible::after {
+      transform: translateY(0.28rem);
+      box-shadow:
+        0 0 0 1px rgba(141, 170, 127, 0.06),
+        0 0.32rem 0 0 rgba(17, 22, 18, 0.94),
+        0 0.52rem 0.8rem rgba(0, 0, 0, 0.14);
+    }
+
+    .accordion-button:hover .accordion-button-cap,
+    .accordion-button:focus-visible .accordion-button-cap {
+      transform: translateY(0.12rem);
+      border-color: rgba(159, 179, 120, 0.24);
+    }
+
+    .accordion-button:active {
+      transform: translateY(0.36rem);
+    }
+
+    .accordion-button:active::after {
+      transform: translateY(0.08rem);
+      box-shadow:
+        0 0 0 1px rgba(141, 170, 127, 0.06),
+        0 0.08rem 0 0 rgba(17, 22, 18, 0.94);
+    }
+
+    .accordion-button:active .accordion-button-cap {
+      transform: translateY(0.3rem) scale(0.988);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.24),
+        0 0 0 1px rgba(16, 20, 17, 0.24);
+    }
+
+    .accordion-button:active .accordion-button-face {
+      background:
+        linear-gradient(180deg, rgba(35, 41, 36, 0.96), rgba(53, 59, 54, 0.96));
     }
 
     .setup-card {
@@ -924,13 +1274,13 @@
           </li>
 
           <li>
-            <span class="bio-label">Neovim config</span>
-            <span class="bio-value"><a href="https://github.com/y9san9/y9san9.nvim">y9san9.nvim</a></span>
+            <span class="bio-label">Dotfiles</span>
+            <span class="bio-value"><a href="https://github.com/akash-plackal/dotfiles">Dotfiles</a></span>
           </li>
           <li>
-            <span class="bio-label">Fav font</span>
-            <span class="bio-value">Iosevka</span>
-            <span class="bio-note">Monospace, compact, and readable.</span>
+            <span class="bio-label">Fav theme + font</span>
+            <span class="bio-value">Iosevka & Gruvbox</span>
+            <span class="bio-note">readable and easy on the eyes.</span>
           </li>
         </ul>
       </section>
@@ -1078,7 +1428,7 @@
     </section>
 
     <section class="accordion-group" aria-label="Additional accordion sections">
-      <details class="accordion" name="bottom-sections" open>
+      <details class="accordion" name="bottom-sections">
         <summary>
           <span class="accordion-label">
             <span class="accordion-kicker">now</span>
@@ -1103,59 +1453,82 @@
               class="accordion-icon-minus">−</span></span>
         </summary>
         <div class="accordion-body">
-          <section class="accordion-section" aria-labelledby="use-hardware-title">
-            <h3 id="use-hardware-title">Hardware</h3>
-            <ul>
-              <li>MacBook Air M1 — Asahi Linux</li>
-              <li>MacBook Air M4 — macOS</li>
-              <li>Pixel 9 phone</li>
-            </ul>
-          </section>
-
-          <section class="accordion-section" aria-labelledby="use-software-title">
-            <h3 id="use-software-title">Software</h3>
-
-            <section class="accordion-section" aria-labelledby="use-desktop-title">
-              <h4 id="use-desktop-title">Desktop</h4>
-              <ul>
-                <li>Neovim</li>
-                <li>Tmux</li>
-                <li>Asahi Linux</li>
-                <li>Foot terminal</li>
-                <li>Zoxide</li>
-                <li>Ripgrep</li>
-                <li>Helium browser</li>
-                <li>Firefox browser</li>
-                <li>Stow</li>
-                <li>Yazi</li>
-                <li>Lazygit</li>
+          <div class="use-layout">
+            <section class="use-card" aria-labelledby="use-hardware-title">
+              <header class="use-card-head">
+                <h3 class="use-card-title" id="use-hardware-title">Hardware</h3>
+              </header>
+              <ul class="use-list">
+                <li>
+                  <span class="use-item-title">MacBook Air M1</span>
+                  <span class="use-item-meta">Asahi Linux machine</span>
+                </li>
+                <li>
+                  <span class="use-item-title">MacBook Air M4</span>
+                  <span class="use-item-meta">macOS machine</span>
+                </li>
+                <li>
+                  <span class="use-item-title">Pixel 9</span>
+                  <span class="use-item-meta">phone</span>
+                </li>
               </ul>
             </section>
 
-            <section class="accordion-section" aria-labelledby="use-phone-title">
-              <h4 id="use-phone-title">Phone · Android</h4>
-              <ul>
-                <li>Digi Paws</li>
-                <li>YouTube Vanced</li>
-                <li>Apple Music</li>
-                <li>Bitwarden</li>
-                <li>LocalSend</li>
-                <li>MotionCam Pro</li>
-              </ul>
+            <section class="use-card use-card-wide" aria-labelledby="use-software-title">
+              <header class="use-card-head">
+                <h3 class="use-card-title" id="use-software-title">Software</h3>
+              </header>
+              <div class="use-stack">
+                <section class="use-stack-group" aria-labelledby="use-desktop-title">
+                  <h4 class="use-stack-label" id="use-desktop-title">Desktop</h4>
+                  <ul class="use-list">
+                    <li><span class="use-item-title">Neovim</span></li>
+                    <li><span class="use-item-title">Tmux</span></li>
+                    <li><span class="use-item-title">Asahi Linux</span></li>
+                    <li><span class="use-item-title">Foot terminal</span></li>
+                    <li><span class="use-item-title">Zoxide</span></li>
+                    <li><span class="use-item-title">Ripgrep</span></li>
+                    <li><span class="use-item-title">Helium browser</span></li>
+                    <li><span class="use-item-title">Firefox browser</span></li>
+                    <li><span class="use-item-title">Stow</span></li>
+                    <li><span class="use-item-title">Yazi</span></li>
+                    <li><span class="use-item-title">Lazygit</span></li>
+                  </ul>
+                </section>
+
+                <section class="use-stack-group" aria-labelledby="use-phone-title">
+                  <h4 class="use-stack-label" id="use-phone-title">Phone · Android</h4>
+                  <ul class="use-list">
+                    <li><span class="use-item-title">Digi Paws</span></li>
+                    <li><span class="use-item-title">YouTube Vanced</span></li>
+                    <li><span class="use-item-title">Apple Music</span></li>
+                    <li><span class="use-item-title">Bitwarden</span></li>
+                    <li><span class="use-item-title">LocalSend</span></li>
+                    <li><span class="use-item-title">MotionCam Pro</span></li>
+                  </ul>
+                </section>
+              </div>
             </section>
-          </section>
+          </div>
         </div>
       </details>
 
       <div class="accordion-cta">
-        <a class="accordion-button" href="/about/more/">know more about me</a>
+        <a class="accordion-button" href="/about/more/">
+          <span class="accordion-button-cap">
+            <span class="accordion-button-face">
+              <span class="accordion-button-kicker">Next page</span>
+              <span class="accordion-button-label">know more about me</span>
+            </span>
+          </span>
+        </a>
       </div>
     </section>
 
     <p><a href="/">Back to home</a></p>
   </main>
   <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>
-  <script src="/assets/nav-audio.js?v=20260311m1" defer></script>
+  <script src="/assets/nav-audio.js?v=20260331m2" defer></script>
   <div class="giscus"></div>
 </body>
 
