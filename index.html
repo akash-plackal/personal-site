@@ -108,6 +108,7 @@
       height: 100%;
       object-fit: cover;
       overflow: clip;
+      clip-path: url(#avatar-clip);
     }
 
     ::view-transition-old(hero-avatar) {
@@ -234,6 +235,7 @@
     }
 
     .hero-portrait {
+      view-transition-name: hero-avatar;
       width: clamp(11rem, 19vw, 21rem);
       aspect-ratio: 1 / 1;
       position: relative;
@@ -271,7 +273,6 @@
       background: var(--surface);
       position: relative;
       z-index: 2;
-      view-transition-name: hero-avatar;
       clip-path: url(#avatar-clip);
       box-shadow: 0 0 0 1px rgba(159, 179, 120, 0.08);
       transition:
