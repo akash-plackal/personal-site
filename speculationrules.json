@@ -2,8 +2,19 @@
   "prerender": [
     {
       "source": "document",
-      "where": { "href_matches": "/*" },
-      "eagerness": "eager"
+      "where": {
+        "href_matches": "/about/photos/*"
+      },
+      "eagerness": "immediate"
+    }
+  ],
+  "prefetch": [
+    {
+      "source": "document",
+      "where": {
+        "href_matches": "/*"
+      },
+      "eagerness": "immediate"
     }
   ]
 }
