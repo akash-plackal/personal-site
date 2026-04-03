@@ -34,6 +34,7 @@ mkdir -p "$OUT_DIR"
 cp "$ROOT_DIR/_headers" "$OUT_DIR/_headers"
 cp -R "$ROOT_DIR/assets" "$OUT_DIR/assets"
 cp "$ROOT_DIR/favicon.ico" "$OUT_DIR/favicon.ico"
+cp "$ROOT_DIR/speculationrules.json" "$OUT_DIR/speculationrules.json"
 
 HTML_FILES=("$ROOT_DIR/index.html")
 while IFS= read -r -d '' file; do
