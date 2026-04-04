@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Terminal prompt favicon">
-  <rect x="4" y="4" width="56" height="56" rx="12" fill="#1a1f1b" stroke="#3f4b42" stroke-width="2" />
-  <path d="M19 25L29 32L19 39" fill="none" stroke="#9fb378" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-  <rect x="33" y="37" width="13" height="5" rx="2.5" fill="#9fb378" />
-</svg>
