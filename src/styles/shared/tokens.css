@@ -1,0 +1,16 @@
+:root {
+  --font-main: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+  --bg: #141a15;
+  --surface: #1d2520;
+  --fg: #d5d9c8;
+  --muted: #a8b09b;
+  --line: #465247;
+  --link: #9fb378;
+  --ring-outer: #8daa7f;
+  --selection-bg: #324036;
+  --selection-fg: #e7ebdc;
+}
+
+@view-transition {
+  navigation: auto;
+}

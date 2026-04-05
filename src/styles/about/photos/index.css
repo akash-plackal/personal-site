@@ -1,0 +1,46 @@
+@import "../../shared/tokens.css";
+
+* { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg); }
+    body {
+      max-width: 60rem;
+      margin-inline: auto;
+      padding: 1.25rem;
+      min-height: 100vh;
+      font: 16px/1.5 var(--font-main);
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      max-width: 66ch;
+    }
+
+    a {
+      color: var(--link);
+      text-underline-offset: 0.15em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .grid img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 0.9rem;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }

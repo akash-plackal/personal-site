@@ -1,39 +1,47 @@
 * Hello, this is my personal website.
 
-** One-time install (no repo npm deps)
+** Install
 
 #+begin_src sh
-npm i -g html-minifier-next
+npm install
 #+end_src
 
 ** Build
 
 #+begin_src sh
-make build
+npm run build
 #+end_src
 
 Build output is written to =dist/=.
 Default minification mode is =max= (smallest output). Use =safe= mode if needed:
 
 #+begin_src sh
-HTML_MINIFIER_MODE=safe make build
+HTML_MINIFIER_MODE=safe npm run build
 #+end_src
 
 ** Budget check only
 
 #+begin_src sh
-make check
+npm run check
 #+end_src
 
 ** Local preview
 
 #+begin_src sh
-make serve
+npm run preview
 #+end_src
 
 Then open =http://localhost:8080=.
 
+** Build system notes
+
+- CSS source lives in =src/styles/=
+- Shared design tokens live in =src/styles/shared/tokens.css=
+- HTML can include shared fragments with =<include src="/src/partials/...">=
+- Stylesheets marked with =data-inline= are bundled and injected as inline =<style>= tags during the build
+- Final output is still fully static HTML in =dist/=
+
 ** Cloudflare Pages
 
-- Build command: =./scripts/build.sh=
+- Build command: =npm run build=
 - Build output directory: =dist=

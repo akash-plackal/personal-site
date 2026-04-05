@@ -1,0 +1,23 @@
+{
+  "name": "personal-site",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Ultra-fast personal website with inline critical CSS and strict performance budgets.",
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "check": "./scripts/check-budgets.sh dist",
+    "clean": "rm -rf dist",
+    "serve": "python3 -m http.server --directory dist 8080",
+    "preview": "npm run build && npm run serve"
+  },
+  "devDependencies": {
+    "html-minifier-next": "^1.1.0",
+    "lightningcss": "^1.29.3",
+    "posthtml": "^0.16.6",
+    "posthtml-include": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
