@@ -73,8 +73,9 @@ html {
   object-position: 50% 28%;
 }
 
-
-
+.hero-portrait {
+  animation: hero-in 500ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1) both;
+}
 
 * {
   box-sizing: border-box;
