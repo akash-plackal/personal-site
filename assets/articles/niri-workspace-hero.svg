@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Horizontal scrolling window manager</title>
+  <desc id="desc">A flat horizontal strip of tiled windows representing Niri's scrolling workspace model.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#141a15"/>
+      <stop offset="100%" stop-color="#1d2520"/>
+    </linearGradient>
+    <style>
+      .frame{fill:#1d2520;stroke:#465247;stroke-width:2}.panel{fill:#141a15;stroke:#465247;stroke-width:2}.active{fill:#324036;stroke:#9fb378;stroke-width:2}.bar{fill:#465247}.accent{stroke:#9fb378;stroke-width:3;stroke-linecap:round;fill:none}.muted{stroke:#465247;stroke-width:2;stroke-linecap:round;fill:none}.txt{fill:#d5d9c8;font:800 15px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.small{fill:#a8b09b;font:700 12px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.dot{fill:#8daa7f}
+    </style>
+  </defs>
+
+  <rect width="960" height="420" fill="url(#bg)"/>
+  <g opacity=".2" stroke="#465247" stroke-width="1">
+    <path d="M90 82h780M90 338h780M160 46v328M800 46v328"/>
+    <path d="M0 210h960"/>
+  </g>
+
+  <text class="txt" x="126" y="92">stable windows, scrolling space</text>
+  <path class="accent" d="M620 88h120m0 0-18-18m18 18-18 18"/>
+
+  <g transform="translate(96 124)">
+    <rect class="frame" x="0" y="0" width="768" height="184" rx="18"/>
+    <rect x="24" y="22" width="720" height="24" rx="12" fill="#141a15" stroke="#465247"/>
+    <circle class="dot" cx="46" cy="34" r="5"/>
+    <circle cx="66" cy="34" r="5" fill="#a8b09b" opacity=".75"/>
+    <circle cx="86" cy="34" r="5" fill="#d5d9c8" opacity=".5"/>
+
+    <g transform="translate(28 66)">
+      <rect class="panel" x="0" y="0" width="154" height="92" rx="10"/>
+      <path class="muted" d="M22 24h82M22 44h110M22 64h64"/>
+      <text class="small" x="22" y="116">terminal</text>
+    </g>
+
+    <g transform="translate(198 66)">
+      <rect class="active" x="0" y="0" width="184" height="92" rx="10"/>
+      <path class="accent" d="M24 26h112M24 48h136M24 70h78"/>
+      <text class="small" x="24" y="116">editor</text>
+    </g>
+
+    <g transform="translate(398 66)">
+      <rect class="panel" x="0" y="0" width="154" height="92" rx="10"/>
+      <path class="muted" d="M22 24h96M22 44h70M22 64h108"/>
+      <text class="small" x="22" y="116">browser</text>
+    </g>
+
+    <g transform="translate(568 66)">
+      <rect class="panel" x="0" y="0" width="154" height="92" rx="10"/>
+      <path class="muted" d="M22 24h76M22 44h102M22 64h58"/>
+      <text class="small" x="22" y="116">chat</text>
+    </g>
+  </g>
+
+  <g transform="translate(202 338)">
+    <path class="muted" d="M0 0h556"/>
+    <path class="accent" d="M168 0h156"/>
+    <circle class="dot" cx="168" cy="0" r="5"/>
+    <circle class="dot" cx="324" cy="0" r="5"/>
+    <text class="small" x="194" y="32">new windows extend right instead of reflowing everything</text>
+  </g>
+</svg>
