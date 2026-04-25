@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Minimal browser windows</title>
+  <desc id="desc">Flat browser windows arranged like search results, using the site color palette.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#141a15"/>
+      <stop offset="100%" stop-color="#1d2520"/>
+    </linearGradient>
+    <style>
+      .window{fill:#1d2520;stroke:#465247;stroke-width:2}.bar{fill:#141a15}.line{stroke:#465247;stroke-width:2;stroke-linecap:round}.accent{stroke:#9fb378;stroke-width:3;stroke-linecap:round}.dot{fill:#8daa7f}.muted{fill:#a8b09b}.fg{fill:#d5d9c8}.pill{fill:#324036;stroke:#9fb378;stroke-width:2}.txt{font:800 15px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.small{font:700 12px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+    </style>
+  </defs>
+  <rect width="960" height="420" fill="url(#bg)"/>
+  <g opacity=".2" stroke="#465247" stroke-width="1">
+    <path d="M90 74h780M90 346h780M150 42v336M810 42v336"/>
+    <path d="M0 210h960"/>
+  </g>
+
+  <g transform="translate(142 86)">
+    <rect class="window" width="676" height="248" rx="18"/>
+    <rect class="bar" x="18" y="18" width="640" height="42" rx="10"/>
+    <circle class="dot" cx="42" cy="39" r="5"/>
+    <circle class="muted" cx="62" cy="39" r="5" opacity=".75"/>
+    <circle class="fg" cx="82" cy="39" r="5" opacity=".55"/>
+    <rect x="122" y="27" width="414" height="24" rx="12" fill="#1d2520" stroke="#465247"/>
+    <path class="line" d="M147 39h238"/>
+    <path class="accent" d="M558 39h50"/>
+
+    <g transform="translate(46 92)">
+      <rect class="pill" width="116" height="38" rx="19"/>
+      <text class="txt fg" x="58" y="25" text-anchor="middle">Helium</text>
+      <path class="accent" d="M144 18h104"/>
+      <path class="line" d="M144 38h184"/>
+      <path class="line" d="M144 58h138"/>
+    </g>
+
+    <g transform="translate(46 170)">
+      <rect x="0" y="0" width="76" height="30" rx="15" fill="#141a15" stroke="#465247"/>
+      <text class="small muted" x="38" y="20" text-anchor="middle">Firefox</text>
+      <rect x="92" y="0" width="74" height="30" rx="15" fill="#141a15" stroke="#465247"/>
+      <text class="small muted" x="129" y="20" text-anchor="middle">Chrome</text>
+      <rect x="182" y="0" width="64" height="30" rx="15" fill="#141a15" stroke="#465247"/>
+      <text class="small muted" x="214" y="20" text-anchor="middle">Safari</text>
+      <rect x="262" y="0" width="62" height="30" rx="15" fill="#141a15" stroke="#465247"/>
+      <text class="small muted" x="293" y="20" text-anchor="middle">Orion</text>
+      <rect x="340" y="0" width="54" height="30" rx="15" fill="#141a15" stroke="#465247"/>
+      <text class="small muted" x="367" y="20" text-anchor="middle">Zen</text>
+      <rect x="410" y="0" width="62" height="30" rx="15" fill="#141a15" stroke="#465247"/>
+      <text class="small muted" x="441" y="20" text-anchor="middle">Brave</text>
+    </g>
+
+    <g fill="none" stroke="#8daa7f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M522 120c31 0 56 25 56 56s-25 56-56 56-56-25-56-56 25-56 56-56Z"/>
+      <path d="M562 216l42 42"/>
+      <path d="M490 176h64"/>
+      <path d="M522 144v64" opacity=".65"/>
+    </g>
+  </g>
+</svg>
