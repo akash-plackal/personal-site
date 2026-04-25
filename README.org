@@ -38,7 +38,9 @@ Then open =http://localhost:8080=.
 - CSS source lives in =src/styles/=
 - Shared design tokens live in =src/styles/shared/tokens.css=
 - HTML can include shared fragments with =<include src="/src/partials/...">=
+- Articles live in =content/articles/*.md= with front matter for title, date, description, slug, and hero data
 - Stylesheets marked with =data-inline= are bundled and injected as inline =<style>= tags during the build
+- Article pages and the homepage writing list are generated from Markdown during the build
 - Final output is still fully static HTML in =dist/=
 
 ** Cloudflare Pages
