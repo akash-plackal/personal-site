@@ -237,6 +237,7 @@ h1 {
   width: fit-content;
   isolation: isolate;
   view-transition-name: hero-avatar;
+  will-change: transform;
 }
 
 .about-photo {
@@ -1092,6 +1093,8 @@ p {
   border: none;
   background: transparent;
   font-family: var(--font-main);
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
   color: var(--fg);
 }
 

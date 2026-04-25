@@ -12,9 +12,14 @@
 
 /
   Link: </assets/hero-avatar-384.avif>; rel=preload; as=image; type=image/avif
+  Link: <https://giscus.app>; rel=preconnect; crossorigin
 
 /about/*
   Link: </assets/hero-about-720.avif>; rel=preload; as=image; type=image/avif
+  Link: <https://giscus.app>; rel=preconnect; crossorigin
+
+/articles/*
+  Link: <https://giscus.app>; rel=preconnect; crossorigin
 
 /speculationrules.json
   Content-Type: application/speculationrules+json

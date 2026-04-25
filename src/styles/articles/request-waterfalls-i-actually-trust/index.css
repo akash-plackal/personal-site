@@ -270,6 +270,7 @@ h1 {
   background: var(--surface);
   margin: 0 0 1.2rem;
   view-transition-name: article-hero;
+  will-change: transform;
 }
 
 p {
@@ -565,6 +566,8 @@ html:active-view-transition main>p:last-of-type a::before {
   background: transparent;
   font-family: var(--font-main);
   color: var(--fg);
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
 }
 
 .giscus-frame {

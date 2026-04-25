@@ -166,6 +166,7 @@ h1 {
 
 .hero-portrait {
   view-transition-name: hero-avatar;
+  will-change: transform;
   width: clamp(11rem, 19vw, 21rem);
   aspect-ratio: 1 / 1;
   position: relative;
@@ -451,6 +452,8 @@ time {
   background: transparent;
   font-family: var(--font-main);
   color: var(--fg);
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
 }
 
 .giscus-frame {
