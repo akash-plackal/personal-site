@@ -246,7 +246,7 @@ h2 {
 }
 
 .writing-date {
-  color: var(--muted);
+  color: var(--link);
   font-size: 1rem;
 }
 
@@ -266,7 +266,18 @@ a {
 }
 
 .writing-title a {
+  --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
+  --shape-pad-inline: 0.62rem;
+  --shape-pad-block: 0.36rem;
   color: var(--fg);
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.writing-item:nth-child(even) .writing-title a {
+  --shape-radius: 28%;
+  --shape-pad-block: 0.3rem;
 }
 
 .writing-summary {
@@ -281,18 +292,19 @@ a {
 .writing-title a {
   transition:
     color 160ms ease-out,
-    transform 260ms ease-out,
+    transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
     text-decoration-color 120ms ease-out;
 }
 
-.site-nav a::before {
+.site-nav a::before,
+.writing-title a::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: calc(100% + 0.72rem);
-  height: calc(100% + 0.3rem);
-  border-radius: 30%;
+  width: calc(100% + var(--shape-pad-inline, 0.72rem));
+  height: calc(100% + var(--shape-pad-block, 0.3rem));
+  border-radius: var(--shape-radius, 30%);
   background: rgba(159, 179, 120, 0.12);
   box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
   opacity: 0;
@@ -309,7 +321,9 @@ a {
 
 .site-nav a:hover::before,
 .site-nav a:focus-visible::before,
-.site-nav a[aria-current="page"]::before {
+.site-nav a[aria-current="page"]::before,
+.writing-title a:hover::before,
+.writing-title a:focus-visible::before {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, -50%) scale(1);
@@ -338,7 +352,8 @@ html:active-view-transition .writing-title a {
   transform: none;
 }
 
-html:active-view-transition .site-nav a::before {
+html:active-view-transition .site-nav a::before,
+html:active-view-transition .writing-title a::before {
   opacity: 0;
   visibility: hidden;
   transition: none;

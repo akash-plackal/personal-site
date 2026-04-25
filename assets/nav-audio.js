@@ -164,9 +164,10 @@
         `&su=${encodeURIComponent(subject)}` +
         `&body=${encodeURIComponent(body)}`;
       // Open in a new tab so the user doesn't lose the page they were on.
-      const win = window.open(gmail, "_blank", "noopener,noreferrer");
-      // If a popup blocker prevents the new tab, fall back to navigating in place.
-      if (!win) window.location.href = gmail;
+      // Do not fall back to `window.location.href`: with `noopener`, some
+      // browsers intentionally return `null` from `window.open()` even when
+      // the tab opens successfully, which would also navigate this page.
+      window.open(gmail, "_blank", "noopener,noreferrer");
       dialog.close();
       form.reset();
     });
