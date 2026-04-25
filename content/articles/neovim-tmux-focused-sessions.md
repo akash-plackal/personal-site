@@ -1,10 +1,17 @@
 ---
 title: Neovim + Tmux for Focused Sessions
-description: Quick notes about a focused terminal workflow with Neovim and tmux.
+description: Field notes on a repeatable Neovim and tmux terminal workflow — pane layouts, command depth over plugin count, and the small habits that keep terminal sessions focused.
 date: 2026-01-17
 slug: neovim-tmux-focused-sessions
 hero: /assets/articles/terminal-flow.svg
 heroAlt: Abstract terminal workflow artwork.
+tags:
+  - Neovim
+  - Tmux
+  - Terminal
+  - Developer Workflow
+  - Productivity
+  - Linux
 ---
 
 A focused setup is less about plugins and more about repeatability. I want the same screen shape every morning.

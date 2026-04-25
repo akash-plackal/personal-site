@@ -123,6 +123,42 @@ function normalizeDate(value) {
   return String(value);
 }
 
+// Convert YYYY-MM-DD into an ISO 8601 timestamp at noon UTC. Article schema
+// and OG `article:published_time` both expect ISO 8601 — bare dates work but
+// the explicit form maps cleanly to dateModified comparisons in Search Console.
+function toIso(date) {
+  if (!date) return '';
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T12:00:00+00:00` : String(date);
+}
+
+const RASTER_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif']);
+const IMAGE_MIME = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+};
+
+function isRasterImage(url) {
+  if (!url) return false;
+  const ext = path.extname(url.split('?')[0]).toLowerCase();
+  return RASTER_EXT.has(ext);
+}
+
+function imageMime(url) {
+  const ext = path.extname((url || '').split('?')[0]).toLowerCase();
+  return IMAGE_MIME[ext] || 'image/png';
+}
+
+function absoluteUrl(pathname) {
+  if (!pathname) return '';
+  if (/^https?:\/\//i.test(pathname)) return pathname;
+  return `${SITE_ORIGIN}${pathname.startsWith('/') ? '' : '/'}${pathname}`;
+}
+
 function renderMarkdown(content) {
   const tokens = markdown.parse(content, {});
   const headings = [];
@@ -196,6 +232,95 @@ function renderHero(article) {
   const alt = article.heroAlt || '';
 
   return `<img class="hero-image" src="${escapeHtml(article.hero)}" width="${escapeHtml(width)}" height="${escapeHtml(height)}" alt="${escapeHtml(alt)}" />`;
+}
+
+// Open Graph image meta block — emitted as a contiguous group so social card
+// validators (FB, Twitter, LinkedIn) parse all hints together.
+function renderOgImageMeta(article) {
+  const img = article.ogImage;
+  return [
+    `<meta property="og:image" content="${escapeHtml(img.absoluteUrl)}" />`,
+    `<meta property="og:image:type" content="${escapeHtml(img.type)}" />`,
+    `<meta property="og:image:width" content="${escapeHtml(img.width)}" />`,
+    `<meta property="og:image:height" content="${escapeHtml(img.height)}" />`,
+    `<meta property="og:image:alt" content="${escapeHtml(img.alt)}" />`,
+    `<meta name="twitter:image" content="${escapeHtml(img.absoluteUrl)}" />`,
+    `<meta name="twitter:image:alt" content="${escapeHtml(img.alt)}" />`,
+  ].join('\n  ');
+}
+
+// Article-specific OG meta + per-tag <meta property="article:tag">. Google
+// uses these signals for News/Discover and Lighthouse's structured-data
+// manual audit. Author URL points at the about page so E-E-A-T is verifiable.
+function renderArticleMeta(article) {
+  const lines = [
+    `<meta property="article:published_time" content="${escapeHtml(article.publishedTime)}" />`,
+    `<meta property="article:modified_time" content="${escapeHtml(article.modifiedTime)}" />`,
+    `<meta property="article:author" content="${escapeHtml(`${SITE_ORIGIN}/about/`)}" />`,
+  ];
+  if (article.tags && article.tags.length > 0) {
+    lines.push(`<meta name="keywords" content="${escapeHtml(article.tags.join(', '))}" />`);
+    for (const tag of article.tags) {
+      lines.push(`<meta property="article:tag" content="${escapeHtml(tag)}" />`);
+    }
+  }
+  return lines.join('\n  ');
+}
+
+// JSON-LD: BlogPosting (the article itself) plus a BreadcrumbList so Google
+// shows Home › Writing › Article in search results. Output is single-line so
+// the HTML minifier doesn't have to think about it.
+function renderArticleJsonLd(article) {
+  const blogPosting = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${article.canonical}#article`,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': article.canonical },
+    headline: article.title,
+    description: article.description,
+    image: [article.ogImage.absoluteUrl],
+    datePublished: article.publishedTime,
+    dateModified: article.modifiedTime,
+    inLanguage: 'en',
+    url: article.canonical,
+    author: {
+      '@type': 'Person',
+      '@id': `${SITE_ORIGIN}/#person`,
+      name: article.author,
+      url: `${SITE_ORIGIN}/about/`,
+    },
+    publisher: {
+      '@type': 'Person',
+      '@id': `${SITE_ORIGIN}/#person`,
+      name: 'Akash Plackal',
+      url: SITE_ORIGIN + '/',
+    },
+    isPartOf: {
+      '@type': 'Blog',
+      '@id': `${SITE_ORIGIN}/writing/#blog`,
+      name: 'Akash Plackal — Writing',
+      url: `${SITE_ORIGIN}/writing/`,
+    },
+  };
+
+  if (article.tags && article.tags.length > 0) {
+    blogPosting.keywords = article.tags.join(', ');
+  }
+
+  const breadcrumbs = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_ORIGIN}/` },
+      { '@type': 'ListItem', position: 2, name: 'Writing', item: `${SITE_ORIGIN}/writing/` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: article.canonical },
+    ],
+  };
+
+  // Single combined script keeps total bytes lower than two separate blocks
+  // and is equally valid per the JSON-LD spec (an array of root nodes).
+  const payload = JSON.stringify([blogPosting, breadcrumbs]);
+  return `<script type="application/ld+json">${payload}</script>`;
 }
 
 function renderArticleList(articles) {
@@ -273,6 +398,16 @@ function markCurrentNav(html, relPath) {
   );
 }
 
+// Default OG image for articles that don't have a raster hero. Square 640
+// avatar works in all major social card validators and is already on-disk.
+const DEFAULT_OG_IMAGE = {
+  url: '/assets/hero-avatar-640.avif',
+  width: 640,
+  height: 640,
+  type: 'image/avif',
+  alt: 'Akash Plackal',
+};
+
 async function loadArticles() {
   const files = await gatherMarkdownFiles();
   const template = await fs.readFile(ARTICLE_TEMPLATE, 'utf8');
@@ -289,16 +424,59 @@ async function loadArticles() {
 
     const { body, headings } = renderMarkdown(content);
     const date = normalizeDate(data.date);
+    const lastmod = data.lastmod ? normalizeDate(data.lastmod) : date;
+
+    // Tags: accept `tags` (preferred) or `keywords`. Always normalise to a
+    // string array so downstream code is uniform.
+    const rawTags = data.tags || data.keywords || [];
+    const tags = (Array.isArray(rawTags) ? rawTags : [rawTags])
+      .map((t) => String(t).trim())
+      .filter(Boolean);
+
+    // OG image. Prefer an explicit `ogImage` override, otherwise use the hero
+    // if it's a raster format crawlers will accept, otherwise fall back to the
+    // site avatar so the social card never breaks.
+    const heroPath = data.hero ? String(data.hero) : '';
+    const explicitOg = data.ogImage ? String(data.ogImage) : '';
+    let ogImage;
+    if (explicitOg) {
+      ogImage = {
+        url: explicitOg,
+        width: data.ogImageWidth ? Number(data.ogImageWidth) : 1200,
+        height: data.ogImageHeight ? Number(data.ogImageHeight) : 630,
+        type: imageMime(explicitOg),
+        alt: data.ogImageAlt ? String(data.ogImageAlt) : (data.heroAlt ? String(data.heroAlt) : String(data.title)),
+      };
+    } else if (heroPath && isRasterImage(heroPath)) {
+      ogImage = {
+        url: heroPath,
+        width: data.heroWidth ? Number(data.heroWidth) : 1200,
+        height: data.heroHeight ? Number(data.heroHeight) : 630,
+        type: imageMime(heroPath),
+        alt: data.heroAlt ? String(data.heroAlt) : String(data.title),
+      };
+    } else {
+      ogImage = { ...DEFAULT_OG_IMAGE };
+    }
+
     const article = {
       title: String(data.title),
       description: String(data.description),
       date,
+      lastmod,
+      publishedTime: toIso(date),
+      modifiedTime: toIso(lastmod),
       month: date.slice(0, 7),
       slug,
-      hero: data.hero ? String(data.hero) : '',
+      url: `/articles/${slug}/`,
+      canonical: `${SITE_ORIGIN}/articles/${slug}/`,
+      hero: heroPath,
       heroAlt: data.heroAlt ? String(data.heroAlt) : '',
       heroWidth: data.heroWidth ? Number(data.heroWidth) : 960,
       heroHeight: data.heroHeight ? Number(data.heroHeight) : 420,
+      ogImage: { ...ogImage, absoluteUrl: absoluteUrl(ogImage.url) },
+      tags,
+      author: data.author ? String(data.author) : 'Akash Plackal',
       body,
       headings,
       template,
@@ -493,6 +671,12 @@ async function main() {
       TITLE: escapeHtml(article.title),
       DESCRIPTION: escapeHtml(article.description),
       DATE: escapeHtml(article.date),
+      DATE_DISPLAY: escapeHtml(article.date),
+      DATETIME: escapeHtml(article.publishedTime),
+      CANONICAL: escapeHtml(article.canonical),
+      OG_IMAGE_META: renderOgImageMeta(article),
+      ARTICLE_META: renderArticleMeta(article),
+      JSON_LD: renderArticleJsonLd(article),
       HERO: renderHero(article),
       BODY: article.body,
       TOC: renderToc(article.headings),

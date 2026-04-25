@@ -1,12 +1,23 @@
 ---
 title: "Niri WM: The Best Way to Use a Computer"
-description: Into to Niri WM, A scrollable-tiling wm that feels so good.
+description: An intro to Niri — a scrollable-tiling Wayland window manager that pairs the focus of i3 with horizontal scrolling workspaces. Why I switched from i3 and macOS.
 date: 2026-04-25
 slug: niri-wm-best-way-to-use-a-computer
 hero: /assets/articles/niri_demo.gif
 heroAlt: Niri horizontal scrolling workspace demo.
 heroWidth: 520
 heroHeight: 293
+ogImage: /assets/hero-avatar-640.avif
+ogImageWidth: 640
+ogImageHeight: 640
+ogImageAlt: Akash Plackal — writing about Niri WM and Linux desktops.
+tags:
+  - Linux
+  - Niri
+  - Wayland
+  - Window Manager
+  - Tiling WM
+  - Desktop Environment
 ---
 
 I’ve used a lot of desktop environments and window managers over time, including GNOME, KDE, XFCE, macOS, Hyprland, and i3.

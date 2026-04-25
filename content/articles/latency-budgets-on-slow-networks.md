@@ -1,10 +1,17 @@
 ---
 title: Latency Budgets on Slow Networks
-description: Practical notes on setting latency budgets for real users on slow links.
+description: Practical notes on setting request, byte, and latency budgets for real users on slow links — with concrete heuristics for HTTP/2, HTTP/3, and bad Wi-Fi.
 date: 2025-12-09
 slug: latency-budgets-on-slow-networks
 hero: /assets/articles/latency-map.svg
 heroAlt: Abstract network latency map artwork.
+tags:
+  - Web Performance
+  - Latency
+  - Networking
+  - HTTP
+  - Core Web Vitals
+  - Performance Budgets
 ---
 
 Bandwidth can hide waste on good Wi-Fi, but latency always tells the truth. On poor links, every extra handshake is visible.

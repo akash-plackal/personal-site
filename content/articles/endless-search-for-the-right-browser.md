@@ -1,10 +1,17 @@
 ---
 title: An Endless Search for the Right Browser
-description: Notes from trying Firefox, Chrome, Safari, Orion, Zen, Brave, Helium, and Vim-style browsers.
+description: A developer's honest comparison of Firefox, Chrome, Safari, Orion, Zen, Brave, Helium, and Vim-style browsers — what worked, what broke, and where I landed.
 date: 2026-04-25
 slug: endless-search-for-the-right-browser
 hero: /assets/articles/browser-search-hero.svg
 heroAlt: Minimal browser window illustration with search results.
+tags:
+  - Browsers
+  - Firefox
+  - Chrome
+  - Safari
+  - Web Development
+  - Developer Tools
 ---
 
 One of my ongoing hobbies is trying different browsers. I keep switching because I’m never fully satisfied with any single one.

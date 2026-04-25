@@ -1,10 +1,17 @@
 ---
 title: Why This Site Stays HTML-First
-description: Notes on keeping a personal site HTML-first for speed and reliability.
+description: Why this personal site stays HTML-first — meaningful content in the first response, optional JavaScript, strict performance budgets, and reliability over novelty.
 date: 2026-02-11
 slug: why-this-site-stays-html-first
 hero: /assets/articles/signal-grid.svg
 heroAlt: Abstract signal style artwork.
+tags:
+  - HTML-First
+  - Web Performance
+  - Reliability
+  - Static Sites
+  - Progressive Enhancement
+  - Core Web Vitals
 ---
 
 The fastest page is the one that can explain itself before JavaScript wakes up. That is the entire idea behind this site.

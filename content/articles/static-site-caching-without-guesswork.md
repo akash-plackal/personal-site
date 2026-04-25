@@ -1,10 +1,17 @@
 ---
 title: Static Site Caching Without Guesswork
-description: A practical approach to immutable asset caching and predictable HTML freshness.
+description: A practical approach to immutable asset caching and predictable HTML freshness — Cache-Control directives, fingerprinting, and verifying real wire headers after deploy.
 date: 2026-02-16
 slug: static-site-caching-without-guesswork
 hero: /assets/articles/static-cache-hero.svg
 heroAlt: Static cache layers and refresh flow diagram.
+tags:
+  - Caching
+  - Web Performance
+  - HTTP
+  - Static Sites
+  - HTML-First
+  - Cache-Control
 ---
 
 Caching looks simple until a deploy goes live and half your users run old bytes while the other half hit the new build. Predictable caching is less about clever directives and more about strict separation.

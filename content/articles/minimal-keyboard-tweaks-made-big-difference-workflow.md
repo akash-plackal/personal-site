@@ -1,10 +1,17 @@
 ---
 title: Minimal Keyboard Tweaks That Made a Big Impact
-description: A developer-focused guide to ergonomic key remapping using tap-hold behavior to minimize hand movement.
+description: A developer's guide to ergonomic key remapping with tap-hold behavior — Caps Lock as Escape and Control, home-row mods, and tweaks that cut hand movement for Vim users.
 date: 2026-02-11
 slug: minimal-keyboard-tweaks-made-big-difference-workflow
 hero: /assets/articles/keyboard-remap-hero.svg
 heroAlt: Illustration of a keyboard with remapped keys highlighted.
+tags:
+  - Keyboard
+  - Ergonomics
+  - Vim
+  - Neovim
+  - Productivity
+  - Developer Workflow
 ---
 
 When I set up a new computer, one of the first things I do isn’t to install apps or configure themes, it’s remapping my keyboard.

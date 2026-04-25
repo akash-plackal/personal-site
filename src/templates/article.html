@@ -2,24 +2,21 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://giscus.app" crossorigin />
-  <link rel="dns-prefetch" href="https://giscus.app" />
-  <link rel="dns-prefetch" href="https://api.github.com" />
-  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
-  <link rel="prefetch" as="image" type="image/avif" href="/assets/hero-about-720.avif"
-    imagesrcset="/assets/hero-about-720.avif 720w, /assets/hero-about-1080.avif 1080w"
-    imagesizes="(min-width: 54rem) 22rem, 88vw" />
-  <title>{{TITLE}} | Akash Plackal</title>
+  <include src="src/partials/head-base.html"></include>
+  <title>{{TITLE}} — Akash Plackal</title>
   <meta name="description" content="{{DESCRIPTION}}" />
-  <meta property="og:title" content="{{TITLE}} | Akash Plackal" />
+  <link rel="canonical" href="{{CANONICAL}}" />
+  <meta property="og:title" content="{{TITLE}}" />
   <meta property="og:description" content="{{DESCRIPTION}}" />
   <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{CANONICAL}}" />
+  {{OG_IMAGE_META}}
+  {{ARTICLE_META}}
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="{{TITLE}} | Akash Plackal" />
+  <meta name="twitter:title" content="{{TITLE}}" />
   <meta name="twitter:description" content="{{DESCRIPTION}}" />
   <link rel="stylesheet" href="/src/styles/articles/base.css" data-inline />
+  {{JSON_LD}}
 </head>
 
 <body>
@@ -30,18 +27,20 @@
 
   <div class="article-shell">
     <main>
-      <div class="meta-row">
-        <a class="back" href="/">&larr; back</a>
-        <time datetime="{{DATE}}">{{DATE}}</time>
-      </div>
+      <nav class="meta-row" aria-label="Article meta">
+        <a class="back" href="/writing/" aria-label="Back to all writing">&larr; Back to writing</a>
+        <time datetime="{{DATETIME}}">{{DATE}}</time>
+      </nav>
 
       <h1>{{TITLE}}</h1>
 
       {{HERO}}
 
-      {{BODY}}
+      <article>
+        {{BODY}}
+      </article>
 
-      <p><a href="/">Back to home</a></p>
+      <p><a href="/writing/">Read more articles by Akash Plackal</a></p>
     </main>
 
     {{TOC}}
