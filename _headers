@@ -10,6 +10,12 @@
   Speculation-Rules: "/speculationrules.json"
   Cache-Control: public, max-age=60, s-maxage=31536000, stale-while-revalidate=86400, stale-if-error=604800
 
+/
+  Link: </assets/hero-avatar-384.avif>; rel=preload; as=image; type=image/avif
+
+/about/*
+  Link: </assets/hero-about-720.avif>; rel=preload; as=image; type=image/avif
+
 /speculationrules.json
   Content-Type: application/speculationrules+json
   Cache-Control: public, max-age=31536000, immutable
