@@ -1,0 +1,10 @@
+# https://akashplackal.com — robots.txt
+# Allow all well-behaved crawlers.
+
+User-agent: *
+Allow: /
+
+# Be a little kind to the origin.
+Crawl-delay: 1
+
+Sitemap: https://akashplackal.com/sitemap.xml

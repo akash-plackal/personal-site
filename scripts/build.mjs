@@ -19,6 +19,7 @@ const MINIFIER_MODE = process.env.HTML_MINIFIER_MODE || 'max';
 const MINIFIER_BIN = path.join(ROOT_DIR, 'node_modules', '.bin', 'html-minifier-next');
 const CONTENT_DIR = path.join(ROOT_DIR, 'content', 'articles');
 const ARTICLE_TEMPLATE = path.join(ROOT_DIR, 'src', 'templates', 'article.html');
+const SITE_ORIGIN = process.env.SITE_ORIGIN || 'https://akashplackal.com';
 const markdown = new MarkdownIt({
   html: false,
   linkify: true,
@@ -380,6 +381,68 @@ async function copyStaticAsset(relPath) {
   await fs.cp(src, dest, { recursive: true });
 }
 
+// Build a sitemap.xml from all generated HTML pages plus articles. Pages are
+// emitted with absolute URLs at SITE_ORIGIN; lastmod is the latest article
+// date for the homepage and the article date for each article.
+async function writeSitemap(htmlFiles, articles) {
+  const today = new Date().toISOString().slice(0, 10);
+  const latestArticleDate = articles.length > 0 ? articles[0].date : today;
+
+  const staticEntries = [];
+  for (const file of htmlFiles) {
+    const rel = path.relative(ROOT_DIR, file);
+    const dir = path.dirname(rel);
+    let urlPath;
+    if (rel === 'index.html') {
+      urlPath = '/';
+    } else if (path.basename(rel) === 'index.html') {
+      urlPath = `/${dir.split(path.sep).join('/')}/`;
+    } else {
+      // Non-index .html — unusual in this codebase; serve as-is.
+      urlPath = `/${rel.split(path.sep).join('/')}`;
+    }
+
+    let priority = '0.6';
+    let changefreq = 'monthly';
+    if (urlPath === '/') {
+      priority = '1.0';
+      changefreq = 'weekly';
+    } else if (urlPath === '/about/') {
+      priority = '0.8';
+      changefreq = 'monthly';
+    } else if (urlPath === '/writing/') {
+      priority = '0.9';
+      changefreq = 'weekly';
+    }
+
+    staticEntries.push({
+      loc: urlPath,
+      lastmod: urlPath === '/' || urlPath === '/writing/' ? latestArticleDate : today,
+      changefreq,
+      priority,
+    });
+  }
+
+  const articleEntries = articles.map((article) => ({
+    loc: `/articles/${article.slug}/`,
+    lastmod: article.date,
+    changefreq: 'yearly',
+    priority: '0.7',
+  }));
+
+  const all = [...staticEntries, ...articleEntries];
+
+  const body = all
+    .map((entry) => (
+      `  <url>\n    <loc>${SITE_ORIGIN}${entry.loc}</loc>\n    <lastmod>${entry.lastmod}</lastmod>\n    <changefreq>${entry.changefreq}</changefreq>\n    <priority>${entry.priority}</priority>\n  </url>`
+    ))
+    .join('\n');
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
+
+  await fs.writeFile(path.join(OUT_DIR, 'sitemap.xml'), xml);
+}
+
 async function main() {
   try {
     await fs.access(MINIFIER_BIN);
@@ -395,6 +458,7 @@ async function main() {
     copyStaticAsset('assets'),
     copyStaticAsset('favicon.ico'),
     copyStaticAsset('speculationrules.json'),
+    copyStaticAsset('robots.txt'),
   ]);
 
   const articles = await loadArticles();
@@ -443,6 +507,8 @@ async function main() {
     const minified = await minifyHtml(inlined);
     await fs.writeFile(dest, minified);
   }
+
+  await writeSitemap(htmlFiles, articles);
 
   await execFileAsync(path.join(ROOT_DIR, 'scripts', 'csp-hashes.sh'), [OUT_DIR], {
     cwd: ROOT_DIR,
