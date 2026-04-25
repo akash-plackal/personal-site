@@ -28,6 +28,7 @@ async function gatherHtmlFiles() {
   const roots = [
     path.join(ROOT_DIR, 'index.html'),
     path.join(ROOT_DIR, 'about'),
+    path.join(ROOT_DIR, 'writing'),
   ];
 
   const files = [];
@@ -206,6 +207,20 @@ function renderArticleList(articles) {
     .join('\n');
 }
 
+function renderArticleIndex(articles) {
+  return articles
+    .map((article) => (
+      `        <li class="writing-item">
+          <time class="writing-date" datetime="${escapeHtml(article.date)}">${escapeHtml(article.date)}</time>
+          <div>
+            <h3 class="writing-title"><a href="/articles/${escapeHtml(article.slug)}/">${escapeHtml(article.title)}</a></h3>
+            <p class="writing-summary">${escapeHtml(article.description)}</p>
+          </div>
+        </li>`
+    ))
+    .join('\n');
+}
+
 async function loadArticles() {
   const files = await gatherMarkdownFiles();
   const template = await fs.readFile(ARTICLE_TEMPLATE, 'utf8');
@@ -340,9 +355,9 @@ async function main() {
     await fs.mkdir(path.dirname(dest), { recursive: true });
 
     const source = await fs.readFile(src, 'utf8');
-    const raw = rel === 'index.html'
-      ? source.replace('{{ARTICLES_LIST}}', renderArticleList(articles))
-      : source;
+    const raw = source
+      .replace('{{ARTICLES_LIST}}', renderArticleList(articles))
+      .replace('{{ARTICLES_INDEX}}', renderArticleIndex(articles));
     const included = await posthtml([
       include({ root: ROOT_DIR }),
     ]).process(raw, { sync: true });
