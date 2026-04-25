@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Minimal keyboard with highlighted remapped keys</title>
+  <desc id="desc">A flat two-dimensional keyboard illustration with ergonomic remap keys highlighted in the site color palette.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#141a15"/>
+      <stop offset="100%" stop-color="#1d2520"/>
+    </linearGradient>
+    <style>
+      .case{fill:#1d2520;stroke:#465247;stroke-width:2}.base{fill:#141a15}.key{fill:#1d2520;stroke:#465247;stroke-width:1.5}.hot{fill:#324036;stroke:#9fb378;stroke-width:2}.label{fill:#a8b09b;font:700 13px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.hotlabel{fill:#e7ebdc;font:800 13px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.note{fill:#d5d9c8;font:800 14px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.line{stroke:#8daa7f;stroke-width:3;stroke-linecap:round;fill:none}
+    </style>
+  </defs>
+
+  <rect width="960" height="420" fill="url(#bg)"/>
+  <g opacity=".2" stroke="#465247" stroke-width="1">
+    <path d="M80 84h800M80 336h800M140 48v324M820 48v324"/>
+    <path d="M0 210h960"/>
+  </g>
+
+  <rect class="case" x="106" y="116" width="748" height="188" rx="18"/>
+  <rect class="base" x="126" y="136" width="708" height="148" rx="10"/>
+
+  <g text-anchor="middle">
+    <!-- top row -->
+    <g transform="translate(146 152)">
+      <rect class="key" x="0" y="0" width="48" height="32" rx="6"/><text class="label" x="24" y="21">Q</text>
+      <rect class="key" x="56" y="0" width="48" height="32" rx="6"/><text class="label" x="80" y="21">W</text>
+      <rect class="key" x="112" y="0" width="48" height="32" rx="6"/><text class="label" x="136" y="21">E</text>
+      <rect class="key" x="168" y="0" width="48" height="32" rx="6"/><text class="label" x="192" y="21">R</text>
+      <rect class="key" x="224" y="0" width="48" height="32" rx="6"/><text class="label" x="248" y="21">T</text>
+      <rect class="key" x="280" y="0" width="48" height="32" rx="6"/><text class="label" x="304" y="21">Y</text>
+      <rect class="key" x="336" y="0" width="48" height="32" rx="6"/><text class="label" x="360" y="21">U</text>
+      <rect class="key" x="392" y="0" width="48" height="32" rx="6"/><text class="label" x="416" y="21">I</text>
+      <rect class="key" x="448" y="0" width="48" height="32" rx="6"/><text class="label" x="472" y="21">O</text>
+      <rect class="key" x="504" y="0" width="48" height="32" rx="6"/><text class="label" x="528" y="21">P</text>
+      <rect class="key" x="560" y="0" width="62" height="32" rx="6"/><text class="label" x="591" y="21">DEL</text>
+      <rect class="key" x="630" y="0" width="58" height="32" rx="6"/><text class="label" x="659" y="21">TAB</text>
+    </g>
+
+    <!-- home row -->
+    <g transform="translate(146 198)">
+      <rect class="hot" x="0" y="0" width="76" height="32" rx="6"/><text class="hotlabel" x="38" y="21">CAPS</text>
+      <rect class="key" x="84" y="0" width="48" height="32" rx="6"/><text class="label" x="108" y="21">A</text>
+      <rect class="key" x="140" y="0" width="48" height="32" rx="6"/><text class="label" x="164" y="21">S</text>
+      <rect class="key" x="196" y="0" width="48" height="32" rx="6"/><text class="label" x="220" y="21">D</text>
+      <rect class="key" x="252" y="0" width="48" height="32" rx="6"/><text class="label" x="276" y="21">F</text>
+      <rect class="key" x="308" y="0" width="48" height="32" rx="6"/><text class="label" x="332" y="21">G</text>
+      <rect class="key" x="364" y="0" width="48" height="32" rx="6"/><text class="label" x="388" y="21">H</text>
+      <rect class="key" x="420" y="0" width="48" height="32" rx="6"/><text class="label" x="444" y="21">J</text>
+      <rect class="key" x="476" y="0" width="48" height="32" rx="6"/><text class="label" x="500" y="21">K</text>
+      <rect class="key" x="532" y="0" width="48" height="32" rx="6"/><text class="label" x="556" y="21">L</text>
+      <rect class="hot" x="588" y="0" width="100" height="32" rx="6"/><text class="hotlabel" x="638" y="21">ENTER</text>
+    </g>
+
+    <!-- bottom row -->
+    <g transform="translate(146 244)">
+      <rect class="hot" x="0" y="0" width="88" height="32" rx="6"/><text class="hotlabel" x="44" y="21">SHIFT</text>
+      <rect class="key" x="96" y="0" width="48" height="32" rx="6"/><text class="label" x="120" y="21">Z</text>
+      <rect class="key" x="152" y="0" width="48" height="32" rx="6"/><text class="label" x="176" y="21">X</text>
+      <rect class="key" x="208" y="0" width="48" height="32" rx="6"/><text class="label" x="232" y="21">C</text>
+      <rect class="key" x="264" y="0" width="48" height="32" rx="6"/><text class="label" x="288" y="21">V</text>
+      <rect class="key" x="320" y="0" width="48" height="32" rx="6"/><text class="label" x="344" y="21">B</text>
+      <rect class="key" x="376" y="0" width="104" height="32" rx="6"/><text class="label" x="428" y="21">SPACE</text>
+      <rect class="hot" x="488" y="0" width="48" height="32" rx="6"/><text class="hotlabel" x="512" y="21">M</text>
+      <rect class="key" x="544" y="0" width="48" height="32" rx="6"/><text class="label" x="568" y="21">N</text>
+      <rect class="hot" x="600" y="0" width="48" height="32" rx="6"/><text class="hotlabel" x="624" y="21">,</text>
+    </g>
+  </g>
+
+  <path class="line" d="M184 196c24-44 76-67 144-58"/>
+  <path class="line" d="M188 280c47 42 123 55 218 32"/>
+  <path class="line" d="M658 236c13-28 45-42 83-38"/>
+
+  <g class="note">
+    <text x="342" y="132">tap Esc · hold Ctrl</text>
+    <text x="218" y="332">tap Backspace · hold Shift</text>
+    <text x="748" y="194">Ctrl+M → Enter</text>
+  </g>
+</svg>
