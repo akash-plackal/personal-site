@@ -6,20 +6,6 @@
         "href_matches": "/about/photos/*"
       },
       "eagerness": "immediate"
-    },
-    {
-      "source": "document",
-      "where": {
-        "href_matches": "/about/*"
-      },
-      "eagerness": "moderate"
-    },
-    {
-      "source": "document",
-      "where": {
-        "href_matches": "/articles/*"
-      },
-      "eagerness": "moderate"
     }
   ],
   "prefetch": [
