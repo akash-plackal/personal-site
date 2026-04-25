@@ -84,6 +84,96 @@
 
   setupReadingProgress();
 
+  // ── Contact dialog ───────────────────────────────────────────
+  const setupContactDialog = () => {
+    const dialog = document.getElementById("contact-dialog");
+    if (!(dialog instanceof HTMLDialogElement)) return;
+    const form = dialog.querySelector("[data-contact-form]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const open = () => {
+      if (dialog.open) return;
+      try {
+        dialog.showModal();
+      } catch {
+        try { dialog.show(); } catch {}
+      }
+    };
+
+    document.querySelectorAll("[data-contact-open]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        open();
+      });
+    });
+
+    dialog.querySelectorAll("[data-contact-close]").forEach((btn) => {
+      btn.addEventListener("click", () => dialog.close());
+    });
+
+    // Copy email to clipboard.
+    const copyBtn = dialog.querySelector("[data-contact-copy]");
+    const emailEl = dialog.querySelector("[data-contact-email]");
+    if (copyBtn instanceof HTMLButtonElement && emailEl) {
+      let resetTimer = 0;
+      copyBtn.addEventListener("click", async () => {
+        const email = (emailEl.textContent || "").trim();
+        if (!email) return;
+        const original = "Copy";
+        try {
+          await navigator.clipboard.writeText(email);
+          copyBtn.textContent = "Copied";
+          copyBtn.classList.add("is-copied");
+        } catch {
+          // Fallback: select the text so the user can copy manually.
+          const range = document.createRange();
+          range.selectNodeContents(emailEl);
+          const sel = window.getSelection();
+          sel?.removeAllRanges();
+          sel?.addRange(range);
+          copyBtn.textContent = "Select+copy";
+        }
+        clearTimeout(resetTimer);
+        resetTimer = window.setTimeout(() => {
+          copyBtn.textContent = original;
+          copyBtn.classList.remove("is-copied");
+        }, 1600);
+      });
+    }
+
+    // Click on backdrop closes the dialog.
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const data = new FormData(form);
+      const name = String(data.get("name") || "").trim();
+      const message = String(data.get("message") || "").trim();
+      if (!name || !message) return;
+
+      const subject = `Message from ${name}`;
+      // Gmail provides the sender's address as the From field automatically,
+      // so we only include the user's name as a sign-off in the body.
+      const body = `${message}\n\n— ${name}`;
+      const gmail =
+        "https://mail.google.com/mail/?view=cm&fs=1" +
+        "&to=akashplackal@gmail.com" +
+        `&su=${encodeURIComponent(subject)}` +
+        `&body=${encodeURIComponent(body)}`;
+      // Open in a new tab so the user doesn't lose the page they were on.
+      const win = window.open(gmail, "_blank", "noopener,noreferrer");
+      // If a popup blocker prevents the new tab, fall back to navigating in place.
+      if (!win) window.location.href = gmail;
+      dialog.close();
+      form.reset();
+    });
+  };
+
+  setupContactDialog();
+
   // ── Lazy-load Giscus ─────────────────────────────────────────
   const giscusEl = document.querySelector(".giscus");
   if (giscusEl && !giscusEl.querySelector("iframe")) {

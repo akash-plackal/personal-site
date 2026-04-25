@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -221,6 +222,35 @@ function renderArticleIndex(articles) {
     .join('\n');
 }
 
+// Asset fingerprinting. Source HTML references assets without `?v=...`;
+// the build computes a content hash for each fingerprinted asset and rewrites
+// every reference to include `?v=<hash>`. Same bytes → same hash → cache stays
+// valid; changed bytes → new hash → automatic cache bust.
+const FINGERPRINTED_ASSETS = ['/assets/nav-audio.js'];
+
+async function buildAssetFingerprints() {
+  const map = new Map();
+  for (const url of FINGERPRINTED_ASSETS) {
+    const filePath = path.join(ROOT_DIR, url.replace(/^\//, ''));
+    const content = await fs.readFile(filePath);
+    const hash = crypto.createHash('sha256').update(content).digest('hex').slice(0, 10);
+    map.set(url, hash);
+  }
+  return map;
+}
+
+function fingerprintAssets(html, fingerprints) {
+  let result = html;
+  for (const [url, hash] of fingerprints) {
+    const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match the URL with or without an existing `?v=...` query so this is
+    // idempotent and tolerates legacy version strings during the transition.
+    const pattern = new RegExp(`${escaped}(\\?v=[^"'\\s>]+)?`, 'g');
+    result = result.replace(pattern, `${url}?v=${hash}`);
+  }
+  return result;
+}
+
 function markCurrentNav(html, relPath) {
   let href = '';
   if (relPath === path.join('about', 'index.html') || relPath.startsWith(`about${path.sep}`)) {
@@ -366,6 +396,7 @@ async function main() {
 
   const articles = await loadArticles();
   const htmlFiles = await gatherHtmlFiles();
+  const assetFingerprints = await buildAssetFingerprints();
 
   for (const src of htmlFiles) {
     const rel = path.relative(ROOT_DIR, src);
@@ -381,7 +412,8 @@ async function main() {
     ]).process(raw, { sync: true });
 
     const marked = markCurrentNav(included.html, rel);
-    const inlined = inlineBundledStyles(marked, src);
+    const fingerprinted = fingerprintAssets(marked, assetFingerprints);
+    const inlined = inlineBundledStyles(fingerprinted, src);
     const minified = await minifyHtml(inlined);
     await fs.writeFile(dest, minified);
   }
@@ -403,7 +435,8 @@ async function main() {
       include({ root: ROOT_DIR }),
     ]).process(raw, { sync: true });
 
-    const inlined = inlineBundledStyles(included.html, ARTICLE_TEMPLATE);
+    const fingerprinted = fingerprintAssets(included.html, assetFingerprints);
+    const inlined = inlineBundledStyles(fingerprinted, ARTICLE_TEMPLATE);
     const minified = await minifyHtml(inlined);
     await fs.writeFile(dest, minified);
   }

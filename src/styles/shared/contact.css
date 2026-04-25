@@ -1,0 +1,337 @@
+.contact-dialog {
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--surface);
+  color: var(--fg);
+  padding: 0;
+  max-width: min(32rem, calc(100% - 2rem));
+  width: 100%;
+  font: inherit;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.4);
+}
+
+.contact-dialog::backdrop {
+  background: rgba(10, 14, 11, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+/* ── Open animations ─────────────────────────────────────────
+ * Calm slide-up for the dialog itself, then text + buttons stagger in.
+ * Inputs and textareas stay static — they're for typing, not decoration.
+ */
+
+@keyframes contact-dialog-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contact-backdrop-enter {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes contact-text-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contact-slide-l {
+  0% {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.contact-dialog[open] {
+  animation: contact-dialog-enter 360ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+}
+
+.contact-dialog[open]::backdrop {
+  animation: contact-backdrop-enter 320ms ease-out both;
+}
+
+/* Title row: heading text + close button */
+.contact-dialog[open] .contact-header {
+  animation: contact-text-enter 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 80ms;
+}
+
+.contact-dialog[open] .contact-intro {
+  animation: contact-text-enter 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 140ms;
+}
+
+/* Email + copy-button row: slide in from the left with the bouncy spring
+   so it has a little personality vs the straight-up text fades. */
+.contact-dialog[open] .contact-direct {
+  animation: contact-slide-l 460ms
+    linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1)
+    both;
+  animation-delay: 200ms;
+}
+
+/* Field labels only — inputs and textareas are deliberately NOT animated
+   so the form is ready to type into the moment the dialog opens. */
+.contact-dialog[open] .contact-field:nth-of-type(1) .contact-label {
+  animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 260ms;
+}
+
+.contact-dialog[open] .contact-field:nth-of-type(2) .contact-label {
+  animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 320ms;
+}
+
+/* Buttons last — they're the call-to-action so it's nice to draw the eye
+   to them at the end of the staggered entrance. */
+.contact-dialog[open] .contact-actions {
+  animation: contact-text-enter 400ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 380ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-dialog[open],
+  .contact-dialog[open]::backdrop,
+  .contact-dialog[open] .contact-header,
+  .contact-dialog[open] .contact-intro,
+  .contact-dialog[open] .contact-direct,
+  .contact-dialog[open] .contact-field .contact-label,
+  .contact-dialog[open] .contact-actions {
+    animation: none;
+  }
+}
+
+.contact-form {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.2rem 1.25rem 1.1rem;
+  margin: 0;
+}
+
+.contact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.contact-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.contact-close {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.05rem 0.5rem 0.15rem;
+  border-radius: 0.4rem;
+  font-family: inherit;
+  transition:
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
+}
+
+.contact-close:hover,
+.contact-close:focus-visible {
+  color: var(--fg);
+  border-color: var(--line);
+  background: rgba(159, 179, 120, 0.08);
+  outline: none;
+}
+
+.contact-intro {
+  margin: 0 0 0.2rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-width: none;
+}
+
+.contact-direct {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.55rem 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: rgba(20, 26, 21, 0.55);
+  min-width: 0;
+}
+
+.contact-direct-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+.contact-email {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--fg);
+  font-size: 0.95rem;
+  user-select: all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-copy {
+  flex: 0 0 auto;
+  font: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.38rem;
+  border: 1px solid var(--line);
+  background: rgba(159, 179, 120, 0.08);
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition:
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    background-color 160ms ease-out,
+    transform 160ms ease-out;
+}
+
+.contact-copy:hover,
+.contact-copy:focus-visible {
+  outline: none;
+  color: var(--fg);
+  border-color: var(--ring-outer);
+  background: rgba(159, 179, 120, 0.18);
+}
+
+.contact-copy.is-copied {
+  color: var(--fg);
+  border-color: rgba(141, 170, 127, 0.7);
+  background: rgba(159, 179, 120, 0.28);
+}
+
+.contact-field {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.contact-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.contact-field input,
+.contact-field textarea {
+  font: inherit;
+  color: var(--fg);
+  background: rgba(20, 26, 21, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  width: 100%;
+  resize: vertical;
+  transition:
+    border-color 160ms ease-out,
+    background-color 160ms ease-out,
+    box-shadow 160ms ease-out;
+}
+
+.contact-field textarea {
+  min-height: 7rem;
+  line-height: 1.45;
+}
+
+.contact-field input:focus-visible,
+.contact-field textarea:focus-visible {
+  outline: none;
+  border-color: var(--ring-outer);
+  background: rgba(20, 26, 21, 0.85);
+  box-shadow: 0 0 0 3px rgba(159, 179, 120, 0.18);
+}
+
+.contact-actions {
+  display: flex;
+  gap: 0.55rem;
+  justify-content: flex-end;
+  margin-top: 0.4rem;
+}
+
+.contact-btn {
+  font: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0.5rem 0.95rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  transition:
+    transform 160ms ease-out,
+    background-color 160ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out;
+}
+
+.contact-btn-secondary {
+  background: transparent;
+  color: var(--muted);
+}
+
+.contact-btn-secondary:hover,
+.contact-btn-secondary:focus-visible {
+  outline: none;
+  color: var(--fg);
+  border-color: var(--ring-outer);
+  background: rgba(159, 179, 120, 0.06);
+}
+
+.contact-btn-primary {
+  background: rgba(159, 179, 120, 0.16);
+  border-color: rgba(141, 170, 127, 0.5);
+  color: var(--fg);
+}
+
+.contact-btn-primary:hover,
+.contact-btn-primary:focus-visible {
+  outline: none;
+  border-color: var(--ring-outer);
+  background: rgba(159, 179, 120, 0.28);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 32rem) {
+  .contact-actions {
+    flex-direction: column-reverse;
+  }
+
+  .contact-btn {
+    width: 100%;
+  }
+}
