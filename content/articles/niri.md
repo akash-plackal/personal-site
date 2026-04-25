@@ -1,10 +1,12 @@
 ---
 title: "Niri WM: The Best Way to Use a Computer"
-description: Notes on Niri WM, horizontal scrolling workspaces, low latency, and why its tiling model feels so good.
+description: Into to Niri WM, A scrollable-tiling wm that feels so good.
 date: 2026-04-25
 slug: niri-wm-best-way-to-use-a-computer
-hero: /assets/articles/niri-workspace-hero.svg
-heroAlt: Flat illustration of horizontal scrolling tiled windows.
+hero: /assets/articles/niri_demo.gif
+heroAlt: Niri horizontal scrolling workspace demo.
+heroWidth: 520
+heroHeight: 293
 ---
 
 I’ve used a lot of desktop environments and window managers over time, including GNOME, KDE, XFCE, macOS, Hyprland, and i3.
@@ -26,8 +28,6 @@ Tweaks like increasing the key repeat rate and enabling reduced motion make the 
 That’s when I decided to try Niri WM, and I was really impressed, especially with its philosophy of horizontal scrolling and its tasteful features.
 
 ## A Different Approach to Tiling
-
-![Niri horizontal scrolling workspace demo](/assets/articles/niri_demo.gif)
 
 In traditional tiling window managers like i3 or Hyprland, every new window triggers a reflow that squishes everything else.
 
