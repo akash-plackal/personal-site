@@ -221,6 +221,24 @@ function renderArticleIndex(articles) {
     .join('\n');
 }
 
+function markCurrentNav(html, relPath) {
+  let href = '';
+  if (relPath === path.join('about', 'index.html') || relPath.startsWith(`about${path.sep}`)) {
+    href = '/about/';
+  } else if (relPath === path.join('writing', 'index.html') || relPath.startsWith(`writing${path.sep}`)) {
+    href = '/writing/';
+  }
+
+  if (!href) {
+    return html;
+  }
+
+  return html.replace(
+    new RegExp(`<a href="${href.replaceAll('/', '\\/')}"`, 'g'),
+    `<a aria-current="page" href="${href}"`,
+  );
+}
+
 async function loadArticles() {
   const files = await gatherMarkdownFiles();
   const template = await fs.readFile(ARTICLE_TEMPLATE, 'utf8');
@@ -362,7 +380,8 @@ async function main() {
       include({ root: ROOT_DIR }),
     ]).process(raw, { sync: true });
 
-    const inlined = inlineBundledStyles(included.html, src);
+    const marked = markCurrentNav(included.html, rel);
+    const inlined = inlineBundledStyles(marked, src);
     const minified = await minifyHtml(inlined);
     await fs.writeFile(dest, minified);
   }

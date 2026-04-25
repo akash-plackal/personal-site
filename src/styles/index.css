@@ -125,7 +125,8 @@ body {
 }
 
 .site-nav a:hover,
-.site-nav a:focus-visible {
+.site-nav a:focus-visible,
+.site-nav a[aria-current="page"] {
   color: var(--fg);
 }
 
@@ -346,6 +347,7 @@ a {
 
 .site-nav a:hover::before,
 .site-nav a:focus-visible::before,
+.site-nav a[aria-current="page"]::before,
 .chip:hover::before,
 .chip:focus-visible::before,
 .post-list a:hover::before,
@@ -367,6 +369,7 @@ a {
 
 .site-nav a:hover,
 .site-nav a:focus-visible,
+.site-nav a[aria-current="page"],
 .chip:hover,
 .chip:focus-visible,
 .post-list a:hover,

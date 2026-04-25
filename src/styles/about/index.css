@@ -322,6 +322,7 @@ main>p:last-of-type a:focus-visible::before {
 
 .site-nav a:hover,
 .site-nav a:focus-visible,
+.site-nav a[aria-current="page"],
 main>p:last-of-type a:hover,
 main>p:last-of-type a:focus-visible {
   text-decoration-color: transparent;
