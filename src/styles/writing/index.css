@@ -206,15 +206,12 @@ h2 {
   list-style: none;
   margin: 0;
   padding: 0;
+  border-top: 1px solid rgba(70, 82, 71, 0.72);
 }
 
 .writing-item {
   animation: body-enter 360ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  display: grid;
-  grid-template-columns: 7rem minmax(0, 1fr);
-  gap: 0.9rem 1.2rem;
-  padding: 1.05rem 0;
-  border-top: 1px solid rgba(70, 82, 71, 0.72);
+  border-bottom: 1px solid rgba(70, 82, 71, 0.72);
 }
 
 .writing-item:nth-child(1) {
@@ -241,22 +238,131 @@ h2 {
   animation-delay: 490ms;
 }
 
-.writing-item:last-child {
-  border-bottom: 1px solid rgba(70, 82, 71, 0.72);
+.writing-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  gap: 0.8rem 1.25rem;
+  align-items: baseline;
+  padding: 1.25rem 0;
+  color: var(--fg);
+  text-decoration: none;
+  transition:
+    color 160ms ease-out,
+    transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+}
+
+.writing-card:hover,
+.writing-card:focus-visible {
+  color: var(--fg);
+  outline: 0;
+  transform: translateX(0.28rem);
 }
 
 .writing-date {
-  color: var(--link);
+  color: var(--muted);
   font-size: 1rem;
+  line-height: 1.2;
+  transition: color 160ms ease-out;
+}
+
+.writing-copy {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 .writing-title {
-  margin: 0 0 0.35rem;
-  font-size: 1.45rem;
-  line-height: 1.18;
+  --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
+  --shape-pad-inline: 0.62rem;
+  --shape-pad-block: 0.36rem;
+  position: relative;
+  isolation: isolate;
+  display: inline-block;
+  justify-self: start;
+  color: var(--fg);
+  font-size: 1.48rem;
+  font-weight: 700;
+  line-height: 1.12;
+  transition: color 160ms ease-out;
 }
 
-.writing-title a,
+.writing-item:nth-child(even) .writing-title {
+  --shape-radius: 28%;
+  --shape-pad-block: 0.3rem;
+}
+
+.writing-title::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% + var(--shape-pad-inline));
+  height: calc(100% + var(--shape-pad-block));
+  border-radius: var(--shape-radius);
+  background: rgba(159, 179, 120, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) scale(0.88);
+  transform-origin: center;
+  transition:
+    transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    opacity 170ms ease-out,
+    visibility 0s 170ms;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.writing-summary {
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: 1.03rem;
+  line-height: 1.5;
+}
+
+.writing-arrow {
+  color: var(--muted);
+  font-size: 1.34rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.55;
+  transform: translateX(-0.18rem);
+  transition:
+    color 160ms ease-out,
+    opacity 160ms ease-out,
+    transform 180ms ease-out;
+}
+
+.writing-card:hover .writing-title,
+.writing-card:focus-visible .writing-title,
+.writing-card:hover .writing-arrow,
+.writing-card:focus-visible .writing-arrow {
+  color: var(--link);
+}
+
+.writing-card:hover .writing-title::before,
+.writing-card:focus-visible .writing-title::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    opacity 170ms ease-out,
+    visibility 0s;
+}
+
+.writing-card:hover .writing-date,
+.writing-card:focus-visible .writing-date {
+  color: var(--fg);
+}
+
+.writing-card:hover .writing-arrow,
+.writing-card:focus-visible .writing-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 a {
   color: var(--link);
   text-decoration-color: var(--line);
@@ -265,46 +371,21 @@ a {
   text-decoration-thickness: 0.07em;
 }
 
-.writing-title a {
-  --shape-radius: 999px 999px 0.34rem 0.34rem / 100% 100% 24% 24%;
-  --shape-pad-inline: 0.62rem;
-  --shape-pad-block: 0.36rem;
-  color: var(--fg);
-  position: relative;
-  display: inline-block;
-  isolation: isolate;
-}
-
-.writing-item:nth-child(even) .writing-title a {
-  --shape-radius: 28%;
-  --shape-pad-block: 0.3rem;
-}
-
-.writing-summary {
-  max-width: 42rem;
-  margin: 0;
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.55;
-}
-
-.site-nav a,
-.writing-title a {
+.site-nav a {
   transition:
     color 160ms ease-out,
     transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
     text-decoration-color 120ms ease-out;
 }
 
-.site-nav a::before,
-.writing-title a::before {
+.site-nav a::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: calc(100% + var(--shape-pad-inline, 0.72rem));
-  height: calc(100% + var(--shape-pad-block, 0.3rem));
-  border-radius: var(--shape-radius, 30%);
+  width: calc(100% + 0.72rem);
+  height: calc(100% + 0.3rem);
+  border-radius: 30%;
   background: rgba(159, 179, 120, 0.12);
   box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
   opacity: 0;
@@ -321,9 +402,7 @@ a {
 
 .site-nav a:hover::before,
 .site-nav a:focus-visible::before,
-.site-nav a[aria-current="page"]::before,
-.writing-title a:hover::before,
-.writing-title a:focus-visible::before {
+.site-nav a[aria-current="page"]::before {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, -50%) scale(1);
@@ -334,9 +413,7 @@ a {
 }
 
 .site-nav a:hover,
-.site-nav a:focus-visible,
-.writing-title a:hover,
-.writing-title a:focus-visible {
+.site-nav a:focus-visible {
   color: var(--link);
   text-decoration-color: transparent;
   transform: translateY(-1px);
@@ -348,12 +425,13 @@ a {
 }
 
 html:active-view-transition .site-nav a,
-html:active-view-transition .writing-title a {
+html:active-view-transition .writing-card {
   transform: none;
 }
 
 html:active-view-transition .site-nav a::before,
-html:active-view-transition .writing-title a::before {
+html:active-view-transition .writing-card::before,
+html:active-view-transition .writing-title::before {
   opacity: 0;
   visibility: hidden;
   transition: none;
@@ -383,8 +461,17 @@ html:active-view-transition .writing-title a::before {
     font-size: 2.35rem;
   }
 
-  .writing-item {
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
+  .writing-card {
+    grid-template-columns: 1fr auto;
+    gap: 0.45rem 0.8rem;
+    padding: 1rem 0;
+  }
+
+  .writing-date {
+    grid-column: 1 / -1;
+  }
+
+  .writing-title {
+    font-size: 1.26rem;
   }
 }

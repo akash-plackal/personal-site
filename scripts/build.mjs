@@ -212,11 +212,14 @@ function renderArticleIndex(articles) {
   return articles
     .map((article) => (
       `        <li class="writing-item">
-          <time class="writing-date" datetime="${escapeHtml(article.date)}">${escapeHtml(article.date)}</time>
-          <div>
-            <h3 class="writing-title"><a href="/articles/${escapeHtml(article.slug)}/">${escapeHtml(article.title)}</a></h3>
-            <p class="writing-summary">${escapeHtml(article.description)}</p>
-          </div>
+          <a class="writing-card" href="/articles/${escapeHtml(article.slug)}/">
+            <time class="writing-date" datetime="${escapeHtml(article.date)}">${escapeHtml(article.date)}</time>
+            <span class="writing-copy">
+              <span class="writing-title">${escapeHtml(article.title)}</span>
+              <span class="writing-summary">${escapeHtml(article.description)}</span>
+            </span>
+            <span class="writing-arrow" aria-hidden="true">→</span>
+          </a>
         </li>`
     ))
     .join('\n');
