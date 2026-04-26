@@ -3,7 +3,8 @@ title: "Niri WM: The Best Way to Use a Computer"
 description: An intro to Niri — a scrollable-tiling Wayland window manager that pairs the focus of i3 with horizontal scrolling workspaces. Why I switched from i3 and macOS.
 date: 2026-04-25
 slug: niri-wm-best-way-to-use-a-computer
-hero: /assets/articles/niri_demo.gif
+hero: /assets/articles/niri_demo.mp4
+heroPoster: /assets/articles/niri_demo_poster.avif
 heroAlt: Niri horizontal scrolling workspace demo.
 heroWidth: 520
 heroHeight: 293

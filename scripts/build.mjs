@@ -133,6 +133,7 @@ function toIso(date) {
 }
 
 const RASTER_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif']);
+const VIDEO_EXT = new Set(['.mp4', '.webm', '.mov', '.m4v']);
 const IMAGE_MIME = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -142,16 +143,41 @@ const IMAGE_MIME = {
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
 };
+const VIDEO_MIME = {
+  '.mp4': 'video/mp4',
+  '.m4v': 'video/mp4',
+  '.webm': 'video/webm',
+  '.mov': 'video/quicktime',
+};
+
+function urlExt(url) {
+  return path.extname((url || '').split('?')[0]).toLowerCase();
+}
 
 function isRasterImage(url) {
   if (!url) return false;
-  const ext = path.extname(url.split('?')[0]).toLowerCase();
-  return RASTER_EXT.has(ext);
+  return RASTER_EXT.has(urlExt(url));
+}
+
+function isVideo(url) {
+  if (!url) return false;
+  return VIDEO_EXT.has(urlExt(url));
 }
 
 function imageMime(url) {
-  const ext = path.extname((url || '').split('?')[0]).toLowerCase();
-  return IMAGE_MIME[ext] || 'image/png';
+  return IMAGE_MIME[urlExt(url)] || 'image/png';
+}
+
+function videoMime(url) {
+  return VIDEO_MIME[urlExt(url)] || 'video/mp4';
+}
+
+function assetMime(url) {
+  return isVideo(url) ? videoMime(url) : imageMime(url);
+}
+
+function preloadAs(url) {
+  return isVideo(url) ? 'video' : 'image';
 }
 
 function absoluteUrl(pathname) {
@@ -232,7 +258,28 @@ function renderHero(article) {
   const height = article.heroHeight || 420;
   const alt = article.heroAlt || '';
 
-  return `<img class="hero-image" src="${escapeHtml(article.hero)}" width="${escapeHtml(width)}" height="${escapeHtml(height)}" alt="${escapeHtml(alt)}" />`;
+  if (isVideo(article.hero)) {
+    // Silent UI loop: muted+autoplay+loop+playsinline. preload=metadata so the
+    // browser starts fetching headers/keyframes immediately but doesn't burn
+    // bandwidth eagerly downloading the whole file before <video> commits.
+    const poster = article.heroPoster ? ` poster="${escapeHtml(article.heroPoster)}"` : '';
+    return `<video class="hero-image" width="${escapeHtml(width)}" height="${escapeHtml(height)}" autoplay loop muted playsinline preload="auto" aria-label="${escapeHtml(alt)}"${poster}><source src="${escapeHtml(article.hero)}" type="${escapeHtml(videoMime(article.hero))}" /></video>`;
+  }
+
+  return `<img class="hero-image" src="${escapeHtml(article.hero)}" width="${escapeHtml(width)}" height="${escapeHtml(height)}" alt="${escapeHtml(alt)}" fetchpriority="high" />`;
+}
+
+// Hero <link rel="preload"> for the article head. Pairs with the 103
+// Early Hints `Link` header so the browser can start fetching the LCP asset
+// before the body is parsed. fetchpriority=high promotes it past other
+// resources discovered later in the page.
+function renderHeroPreload(article) {
+  if (!article.hero) {
+    return '';
+  }
+  const type = assetMime(article.hero);
+  const as = preloadAs(article.hero);
+  return `<link rel="preload" as="${as}" type="${escapeHtml(type)}" href="${escapeHtml(article.hero)}" fetchpriority="high" />`;
 }
 
 // Open Graph image meta block — emitted as a contiguous group so social card
@@ -511,6 +558,7 @@ async function loadArticles() {
       url: `/articles/${slug}/`,
       canonical: `${SITE_ORIGIN}/articles/${slug}/`,
       hero: heroPath,
+      heroPoster: data.heroPoster ? String(data.heroPoster) : '',
       heroAlt: data.heroAlt ? String(data.heroAlt) : '',
       heroWidth: data.heroWidth ? Number(data.heroWidth) : 960,
       heroHeight: data.heroHeight ? Number(data.heroHeight) : 420,
@@ -599,6 +647,35 @@ async function copyStaticAsset(relPath) {
   await fs.cp(src, dest, { recursive: true });
 }
 
+// Generate per-article `Link:` headers for 103 Early Hints. Cloudflare Pages
+// promotes any `Link: <url>; rel=preload` header to a 103 response, so the
+// browser starts fetching the hero image before the HTML body even arrives.
+// Each article path also re-emits the giscus preconnect because per-path
+// header blocks in `_headers` override (not merge with) the wildcard rule.
+function renderArticleHeaders(articles) {
+  return articles
+    .filter((a) => a.hero)
+    .map((a) => {
+      const type = assetMime(a.hero);
+      const as = preloadAs(a.hero);
+      return [
+        `/articles/${a.slug}/`,
+        `  Link: <${a.hero}>; rel=preload; as=${as}; type=${type}`,
+        `  Link: <https://giscus.app>; rel=preconnect; crossorigin`,
+      ].join('\n');
+    })
+    .join('\n\n');
+}
+
+async function buildHeadersFile(articles) {
+  const src = path.join(ROOT_DIR, '_headers');
+  const dest = path.join(OUT_DIR, '_headers');
+  const base = await fs.readFile(src, 'utf8');
+  const articleHeaders = renderArticleHeaders(articles);
+  const combined = articleHeaders ? `${base.trimEnd()}\n\n${articleHeaders}\n` : base;
+  await fs.writeFile(dest, combined);
+}
+
 // Build a sitemap.xml from all generated HTML pages plus articles. Pages are
 // emitted with absolute URLs at SITE_ORIGIN; lastmod is the latest article
 // date for the homepage and the article date for each article.
@@ -675,7 +752,6 @@ async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
 
   await Promise.all([
-    copyStaticAsset('_headers'),
     copyStaticAsset('assets'),
     copyStaticAsset('favicon.ico'),
     copyStaticAsset('speculationrules.json'),
@@ -683,6 +759,7 @@ async function main() {
   ]);
 
   const articles = await loadArticles();
+  await buildHeadersFile(articles);
   const topics = collectTopics(articles);
   const htmlFiles = await gatherHtmlFiles();
   const assetFingerprints = await buildAssetFingerprints();
@@ -722,6 +799,7 @@ async function main() {
       OG_IMAGE_META: renderOgImageMeta(article),
       ARTICLE_META: renderArticleMeta(article),
       JSON_LD: renderArticleJsonLd(article),
+      HERO_PRELOAD: renderHeroPreload(article),
       HERO: renderHero(article),
       BODY: article.body,
       TOC: renderToc(article.headings),
