@@ -1,3 +1,20 @@
+.contact-nav-button {
+  appearance: none;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.contact-nav-button:hover,
+.contact-nav-button:focus-visible {
+  color: var(--fg);
+  outline: none;
+}
+
 .contact-dialog {
   border: 1px solid var(--line);
   border-radius: 1rem;
@@ -7,114 +24,14 @@
   max-width: min(36rem, calc(100% - 2rem));
   width: 100%;
   font: inherit;
+  inset: 0;
+  margin: auto;
   box-shadow: 0 1.75rem 3.5rem rgba(0, 0, 0, 0.5), 0 0.4rem 1rem rgba(0, 0, 0, 0.32);
 }
 
 .contact-dialog::backdrop {
   background: rgba(10, 14, 11, 0.66);
   backdrop-filter: blur(3px);
-}
-
-/* ── Open animations ─────────────────────────────────────────
- * Calm slide-up for the dialog itself, then text + buttons stagger in.
- * Inputs and textareas stay static — they're for typing, not decoration.
- */
-
-@keyframes contact-dialog-enter {
-  0% {
-    opacity: 0;
-    transform: translateY(14px) scale(0.985);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes contact-backdrop-enter {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes contact-text-enter {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes contact-slide-l {
-  0% {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.contact-dialog[open] {
-  animation: contact-dialog-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-}
-
-.contact-dialog[open]::backdrop {
-  animation: contact-backdrop-enter 320ms ease-out both;
-}
-
-.contact-dialog[open] .contact-header {
-  animation: contact-text-enter 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 80ms;
-}
-
-.contact-dialog[open] .contact-quick > .contact-direct:nth-child(1) {
-  animation: contact-slide-l 460ms
-    linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1)
-    both;
-  animation-delay: 160ms;
-}
-
-.contact-dialog[open] .contact-quick > .contact-direct:nth-child(2) {
-  animation: contact-slide-l 460ms
-    linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1)
-    both;
-  animation-delay: 220ms;
-}
-
-.contact-dialog[open] .contact-divider {
-  animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 290ms;
-}
-
-.contact-dialog[open] .contact-field:nth-of-type(1) .contact-label {
-  animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 340ms;
-}
-
-.contact-dialog[open] .contact-field:nth-of-type(2) .contact-label {
-  animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 400ms;
-}
-
-.contact-dialog[open] .contact-actions {
-  animation: contact-text-enter 400ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 460ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .contact-dialog[open],
-  .contact-dialog[open]::backdrop,
-  .contact-dialog[open] .contact-header,
-  .contact-dialog[open] .contact-quick > .contact-direct,
-  .contact-dialog[open] .contact-divider,
-  .contact-dialog[open] .contact-field .contact-label,
-  .contact-dialog[open] .contact-actions {
-    animation: none;
-  }
 }
 
 .contact-form {

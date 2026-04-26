@@ -3,19 +3,20 @@
   <nav class="site-nav" aria-label="Main navigation">
     <a href="/writing/">POSTS</a>
     <a href="/topics/">TOPICS</a>
-    <a href="#contact-dialog" data-contact-open>CONTACT</a>
+    <button type="button" class="contact-nav-button" popovertarget="contact-popover">CONTACT</button>
     <a href="/about/">ABOUT</a>
   </nav>
 </header>
 
-<dialog id="contact-dialog" class="contact-dialog" aria-labelledby="contact-title">
-  <form class="contact-form" data-contact-form novalidate>
+<div id="contact-popover" class="contact-dialog" popover aria-labelledby="contact-title">
+  <form class="contact-form" action="https://mail.google.com/mail/" method="get" target="_blank"
+    rel="noopener noreferrer">
     <div class="contact-header">
       <div class="contact-heading-group">
         <h2 id="contact-title">Get in touch</h2>
         <p class="contact-eyebrow">Email me, grab my resume, or send a quick message.</p>
       </div>
-      <button type="button" class="contact-close" aria-label="Close" data-contact-close>&times;</button>
+      <button type="button" class="contact-close" aria-label="Close" popovertarget="contact-popover" popovertargetaction="hide">&times;</button>
     </div>
 
     <div class="contact-quick">
@@ -32,19 +33,24 @@
       </a>
     </div>
 
+    <!-- Hidden params open Gmail's web compose with the right recipient. -->
+    <input type="hidden" name="view" value="cm" />
+    <input type="hidden" name="fs" value="1" />
+    <input type="hidden" name="to" value="akashplackal@gmail.com" />
+
     <label class="contact-field">
-      <span class="contact-label">Name</span>
-      <input type="text" name="name" required autocomplete="name" />
+      <span class="contact-label">Subject</span>
+      <input type="text" name="su" required placeholder="What's this about?" />
     </label>
 
     <label class="contact-field">
       <span class="contact-label">Message</span>
-      <textarea name="message" rows="5" required></textarea>
+      <textarea name="body" rows="5" required></textarea>
     </label>
 
     <div class="contact-actions">
-      <button type="button" class="contact-btn contact-btn-secondary" data-contact-close>Cancel</button>
+      <button type="button" class="contact-btn contact-btn-secondary" popovertarget="contact-popover" popovertargetaction="hide">Cancel</button>
       <button type="submit" class="contact-btn contact-btn-primary">Send via Gmail</button>
     </div>
   </form>
-</dialog>
+</div>

@@ -84,36 +84,15 @@
 
   setupReadingProgress();
 
-  // ── Contact dialog ───────────────────────────────────────────
-  const setupContactDialog = () => {
-    const dialog = document.getElementById("contact-dialog");
-    if (!(dialog instanceof HTMLDialogElement)) return;
-    const form = dialog.querySelector("[data-contact-form]");
-    if (!(form instanceof HTMLFormElement)) return;
+  // ── Contact popover enhancements ─────────────────────────────
+  // Opening, closing, Escape, and light-dismiss are native via the
+  // Popover API. This JS only keeps the copy button and submit cleanup.
+  const setupContactPopover = () => {
+    const popover = document.getElementById("contact-popover");
+    if (!(popover instanceof HTMLElement)) return;
 
-    const open = () => {
-      if (dialog.open) return;
-      try {
-        dialog.showModal();
-      } catch {
-        try { dialog.show(); } catch {}
-      }
-    };
-
-    document.querySelectorAll("[data-contact-open]").forEach((el) => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        open();
-      });
-    });
-
-    dialog.querySelectorAll("[data-contact-close]").forEach((btn) => {
-      btn.addEventListener("click", () => dialog.close());
-    });
-
-    // Copy email to clipboard.
-    const copyBtn = dialog.querySelector("[data-contact-copy]");
-    const emailEl = dialog.querySelector("[data-contact-email]");
+    const copyBtn = popover.querySelector("[data-contact-copy]");
+    const emailEl = popover.querySelector("[data-contact-email]");
     if (copyBtn instanceof HTMLButtonElement && emailEl) {
       let resetTimer = 0;
       copyBtn.addEventListener("click", async () => {
@@ -125,7 +104,6 @@
           copyBtn.textContent = "Copied";
           copyBtn.classList.add("is-copied");
         } catch {
-          // Fallback: select the text so the user can copy manually.
           const range = document.createRange();
           range.selectNodeContents(emailEl);
           const sel = window.getSelection();
@@ -141,39 +119,18 @@
       });
     }
 
-    // Click on backdrop closes the dialog.
-    dialog.addEventListener("click", (e) => {
-      if (e.target === dialog) dialog.close();
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
-      const data = new FormData(form);
-      const name = String(data.get("name") || "").trim();
-      const message = String(data.get("message") || "").trim();
-      if (!name || !message) return;
-
-      const subject = `Message from ${name}`;
-      // Gmail provides the sender's address as the From field automatically,
-      // so we only include the user's name as a sign-off in the body.
-      const body = `${message}\n\n— ${name}`;
-      const gmail =
-        "https://mail.google.com/mail/?view=cm&fs=1" +
-        "&to=akashplackal@gmail.com" +
-        `&su=${encodeURIComponent(subject)}` +
-        `&body=${encodeURIComponent(body)}`;
-      // Open in a new tab so the user doesn't lose the page they were on.
-      // Do not fall back to `window.location.href`: with `noopener`, some
-      // browsers intentionally return `null` from `window.open()` even when
-      // the tab opens successfully, which would also navigate this page.
-      window.open(gmail, "_blank", "noopener,noreferrer");
-      dialog.close();
-      form.reset();
-    });
+    const form = popover.querySelector(".contact-form");
+    if (form instanceof HTMLFormElement) {
+      form.addEventListener("submit", () => {
+        setTimeout(() => {
+          try { popover.hidePopover(); } catch {}
+          form.reset();
+        }, 0);
+      });
+    }
   };
 
-  setupContactDialog();
+  setupContactPopover();
 
   // ── Lazy-load Giscus ─────────────────────────────────────────
   const giscusEl = document.querySelector(".giscus");
