@@ -426,12 +426,15 @@ function collectTopics(articles) {
 function renderTopicsChips(topics) {
   const host = new URL(SITE_ORIGIN).hostname;
   return topics
-    .map((topic) => {
+    .map((topic, index) => {
       const label = topic.name.toUpperCase();
       const query = topic.name.toLowerCase().replaceAll('-', ' ');
       const encoded = encodeURIComponent(`${query} site:${host}`).replaceAll('%20', '+');
       const countLabel = `${topic.count} ${topic.count === 1 ? 'article' : 'articles'}`;
-      return `        <li><a class="chip" href="https://www.google.com/search?q=${encoded}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)} <span class="chip-count" aria-label="${escapeHtml(countLabel)}">${topic.count}</span></a></li>`;
+      // --chip-delay drives the staggered chip-enter animation in topics/index.css
+      // (animation-delay: calc(var(--chip-delay) * 18ms + 280ms)), so each pill
+      // cascades in instead of all 32 fading together.
+      return `        <li><a class="chip" style="--chip-delay:${index}" href="https://www.google.com/search?q=${encoded}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)} <span class="chip-count" aria-label="${escapeHtml(countLabel)}">${topic.count}</span></a></li>`;
     })
     .join('\n');
 }
