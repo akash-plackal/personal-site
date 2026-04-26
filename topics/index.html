@@ -39,6 +39,13 @@
         Each chip opens a Google search restricted to this site for that topic.
         Results depend on Google having indexed the article. New posts may take a few days to appear.
       </p>
+      <form class="site-search" action="https://www.google.com/search" method="get" target="_blank"
+        rel="noopener noreferrer">
+        <label class="visually-hidden" for="topic-search">Search this site</label>
+        <input id="topic-search" type="search" name="q" placeholder="Search akashplackal.com" />
+        <input type="hidden" name="q" value="site:akashplackal.com" />
+        <button type="submit">Search</button>
+      </form>
     </header>
 
     <section aria-labelledby="all-topics-title">

@@ -157,6 +157,11 @@ a {
   margin-top: 1.25rem;
 }
 
+.stack > :nth-child(n+2) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}
+
 .photo-row {
   display: grid;
   gap: 1rem;

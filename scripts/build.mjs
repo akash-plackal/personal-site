@@ -263,10 +263,27 @@ function renderHero(article) {
     // browser starts fetching headers/keyframes immediately but doesn't burn
     // bandwidth eagerly downloading the whole file before <video> commits.
     const poster = article.heroPoster ? ` poster="${escapeHtml(article.heroPoster)}"` : '';
-    return `<video class="hero-image" width="${escapeHtml(width)}" height="${escapeHtml(height)}" autoplay loop muted playsinline preload="auto" aria-label="${escapeHtml(alt)}"${poster}><source src="${escapeHtml(article.hero)}" type="${escapeHtml(videoMime(article.hero))}" /></video>`;
+    return `<video class="hero-image" width="${escapeHtml(width)}" height="${escapeHtml(height)}" autoplay loop muted playsinline preload="metadata" aria-label="${escapeHtml(alt)}"${poster}><source src="${escapeHtml(article.hero)}" type="${escapeHtml(videoMime(article.hero))}" /></video>`;
   }
 
   return `<img class="hero-image" src="${escapeHtml(article.hero)}" width="${escapeHtml(width)}" height="${escapeHtml(height)}" alt="${escapeHtml(alt)}" fetchpriority="high" />`;
+}
+
+function articleHeroPreload(article) {
+  if (!article.hero) {
+    return null;
+  }
+
+  const url = isVideo(article.hero) ? article.heroPoster : article.hero;
+  if (!url) {
+    return null;
+  }
+
+  return {
+    url,
+    as: preloadAs(url),
+    type: assetMime(url),
+  };
 }
 
 // Hero <link rel="preload"> for the article head. Pairs with the 103
@@ -274,12 +291,11 @@ function renderHero(article) {
 // before the body is parsed. fetchpriority=high promotes it past other
 // resources discovered later in the page.
 function renderHeroPreload(article) {
-  if (!article.hero) {
+  const preload = articleHeroPreload(article);
+  if (!preload) {
     return '';
   }
-  const type = assetMime(article.hero);
-  const as = preloadAs(article.hero);
-  return `<link rel="preload" as="${as}" type="${escapeHtml(type)}" href="${escapeHtml(article.hero)}" fetchpriority="high" />`;
+  return `<link rel="preload" as="${preload.as}" type="${escapeHtml(preload.type)}" href="${escapeHtml(preload.url)}" fetchpriority="high" />`;
 }
 
 // Open Graph image meta block — emitted as a contiguous group so social card
@@ -657,13 +673,12 @@ async function copyStaticAsset(relPath) {
 // header blocks in `_headers` override (not merge with) the wildcard rule.
 function renderArticleHeaders(articles) {
   return articles
-    .filter((a) => a.hero)
-    .map((a) => {
-      const type = assetMime(a.hero);
-      const as = preloadAs(a.hero);
+    .map((a) => ({ article: a, preload: articleHeroPreload(a) }))
+    .filter(({ preload }) => preload)
+    .map(({ article, preload }) => {
       return [
-        `/articles/${a.slug}/`,
-        `  Link: <${a.hero}>; rel=preload; as=${as}; type=${type}`,
+        `/articles/${article.slug}/`,
+        `  Link: <${preload.url}>; rel=preload; as=${preload.as}; type=${preload.type}`,
         `  Link: <https://giscus.app>; rel=preconnect; crossorigin`,
       ].join('\n');
     })
