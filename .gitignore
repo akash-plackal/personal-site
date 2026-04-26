@@ -3,3 +3,4 @@ dist/
 node_modules/
 todo.org
 .DS_Store
+**/.DS_Store

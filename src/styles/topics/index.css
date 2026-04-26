@@ -1,0 +1,368 @@
+@import "../shared/tokens.css";
+@import "../shared/contact.css";
+
+html {
+  background: var(--bg);
+}
+
+@keyframes title-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes meta-enter-l {
+  0% {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lead-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+    filter: blur(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes chip-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::view-transition {
+  background-color: var(--bg);
+}
+
+::view-transition-group(root) {
+  animation: none;
+}
+
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1.25rem;
+  max-width: 50rem;
+  margin-inline: auto;
+  min-height: 100vh;
+  font: 16px/1.5 var(--font-main);
+  color: var(--fg);
+  background: var(--bg);
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.brand {
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 1.55rem;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  justify-content: flex-end;
+  font-size: 0.96rem;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.page-hero {
+  max-width: 44rem;
+  margin-bottom: 2.2rem;
+}
+
+.eyebrow {
+  animation: meta-enter-l 500ms linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1) both;
+  margin: 0 0 0.45rem;
+  color: var(--link);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  animation: title-enter 500ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 60ms;
+  max-width: 18ch;
+  margin-bottom: 0.9rem;
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.intro {
+  animation: lead-enter 460ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 220ms;
+  max-width: 40rem;
+  margin-bottom: 2rem;
+  color: var(--muted);
+  font-size: 1.18rem;
+  line-height: 1.55;
+}
+
+a {
+  color: var(--link);
+  text-decoration-color: var(--line);
+  text-decoration-style: dotted;
+  text-underline-offset: 0.16em;
+  text-decoration-thickness: 0.07em;
+}
+
+/* --- Chips (mirrors home page so visual language is identical) --- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.chip {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  border: 1px solid var(--line);
+  border-radius: 0.72rem;
+  background: var(--surface);
+  color: var(--muted);
+  padding: 0.22rem 0.56rem;
+  font-size: 0.93rem;
+  text-decoration: none;
+  line-height: 1.1;
+  --shape-radius: 999px;
+  --shape-pad-inline: 0.78rem;
+  --shape-pad-block: 0.3rem;
+  transition:
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1);
+  animation: chip-enter 320ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: calc(var(--chip-delay, 0) * 18ms + 280ms);
+}
+
+.chip::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% + var(--shape-pad-inline));
+  height: calc(100% + var(--shape-pad-block));
+  border-radius: var(--shape-radius);
+  background: rgba(159, 179, 120, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) scale(0.88);
+  transform-origin: center;
+  transition:
+    transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    opacity 170ms ease-out,
+    visibility 0s 170ms;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.chip:hover,
+.chip:focus-visible {
+  color: var(--fg);
+  border-color: var(--ring-outer);
+  text-decoration-color: transparent;
+  transform: translateY(-1px);
+  outline: 0;
+}
+
+.chip:hover::before,
+.chip:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    opacity 170ms ease-out,
+    visibility 0s;
+}
+
+/* Count is displayed as subtle inline text after the label so the chip's
+   outer shape stays identical to the home page pills. font-variant-numeric
+   keeps single- and multi-digit counts visually aligned. */
+.chip-count {
+  margin-left: 0.4em;
+  font-size: 0.82em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+  transition: opacity 160ms ease-out;
+}
+
+.chip:hover .chip-count,
+.chip:focus-visible .chip-count {
+  opacity: 0.9;
+}
+
+.notes {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* --- Site nav (matches writing/index.css for consistent header behaviour) --- */
+
+.site-nav a {
+  transition:
+    color 160ms ease-out,
+    transform 380ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    text-decoration-color 120ms ease-out;
+}
+
+.site-nav a::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% + 0.72rem);
+  height: calc(100% + 0.3rem);
+  border-radius: 30%;
+  background: rgba(159, 179, 120, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(159, 179, 120, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) scale(0.88);
+  transform-origin: center;
+  transition:
+    transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    opacity 170ms ease-out,
+    visibility 0s 170ms;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.site-nav a:hover::before,
+.site-nav a:focus-visible::before,
+.site-nav a[aria-current="page"]::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    transform 400ms linear(0, 0.063 3.5%, 0.396 9.3%, 0.756 15.3%, 0.94 19%, 1.026 22.2%, 1.073 25%, 1.089 27.7%, 1.069 32%, 1.035 37%, 1.011 43%, 1.001 53%, 1),
+    opacity 170ms ease-out,
+    visibility 0s;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: var(--link);
+  text-decoration-color: transparent;
+  transform: translateY(-1px);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--fg);
+  text-decoration-color: transparent;
+  transform: translateY(-1px);
+}
+
+html:active-view-transition .site-nav a,
+html:active-view-transition .chip {
+  transform: none;
+}
+
+html:active-view-transition .site-nav a::before,
+html:active-view-transition .chip::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+}
+
+::selection {
+  color: var(--selection-fg);
+  background: var(--selection-bg);
+}
+
+@media (max-width: 42rem) {
+  body {
+    padding: 1rem;
+  }
+
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 1.8rem;
+  }
+
+  .site-nav {
+    justify-content: flex-start;
+  }
+
+  h1 {
+    font-size: 2.35rem;
+  }
+
+  .chips {
+    gap: 0.5rem;
+  }
+}

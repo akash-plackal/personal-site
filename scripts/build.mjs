@@ -31,6 +31,7 @@ async function gatherHtmlFiles() {
     path.join(ROOT_DIR, 'index.html'),
     path.join(ROOT_DIR, 'about'),
     path.join(ROOT_DIR, 'writing'),
+    path.join(ROOT_DIR, 'topics'),
   ];
 
   const files = [];
@@ -351,6 +352,43 @@ function renderArticleIndex(articles) {
     .join('\n');
 }
 
+// Aggregate every unique tag across all articles. The relationship is many-to-
+// many (one article has many tags, one tag covers many articles), so we
+// invert the per-article tag lists into a tag-keyed map. Sorted by article
+// count desc, then alphabetical so the most-covered topics surface first.
+function collectTopics(articles) {
+  const map = new Map();
+  for (const article of articles) {
+    for (const tag of article.tags ?? []) {
+      const name = String(tag).trim();
+      if (!name) continue;
+      const entry = map.get(name) ?? { count: 0 };
+      entry.count += 1;
+      map.set(name, entry);
+    }
+  }
+  return [...map.entries()]
+    .map(([name, data]) => ({ name, count: data.count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
+// Render topic chips that open a Google site-restricted search. Display label
+// is uppercased to match the home page chip style. Query lowercases the tag
+// and converts hyphens to spaces so multi-word compounds like "HTML-First"
+// search as "html first" — broader recall than the hyphenated form.
+function renderTopicsChips(topics) {
+  const host = new URL(SITE_ORIGIN).hostname;
+  return topics
+    .map((topic) => {
+      const label = topic.name.toUpperCase();
+      const query = topic.name.toLowerCase().replaceAll('-', ' ');
+      const encoded = encodeURIComponent(`${query} site:${host}`).replaceAll('%20', '+');
+      const countLabel = `${topic.count} ${topic.count === 1 ? 'article' : 'articles'}`;
+      return `        <li><a class="chip" href="https://www.google.com/search?q=${encoded}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)} <span class="chip-count" aria-label="${escapeHtml(countLabel)}">${topic.count}</span></a></li>`;
+    })
+    .join('\n');
+}
+
 // Asset fingerprinting. Source HTML references assets without `?v=...`;
 // the build computes a content hash for each fingerprinted asset and rewrites
 // every reference to include `?v=<hash>`. Same bytes → same hash → cache stays
@@ -386,6 +424,8 @@ function markCurrentNav(html, relPath) {
     href = '/about/';
   } else if (relPath === path.join('writing', 'index.html') || relPath.startsWith(`writing${path.sep}`)) {
     href = '/writing/';
+  } else if (relPath === path.join('topics', 'index.html') || relPath.startsWith(`topics${path.sep}`)) {
+    href = '/topics/';
   }
 
   if (!href) {
@@ -591,11 +631,14 @@ async function writeSitemap(htmlFiles, articles) {
     } else if (urlPath === '/writing/') {
       priority = '0.9';
       changefreq = 'weekly';
+    } else if (urlPath === '/topics/') {
+      priority = '0.7';
+      changefreq = 'weekly';
     }
 
     staticEntries.push({
       loc: urlPath,
-      lastmod: urlPath === '/' || urlPath === '/writing/' ? latestArticleDate : today,
+      lastmod: urlPath === '/' || urlPath === '/writing/' || urlPath === '/topics/' ? latestArticleDate : today,
       changefreq,
       priority,
     });
@@ -640,6 +683,7 @@ async function main() {
   ]);
 
   const articles = await loadArticles();
+  const topics = collectTopics(articles);
   const htmlFiles = await gatherHtmlFiles();
   const assetFingerprints = await buildAssetFingerprints();
 
@@ -651,7 +695,8 @@ async function main() {
     const source = await fs.readFile(src, 'utf8');
     const raw = source
       .replace('{{ARTICLES_LIST}}', renderArticleList(articles))
-      .replace('{{ARTICLES_INDEX}}', renderArticleIndex(articles));
+      .replace('{{ARTICLES_INDEX}}', renderArticleIndex(articles))
+      .replace('{{TOPICS_CHIPS}}', renderTopicsChips(topics));
     const included = await posthtml([
       include({ root: ROOT_DIR }),
     ]).process(raw, { sync: true });

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <include src="src/partials/head-base.html"></include>
+  <title>Topics — Akash Plackal</title>
+  <meta name="description"
+    content="Browse every topic covered on akashplackal.com — performance, HTML-first design, terminal workflows, caching, reliability, and more. Each chip opens a Google site search restricted to this site." />
+  <link rel="canonical" href="https://akashplackal.com/topics/" />
+  <meta property="og:title" content="Topics — Akash Plackal" />
+  <meta property="og:description"
+    content="Every topic covered on akashplackal.com — click a topic to search the site for related articles." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://akashplackal.com/topics/" />
+  <meta property="og:image" content="https://akashplackal.com/assets/hero-avatar-640.avif" />
+  <meta property="og:image:type" content="image/avif" />
+  <meta property="og:image:width" content="640" />
+  <meta property="og:image:height" content="640" />
+  <meta property="og:image:alt" content="Portrait of Akash Plackal." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Topics — Akash Plackal" />
+  <meta name="twitter:description"
+    content="Every topic covered on akashplackal.com — click a topic to search the site for related articles." />
+  <meta name="twitter:image" content="https://akashplackal.com/assets/hero-avatar-640.avif" />
+  <meta name="twitter:image:alt" content="Portrait of Akash Plackal." />
+  <link rel="stylesheet" href="/src/styles/topics/index.css" data-inline />
+  <script
+    type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://akashplackal.com/topics/#collection","name":"Topics — Akash Plackal","description":"Every topic covered on akashplackal.com.","url":"https://akashplackal.com/topics/","inLanguage":"en","isPartOf":{"@type":"WebSite","@id":"https://akashplackal.com/#website"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://akashplackal.com/"},{"@type":"ListItem","position":2,"name":"Topics","item":"https://akashplackal.com/topics/"}]}}</script>
+</head>
+
+<body>
+  <include src="src/partials/site-header.html"></include>
+
+  <main>
+    <header class="page-hero">
+      <p class="eyebrow">Topics</p>
+      <h1>Browse by topic.</h1>
+      <p class="intro">
+        Each chip opens a Google search restricted to this site for that topic.
+        The number after each topic is how many articles are tagged with it.
+      </p>
+    </header>
+
+    <section aria-labelledby="all-topics-title">
+      <h2 id="all-topics-title" class="visually-hidden"
+        style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+        All topics</h2>
+      <ul class="chips" aria-label="All topics">
+        {{TOPICS_CHIPS}}
+      </ul>
+    </section>
+
+    <p class="notes">
+      Results depend on Google having indexed the article. New posts may take a
+      few days to appear.
+    </p>
+  </main>
+
+  <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>
+  <script src="/assets/nav-audio.js" defer></script>
+</body>
+
+</html>
