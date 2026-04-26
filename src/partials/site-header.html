@@ -11,15 +11,25 @@
 <dialog id="contact-dialog" class="contact-dialog" aria-labelledby="contact-title">
   <form class="contact-form" data-contact-form novalidate>
     <div class="contact-header">
-      <h2 id="contact-title">Get in touch</h2>
+      <div class="contact-heading-group">
+        <h2 id="contact-title">Get in touch</h2>
+        <p class="contact-eyebrow">Email me, grab my resume, or send a quick message.</p>
+      </div>
       <button type="button" class="contact-close" aria-label="Close" data-contact-close>&times;</button>
     </div>
-    <p class="contact-intro">Send me a message — opens Gmail in a new tab with your message ready to send.</p>
 
-    <div class="contact-direct">
-      <span class="contact-direct-label">Or copy:</span>
-      <span class="contact-email" data-contact-email>akashplackal@gmail.com</span>
-      <button type="button" class="contact-copy" data-contact-copy aria-live="polite">Copy</button>
+    <div class="contact-quick">
+      <div class="contact-direct">
+        <span class="contact-direct-label">Email</span>
+        <span class="contact-email" data-contact-email>akashplackal@gmail.com</span>
+        <button type="button" class="contact-copy" data-contact-copy aria-live="polite">Copy</button>
+      </div>
+      <a class="contact-direct contact-resume" href="/assets/akash-plackal-resume.pdf" download
+        aria-label="Download resume PDF">
+        <span class="contact-direct-label">Resume</span>
+        <span class="contact-email">akash-plackal-resume.pdf</span>
+        <span class="contact-resume-cta" aria-hidden="true">Download </span>
+      </a>
     </div>
 
     <label class="contact-field">

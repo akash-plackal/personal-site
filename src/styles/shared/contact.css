@@ -1,18 +1,18 @@
 .contact-dialog {
   border: 1px solid var(--line);
-  border-radius: 0.85rem;
+  border-radius: 1rem;
   background: var(--surface);
   color: var(--fg);
   padding: 0;
-  max-width: min(32rem, calc(100% - 2rem));
+  max-width: min(36rem, calc(100% - 2rem));
   width: 100%;
   font: inherit;
-  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1.75rem 3.5rem rgba(0, 0, 0, 0.5), 0 0.4rem 1rem rgba(0, 0, 0, 0.32);
 }
 
 .contact-dialog::backdrop {
-  background: rgba(10, 14, 11, 0.62);
-  backdrop-filter: blur(2px);
+  background: rgba(10, 14, 11, 0.66);
+  backdrop-filter: blur(3px);
 }
 
 /* ── Open animations ─────────────────────────────────────────
@@ -23,11 +23,11 @@
 @keyframes contact-dialog-enter {
   0% {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(14px) scale(0.985);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -59,58 +59,58 @@
 }
 
 .contact-dialog[open] {
-  animation: contact-dialog-enter 360ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation: contact-dialog-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
 }
 
 .contact-dialog[open]::backdrop {
   animation: contact-backdrop-enter 320ms ease-out both;
 }
 
-/* Title row: heading text + close button */
 .contact-dialog[open] .contact-header {
   animation: contact-text-enter 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
   animation-delay: 80ms;
 }
 
-.contact-dialog[open] .contact-intro {
-  animation: contact-text-enter 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 140ms;
-}
-
-/* Email + copy-button row: slide in from the left with the bouncy spring
-   so it has a little personality vs the straight-up text fades. */
-.contact-dialog[open] .contact-direct {
+.contact-dialog[open] .contact-quick > .contact-direct:nth-child(1) {
   animation: contact-slide-l 460ms
     linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1)
     both;
-  animation-delay: 200ms;
+  animation-delay: 160ms;
 }
 
-/* Field labels only — inputs and textareas are deliberately NOT animated
-   so the form is ready to type into the moment the dialog opens. */
+.contact-dialog[open] .contact-quick > .contact-direct:nth-child(2) {
+  animation: contact-slide-l 460ms
+    linear(0, 0.049 2.7%, 0.272 6.4%, 0.668 12%, 0.895 16%, 1.028 19.2%, 1.115 22%, 1.157 24.6%, 1.163 26.8%, 1.139 30%, 1.084 34%, 1.04 38.4%, 1.011 44%, 0.998 51%, 1.001 62%, 1)
+    both;
+  animation-delay: 220ms;
+}
+
+.contact-dialog[open] .contact-divider {
+  animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 290ms;
+}
+
 .contact-dialog[open] .contact-field:nth-of-type(1) .contact-label {
   animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 260ms;
+  animation-delay: 340ms;
 }
 
 .contact-dialog[open] .contact-field:nth-of-type(2) .contact-label {
   animation: contact-text-enter 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 320ms;
+  animation-delay: 400ms;
 }
 
-/* Buttons last — they're the call-to-action so it's nice to draw the eye
-   to them at the end of the staggered entrance. */
 .contact-dialog[open] .contact-actions {
   animation: contact-text-enter 400ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
-  animation-delay: 380ms;
+  animation-delay: 460ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .contact-dialog[open],
   .contact-dialog[open]::backdrop,
   .contact-dialog[open] .contact-header,
-  .contact-dialog[open] .contact-intro,
-  .contact-dialog[open] .contact-direct,
+  .contact-dialog[open] .contact-quick > .contact-direct,
+  .contact-dialog[open] .contact-divider,
   .contact-dialog[open] .contact-field .contact-label,
   .contact-dialog[open] .contact-actions {
     animation: none;
@@ -119,75 +119,97 @@
 
 .contact-form {
   display: grid;
-  gap: 0.85rem;
-  padding: 1.2rem 1.25rem 1.1rem;
+  gap: 1.05rem;
+  padding: 1.55rem 1.65rem 1.4rem;
   margin: 0;
 }
 
 .contact-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
 }
 
+.contact-heading-group {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
 .contact-header h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.42rem;
   letter-spacing: -0.01em;
   color: var(--fg);
+  line-height: 1.15;
+}
+
+.contact-eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .contact-close {
+  flex-shrink: 0;
   background: none;
   border: 1px solid transparent;
   color: var(--muted);
-  font-size: 1.4rem;
+  font: inherit;
+  font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.05rem 0.5rem 0.15rem;
-  border-radius: 0.4rem;
-  font-family: inherit;
-  transition:
-    color 160ms ease-out,
-    border-color 160ms ease-out,
-    background-color 160ms ease-out;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: color 160ms ease-out, border-color 160ms ease-out, background-color 160ms ease-out;
 }
 
 .contact-close:hover,
 .contact-close:focus-visible {
   color: var(--fg);
   border-color: var(--line);
-  background: rgba(159, 179, 120, 0.08);
+  background: rgba(159, 179, 120, 0.1);
   outline: none;
 }
 
-.contact-intro {
-  margin: 0 0 0.2rem;
-  color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.4;
-  max-width: none;
+/* ── Quick actions panel (Email + Resume rows) ────────────────────
+   Both rows share the .contact-direct base. The resume variant is an
+   anchor element with a download CTA on the right that matches the
+   visual weight of the Copy button in the email row. */
+
+.contact-quick {
+  display: grid;
+  gap: 0.55rem;
 }
 
 .contact-direct {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.45rem 0.55rem 0.45rem 0.7rem;
+  gap: 0.6rem;
+  padding: 0.55rem 0.6rem 0.55rem 0.8rem;
   border: 1px solid var(--line);
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
   background: rgba(20, 26, 21, 0.55);
   min-width: 0;
+  transition:
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
 }
 
 .contact-direct-label {
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 700;
   flex: 0 0 auto;
+  min-width: 3.4rem;
 }
 
 .contact-email {
@@ -201,44 +223,98 @@
   white-space: nowrap;
 }
 
-.contact-copy {
+/* Shared CTA styling for the Copy button (email row) and the Download
+   pill (resume row) so both rows feel visually identical. */
+.contact-copy,
+.contact-resume-cta {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
   font: inherit;
-  font-family: inherit;
   cursor: pointer;
-  padding: 0.3rem 0.65rem;
-  border-radius: 0.38rem;
+  padding: 0.36rem 0.7rem;
+  border-radius: 0.42rem;
   border: 1px solid var(--line);
-  background: rgba(159, 179, 120, 0.08);
+  background: rgba(159, 179, 120, 0.1);
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 700;
-  transition:
-    color 160ms ease-out,
-    border-color 160ms ease-out,
-    background-color 160ms ease-out,
-    transform 160ms ease-out;
+  transition: color 160ms ease-out, border-color 160ms ease-out, background-color 160ms ease-out;
 }
 
 .contact-copy:hover,
-.contact-copy:focus-visible {
+.contact-copy:focus-visible,
+.contact-resume:hover .contact-resume-cta,
+.contact-resume:focus-visible .contact-resume-cta {
   outline: none;
   color: var(--fg);
   border-color: var(--ring-outer);
-  background: rgba(159, 179, 120, 0.18);
+  background: rgba(159, 179, 120, 0.22);
 }
 
 .contact-copy.is-copied {
   color: var(--fg);
   border-color: rgba(141, 170, 127, 0.7);
-  background: rgba(159, 179, 120, 0.28);
+  background: rgba(159, 179, 120, 0.3);
+}
+
+/* Whole resume row is a clickable anchor; the CTA pill above provides the
+   visual button. Hover lifts the row's background to match the CTA's. */
+.contact-resume {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.contact-resume:hover,
+.contact-resume:focus-visible {
+  outline: none;
+  border-color: var(--ring-outer);
+  background: rgba(20, 26, 21, 0.78);
+}
+
+.contact-resume-arrow {
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: transform 220ms ease-out;
+}
+
+.contact-resume:hover .contact-resume-arrow,
+.contact-resume:focus-visible .contact-resume-arrow {
+  transform: translateY(2px);
+}
+
+/* ── Section divider ────────────────────────────────────────────
+   "or send a message" between the quick actions and the form, visually
+   anchored to the centre. Avoids feeling like one big undifferentiated
+   form when there are now multiple ways to reach me. */
+.contact-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.contact-divider::before,
+.contact-divider::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--line);
+  opacity: 0.7;
 }
 
 .contact-field {
   display: grid;
-  gap: 0.32rem;
+  gap: 0.34rem;
 }
 
 .contact-label {
@@ -255,8 +331,8 @@
   color: var(--fg);
   background: rgba(20, 26, 21, 0.55);
   border: 1px solid var(--line);
-  border-radius: 0.5rem;
-  padding: 0.55rem 0.7rem;
+  border-radius: 0.55rem;
+  padding: 0.6rem 0.75rem;
   width: 100%;
   resize: vertical;
   transition:
@@ -280,23 +356,26 @@
 
 .contact-actions {
   display: flex;
-  gap: 0.55rem;
+  gap: 0.6rem;
   justify-content: flex-end;
-  margin-top: 0.4rem;
+  margin-top: 0.5rem;
 }
 
 .contact-btn {
   font: inherit;
   font-family: inherit;
   cursor: pointer;
-  padding: 0.5rem 0.95rem;
-  border-radius: 0.5rem;
+  padding: 0.58rem 1.05rem;
+  border-radius: 0.55rem;
   border: 1px solid var(--line);
+  font-weight: 600;
+  letter-spacing: -0.005em;
   transition:
     transform 160ms ease-out,
     background-color 160ms ease-out,
     border-color 160ms ease-out,
-    color 160ms ease-out;
+    color 160ms ease-out,
+    box-shadow 160ms ease-out;
 }
 
 .contact-btn-secondary {
@@ -313,8 +392,8 @@
 }
 
 .contact-btn-primary {
-  background: rgba(159, 179, 120, 0.16);
-  border-color: rgba(141, 170, 127, 0.5);
+  background: rgba(159, 179, 120, 0.18);
+  border-color: rgba(141, 170, 127, 0.55);
   color: var(--fg);
 }
 
@@ -322,11 +401,55 @@
 .contact-btn-primary:focus-visible {
   outline: none;
   border-color: var(--ring-outer);
-  background: rgba(159, 179, 120, 0.28);
+  background: rgba(159, 179, 120, 0.3);
   transform: translateY(-1px);
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.25);
+}
+
+/* Screen-reader-only text utility — used inside the resume link to
+   give assistive tech a clearer label than the visible "Download" CTA. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 32rem) {
+  .contact-form {
+    padding: 1.2rem 1.1rem 1.1rem;
+    gap: 0.9rem;
+  }
+
+  .contact-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .contact-eyebrow {
+    font-size: 0.86rem;
+  }
+
+  .contact-direct {
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    padding: 0.55rem 0.65rem;
+  }
+
+  .contact-direct-label {
+    flex: 0 0 100%;
+    font-size: 0.68rem;
+    min-width: 0;
+  }
+
+  .contact-email {
+    flex: 1 1 auto;
+  }
+
   .contact-actions {
     flex-direction: column-reverse;
   }
