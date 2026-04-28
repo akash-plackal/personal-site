@@ -15,8 +15,8 @@
     try {
       const audio = getClickAudio();
       audio.currentTime = 0;
-      void audio.play().catch(() => {});
-    } catch {}
+      void audio.play().catch(() => { });
+    } catch { }
   };
 
   const findClickable = (target) => {
@@ -123,9 +123,9 @@
     if (form instanceof HTMLFormElement) {
       form.addEventListener("submit", () => {
         setTimeout(() => {
-          try { popover.hidePopover(); } catch {}
+          try { popover.hidePopover(); } catch { }
           form.reset();
-        }, 0);
+        }, 500);
       });
     }
   };
@@ -181,7 +181,7 @@
         if (isSameOriginNavigation(clickable, e)) {
           try {
             sessionStorage.setItem("__click", "1");
-          } catch {}
+          } catch { }
           return;
         }
         playClickSound();
@@ -205,7 +205,7 @@
         if (isSameOriginNavigation(clickable, e)) {
           try {
             sessionStorage.setItem("__click", "1");
-          } catch {}
+          } catch { }
           return;
         }
         playClickSound();
