@@ -153,16 +153,7 @@
       s.async = true;
       giscusEl.appendChild(s);
     };
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          io.disconnect();
-          loadGiscus();
-        }
-      },
-      { rootMargin: "800px" },
-    );
-    io.observe(giscusEl);
+    loadGiscus();
   }
 
   // ── Pointer handling ─────────────────────────────────────────
