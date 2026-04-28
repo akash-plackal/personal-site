@@ -160,7 +160,7 @@
           loadGiscus();
         }
       },
-      { rootMargin: "200px" },
+      { rootMargin: "800px" },
     );
     io.observe(giscusEl);
   }
