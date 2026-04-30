@@ -48,6 +48,46 @@
     }
   };
 
+  const earlyActivated = new WeakSet();
+
+  const canEarlyActivate = (el, event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return false;
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return false;
+    if (el.matches?.(':disabled, [aria-disabled="true"]')) return false;
+    if (el instanceof HTMLAnchorElement) {
+      const href = el.getAttribute("href") || "";
+      return href && !href.startsWith("#") && !/^(mailto|tel|javascript):/i.test(href);
+    }
+    return el.matches?.('button, input[type="button"], input[type="submit"], input[type="reset"], [role="button"]');
+  };
+
+  const activateEarly = (el, event) => {
+    if (!canEarlyActivate(el, event)) return false;
+    event.preventDefault();
+    earlyActivated.add(el);
+    window.setTimeout(() => earlyActivated.delete(el), 700);
+
+    if (el instanceof HTMLAnchorElement) {
+      if (isSameOriginNavigation(el, event)) {
+        try { sessionStorage.setItem("__click", "1"); } catch { }
+      }
+      if (el.target && el.target !== "_self") window.open(el.href, el.target, "noopener");
+      else window.location.assign(el.href);
+    } else {
+      el.click();
+    }
+    return true;
+  };
+
+  document.addEventListener("click", (e) => {
+    if (!e.isTrusted || !(e.target instanceof Element)) return;
+    const el = e.target.closest('a[href], button, input[type="button"], input[type="submit"], input[type="reset"], [role="button"]');
+    if (!el || !earlyActivated.has(el)) return;
+    earlyActivated.delete(el);
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }, { capture: true });
+
   // ── Reading progress ─────────────────────────────────────────
   const setupReadingProgress = () => {
     const track = document.querySelector(".reading-progress");
@@ -167,6 +207,11 @@
       if (e.pointerType === "mouse" && e.button !== 0) return;
       const clickable = findClickable(e.target);
       if (!clickable) return;
+
+      if (activateEarly(clickable, e)) {
+        playClickSound();
+        return;
+      }
 
       if (clickable instanceof HTMLAnchorElement) {
         if (isSameOriginNavigation(clickable, e)) {
