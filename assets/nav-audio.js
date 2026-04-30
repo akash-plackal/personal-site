@@ -208,8 +208,9 @@
       const clickable = findClickable(e.target);
       if (!clickable) return;
 
+      const soundOnNextPage = clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, e);
       if (activateEarly(clickable, e)) {
-        playClickSound();
+        if (!soundOnNextPage) playClickSound();
         return;
       }
 
