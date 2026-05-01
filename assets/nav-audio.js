@@ -51,7 +51,7 @@
   const earlyActivated = new WeakSet();
 
   const canEarlyActivate = (el, event) => {
-    if (event.pointerType === "mouse" && event.button !== 0) return false;
+    if (event.pointerType !== "mouse" || event.button !== 0) return false;
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return false;
     if (el.matches?.(':disabled, [aria-disabled="true"]')) return false;
     if (el instanceof HTMLAnchorElement) {
