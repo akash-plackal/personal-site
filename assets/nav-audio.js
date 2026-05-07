@@ -162,10 +162,7 @@
     const form = popover.querySelector(".contact-form");
     if (form instanceof HTMLFormElement) {
       form.addEventListener("submit", () => {
-        setTimeout(() => {
-          try { popover.hidePopover(); } catch { }
-          form.reset();
-        }, 500);
+        try { popover.hidePopover(); } catch { }
       });
     }
   };
