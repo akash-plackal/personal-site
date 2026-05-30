@@ -805,7 +805,7 @@ p {
 }
 
 .accordion-body p {
-  margin: 0 0 0.15rem;
+  margin: 0.8rem 0 0.15rem;
   max-width: 66ch;
   color: var(--muted);
   font-size: 1.02rem;
