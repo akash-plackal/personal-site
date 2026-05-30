@@ -1,75 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
-  <title id="title">Tmux terminal workspace</title>
-  <desc id="desc">A stylized tmux terminal session with split panes, a popup shell, and vim-style navigation hints in the site color palette.</desc>
+  <title id="title">Clean tmux terminal workspace</title>
+  <desc id="desc">A minimal tmux terminal window with split panes and a small popup shell in the site color palette.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#141a15"/>
       <stop offset="100%" stop-color="#1d2520"/>
     </linearGradient>
-    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#9fb378"/>
-      <stop offset="100%" stop-color="#8daa7f"/>
-    </linearGradient>
     <style>
-      .grid{stroke:#465247;stroke-width:1;opacity:.22}.window{fill:#121914;stroke:#465247;stroke-width:2}.bar{fill:#1d2520}.pane{fill:#141a15;stroke:#465247;stroke-width:2}.active{stroke:#9fb378}.popup{fill:#1d2520;stroke:#9fb378;stroke-width:2.5;filter:url(#shadow)}.dot-a{fill:#c48f68}.dot-b{fill:#9fb378}.dot-c{fill:#7f9974}.muted{fill:#a8b09b}.fg{fill:#d5d9c8}.bright{fill:#e7ebdc}.line{stroke:#8daa7f;stroke-width:4;stroke-linecap:round;fill:none}.thin{stroke:#465247;stroke-width:2;stroke-linecap:round}.code{font:700 16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.small{font:700 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.label{font:800 14px system-ui,-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.08em}.key{fill:#324036;stroke:#9fb378;stroke-width:1.5}.keytext{fill:#e7ebdc;font:800 13px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+      .window{fill:#121914;stroke:#465247;stroke-width:2}.bar{fill:#1d2520}.pane{fill:#141a15;stroke:#465247;stroke-width:2}.active{stroke:#9fb378}.popup{fill:#1d2520;stroke:#9fb378;stroke-width:2}.dot-a{fill:#c48f68}.dot-b{fill:#9fb378}.dot-c{fill:#7f9974}.muted{fill:#a8b09b}.fg{fill:#d5d9c8}.bright{fill:#e7ebdc}.code{font:700 16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.small{font:700 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.label{font:800 14px system-ui,-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.08em}
     </style>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#080d0a" flood-opacity=".45"/>
-    </filter>
   </defs>
 
   <rect width="960" height="420" fill="url(#bg)"/>
-  <g class="grid">
-    <path d="M72 64h816M72 356h816M128 36v348M832 36v348M0 210h960"/>
-  </g>
 
-  <rect class="window" x="78" y="58" width="804" height="304" rx="18"/>
-  <rect class="bar" x="78" y="58" width="804" height="42" rx="18"/>
-  <path d="M78 86h804" stroke="#465247" stroke-width="2"/>
-  <circle class="dot-a" cx="112" cy="79" r="6"/>
-  <circle class="dot-b" cx="134" cy="79" r="6"/>
-  <circle class="dot-c" cx="156" cy="79" r="6"/>
-  <text class="label muted" x="480" y="84" text-anchor="middle">TMUX · SESSION: WORK</text>
+  <rect class="window" x="92" y="76" width="776" height="268" rx="18"/>
+  <rect class="bar" x="92" y="76" width="776" height="42" rx="18"/>
+  <path d="M92 118h776" stroke="#465247" stroke-width="2"/>
+  <circle class="dot-a" cx="128" cy="97" r="6"/>
+  <circle class="dot-b" cx="150" cy="97" r="6"/>
+  <circle class="dot-c" cx="172" cy="97" r="6"/>
+  <text class="label muted" x="480" y="102" text-anchor="middle">TMUX · WORK</text>
 
-  <rect class="pane active" x="98" y="120" width="378" height="150" rx="10"/>
-  <rect class="pane" x="492" y="120" width="370" height="150" rx="10"/>
-  <rect class="pane" x="98" y="286" width="764" height="54" rx="10"/>
+  <rect class="pane active" x="118" y="142" width="350" height="126" rx="10"/>
+  <rect class="pane" x="492" y="142" width="350" height="126" rx="10"/>
+  <rect class="pane" x="118" y="288" width="724" height="34" rx="9"/>
 
   <g class="code">
-    <text class="muted" x="122" y="154">$ tmux new -s focus</text>
-    <text class="fg" x="122" y="188">prefix: Ctrl-a</text>
-    <text class="fg" x="122" y="222">split: |  -</text>
-    <text class="muted" x="122" y="252">pane-base-index 1</text>
+    <text class="muted" x="148" y="178">$ tmux new -s focus</text>
+    <text class="fg" x="148" y="212">prefix: Ctrl-a</text>
+    <text class="muted" x="148" y="246">split panes with | and -</text>
 
-    <text class="muted" x="516" y="154">$ nvim app.lua</text>
-    <text class="fg" x="516" y="188">truecolor enabled</text>
-    <text class="fg" x="516" y="222">extended keys: csi-u</text>
-    <text class="muted" x="516" y="252">resurrect + continuum</text>
+    <text class="muted" x="522" y="178">$ nvim notes.md</text>
+    <text class="fg" x="522" y="212">truecolor enabled</text>
+    <text class="muted" x="522" y="246">vim-style pane movement</text>
 
-    <text class="fg" x="122" y="321">1:zsh</text>
-    <text class="muted" x="214" y="321">2:nvim</text>
-    <text class="muted" x="306" y="321">3:logs</text>
-    <text class="bright" x="760" y="321">C-a ?</text>
+    <text class="fg" x="148" y="311">1:zsh</text>
+    <text class="muted" x="238" y="311">2:nvim</text>
+    <text class="muted" x="338" y="311">3:logs</text>
   </g>
 
-  <g transform="translate(372 146)">
-    <rect class="popup" x="0" y="0" width="238" height="132" rx="14"/>
-    <text class="label bright" x="119" y="31" text-anchor="middle">POPUP SHELL</text>
-    <path class="thin" d="M22 48h194"/>
-    <text class="small fg" x="24" y="74">$ notes scratch.md</text>
-    <text class="small muted" x="24" y="102">80% × 80% temporary</text>
+  <g transform="translate(358 174)">
+    <rect class="popup" x="0" y="0" width="244" height="92" rx="14"/>
+    <text class="label bright" x="122" y="32" text-anchor="middle">POPUP SHELL</text>
+    <path d="M28 48h188" stroke="#465247" stroke-width="2" stroke-linecap="round"/>
+    <text class="small muted" x="28" y="72">$ scratch command</text>
   </g>
-
-  <path class="line" d="M270 112c52-42 152-48 218-4" opacity=".75"/>
-  <path class="line" d="M690 280c-52 38-142 44-214 14" opacity=".65"/>
-
-  <g text-anchor="middle" transform="translate(690 70)">
-    <rect class="key" x="-24" y="42" width="48" height="32" rx="7"/><text class="keytext" x="0" y="63">k</text>
-    <rect class="key" x="-80" y="80" width="48" height="32" rx="7"/><text class="keytext" x="-56" y="101">h</text>
-    <rect class="key" x="-24" y="80" width="48" height="32" rx="7"/><text class="keytext" x="0" y="101">j</text>
-    <rect class="key" x="32" y="80" width="48" height="32" rx="7"/><text class="keytext" x="56" y="101">l</text>
-  </g>
-
-  <circle cx="820" cy="310" r="28" fill="url(#glow)" opacity=".18"/>
-  <circle cx="820" cy="310" r="8" fill="#c1a06a"/>
 </svg>
