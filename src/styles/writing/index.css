@@ -31,18 +31,6 @@ html {
   }
 }
 
-@keyframes meta-enter-r {
-  0% {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes lead-enter {
   0% {
     opacity: 0;

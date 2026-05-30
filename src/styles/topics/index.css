@@ -323,13 +323,6 @@ a {
   opacity: 0.9;
 }
 
-.notes {
-  margin: 1rem 0 0;
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.55;
-}
-
 /* --- Site nav (matches writing/index.css for consistent header behaviour) --- */
 
 .site-nav a {

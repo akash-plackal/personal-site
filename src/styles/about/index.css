@@ -5,18 +5,6 @@ html {
   background: var(--bg);
 }
 
-@keyframes vt-enter {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes title-enter {
   0% {
     opacity: 0;
@@ -373,13 +361,6 @@ p {
   line-height: 1.1;
 }
 
-.about-sections {
-  display: grid;
-  gap: 1rem;
-  margin: 1.6rem 0 1.5rem;
-  grid-template-columns: minmax(0, 1fr);
-}
-
 .about-grid {
   display: grid;
   gap: 1rem;
@@ -411,8 +392,7 @@ p {
 }
 
 .bio-list,
-.tech-list,
-.contact-list {
+.tech-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -461,15 +441,13 @@ p {
   font-size: 0.93rem;
 }
 
-.tech-list,
-.contact-list {
+.tech-list {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
 }
 
-.tech-list li,
-.contact-list li {
+.tech-list li {
   display: block;
 }
 
@@ -601,12 +579,6 @@ p {
   line-height: 1.2;
 }
 
-.card-note {
-  color: var(--muted);
-  font-size: 0.86rem;
-  line-height: 1.25;
-}
-
 .tech-list .card-link {
   min-height: 3rem;
   padding: 0.62rem 0.72rem;
@@ -621,10 +593,6 @@ p {
   width: 1.9rem;
   height: 1.9rem;
   font-size: 0.82rem;
-}
-
-.tech-list .card-note {
-  display: none;
 }
 
 .accordion-group {
@@ -843,26 +811,11 @@ p {
   margin-bottom: 0.75rem;
 }
 
-.use-card-kicker {
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  font-size: 0.74rem;
-  font-weight: 700;
-}
-
 .use-card-title {
   margin: 0;
   color: var(--fg);
   font-size: 1.12rem;
   line-height: 1.15;
-}
-
-.use-card-note {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.93rem;
-  line-height: 1.45;
 }
 
 .use-list {
