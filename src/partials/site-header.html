@@ -1,3 +1,16 @@
+<link rel="stylesheet" href="/assets/glass-header.css" />
+<svg class="liquid-glass-defs" aria-hidden="true" focusable="false" width="0" height="0"
+  style="position: absolute; width: 0; height: 0; overflow: hidden">
+  <filter id="liquid-glass-header" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="14" stitchTiles="stitch"
+      result="turbulence" />
+    <feGaussianBlur in="turbulence" stdDeviation="1.4" result="smoothMap" />
+    <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="36" xChannelSelector="R" yChannelSelector="G"
+      result="displaced" />
+    <feGaussianBlur in="displaced" stdDeviation="0.6" />
+  </filter>
+</svg>
+
 <header class="site-header">
   <a class="brand" href="/">akashplackal.com</a>
   <nav class="site-nav" aria-label="Main navigation">
@@ -16,7 +29,8 @@
         <h2 id="contact-title">Get in touch</h2>
         <p class="contact-eyebrow">Email me, grab my resume, or send a quick message.</p>
       </div>
-      <button type="button" class="contact-close" aria-label="Close" popovertarget="contact-popover" popovertargetaction="hide">&times;</button>
+      <button type="button" class="contact-close" aria-label="Close" popovertarget="contact-popover"
+        popovertargetaction="hide">&times;</button>
     </div>
 
     <div class="contact-quick">
@@ -33,7 +47,6 @@
       </a>
     </div>
 
-    <!-- Hidden params open Gmail's web compose with the right recipient. -->
     <input type="hidden" name="view" value="cm" />
     <input type="hidden" name="fs" value="1" />
     <input type="hidden" name="tf" value="1" />
@@ -50,7 +63,8 @@
     </label>
 
     <div class="contact-actions">
-      <button type="button" class="contact-btn contact-btn-secondary" popovertarget="contact-popover" popovertargetaction="hide">Cancel</button>
+      <button type="button" class="contact-btn contact-btn-secondary" popovertarget="contact-popover"
+        popovertargetaction="hide">Cancel</button>
       <button type="submit" class="contact-btn contact-btn-primary">Send via Gmail</button>
     </div>
   </form>
