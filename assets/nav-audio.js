@@ -172,7 +172,10 @@
   // ── Lazy-load Giscus ─────────────────────────────────────────
   const giscusEl = document.querySelector(".giscus");
   if (giscusEl && !giscusEl.querySelector("iframe")) {
+    let giscusLoaded = false;
     const loadGiscus = () => {
+      if (giscusLoaded) return;
+      giscusLoaded = true;
       const s = document.createElement("script");
       s.src = "https://giscus.app/client.js";
       s.dataset.repo = "akash-plackal/personal-site";
@@ -190,7 +193,18 @@
       s.async = true;
       giscusEl.appendChild(s);
     };
-    loadGiscus();
+
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          io.disconnect();
+          loadGiscus();
+        }
+      }, { rootMargin: "600px 0px" });
+      io.observe(giscusEl);
+    } else {
+      loadGiscus();
+    }
   }
 
   // ── Pointer handling ─────────────────────────────────────────

@@ -28,7 +28,3 @@
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
-
-/assets/giscus-custom.css
-  Access-Control-Allow-Origin: https://giscus.app
-  Cross-Origin-Resource-Policy: cross-origin
