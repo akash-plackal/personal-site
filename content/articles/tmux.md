@@ -3,6 +3,8 @@ title: Making Tmux More Productive
 description: Small tmux configuration changes that improved navigation, ergonomics, and day-to-day terminal usage.
 date: 2026-05-09
 slug: tmux-tweaks-terminal-workflow
+hero: /assets/articles/tmux-tweaks-hero.svg
+heroAlt: Stylized tmux terminal workspace with split panes and a popup shell.
 tags:
   - Tmux
   - Terminal
