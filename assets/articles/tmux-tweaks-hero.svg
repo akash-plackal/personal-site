@@ -1,48 +1,68 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
-  <title id="title">Clean tmux terminal workspace</title>
-  <desc id="desc">A minimal tmux terminal window with split panes and a small popup shell in the site color palette.</desc>
+  <title id="title">Tmux workflow abstract</title>
+  <desc id="desc">Abstract tmux terminal panes, session tabs, and pane navigation markers in the site color palette.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#141a15"/>
-      <stop offset="100%" stop-color="#1d2520"/>
+      <stop offset="0%" stop-color="#0f1713"/>
+      <stop offset="100%" stop-color="#17241e"/>
     </linearGradient>
-    <style>
-      .window{fill:#121914;stroke:#465247;stroke-width:2}.bar{fill:#1d2520}.pane{fill:#141a15;stroke:#465247;stroke-width:2}.active{stroke:#9fb378}.popup{fill:#1d2520;stroke:#9fb378;stroke-width:2}.dot-a{fill:#c48f68}.dot-b{fill:#9fb378}.dot-c{fill:#7f9974}.muted{fill:#a8b09b}.fg{fill:#d5d9c8}.bright{fill:#e7ebdc}.code{font:700 16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.small{font:700 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.label{font:800 14px system-ui,-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.08em}
-    </style>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#86a874"/>
+      <stop offset="100%" stop-color="#c1a06a"/>
+    </linearGradient>
   </defs>
-
   <rect width="960" height="420" fill="url(#bg)"/>
 
-  <rect class="window" x="92" y="76" width="776" height="268" rx="18"/>
-  <rect class="bar" x="92" y="76" width="776" height="42" rx="18"/>
-  <path d="M92 118h776" stroke="#465247" stroke-width="2"/>
-  <circle class="dot-a" cx="128" cy="97" r="6"/>
-  <circle class="dot-b" cx="150" cy="97" r="6"/>
-  <circle class="dot-c" cx="172" cy="97" r="6"/>
-  <text class="label muted" x="480" y="102" text-anchor="middle">TMUX · WORK</text>
-
-  <rect class="pane active" x="118" y="142" width="350" height="126" rx="10"/>
-  <rect class="pane" x="492" y="142" width="350" height="126" rx="10"/>
-  <rect class="pane" x="118" y="288" width="724" height="34" rx="9"/>
-
-  <g class="code">
-    <text class="muted" x="148" y="178">$ tmux new -s focus</text>
-    <text class="fg" x="148" y="212">prefix: Ctrl-a</text>
-    <text class="muted" x="148" y="246">split panes with | and -</text>
-
-    <text class="muted" x="522" y="178">$ nvim notes.md</text>
-    <text class="fg" x="522" y="212">truecolor enabled</text>
-    <text class="muted" x="522" y="246">vim-style pane movement</text>
-
-    <text class="fg" x="148" y="311">1:zsh</text>
-    <text class="muted" x="238" y="311">2:nvim</text>
-    <text class="muted" x="338" y="311">3:logs</text>
+  <g opacity=".22" stroke="#2e4036" stroke-width="1">
+    <path d="M0 70h960M0 140h960M0 210h960M0 280h960M0 350h960"/>
+    <path d="M120 0v420M240 0v420M360 0v420M480 0v420M600 0v420M720 0v420M840 0v420"/>
   </g>
 
-  <g transform="translate(358 174)">
-    <rect class="popup" x="0" y="0" width="244" height="92" rx="14"/>
-    <text class="label bright" x="122" y="32" text-anchor="middle">POPUP SHELL</text>
-    <path d="M28 48h188" stroke="#465247" stroke-width="2" stroke-linecap="round"/>
-    <text class="small muted" x="28" y="72">$ scratch command</text>
+  <rect x="80" y="68" width="800" height="284" rx="14" fill="#121d18" stroke="#324038"/>
+  <circle cx="116" cy="96" r="6" fill="#c48f68"/>
+  <circle cx="138" cy="96" r="6" fill="#9fb378"/>
+  <circle cx="160" cy="96" r="6" fill="#7f9974"/>
+  <text x="480" y="102" text-anchor="middle" fill="#a8b09b" opacity=".85" font-family="ui-monospace, Menlo, monospace" font-size="15" font-weight="700">tmux · focus</text>
+
+  <g fill="none" stroke="#2d4036" stroke-width="3" opacity=".92">
+    <path d="M80 124h800"/>
+    <path d="M480 124v178"/>
+    <path d="M80 252h800"/>
+    <path d="M80 302h800"/>
   </g>
+
+  <g fill="#8fa58a" opacity=".84" font-family="ui-monospace, Menlo, monospace" font-size="18">
+    <text x="118" y="166">$ tmux new -s focus</text>
+    <text x="118" y="206">prefix C-a</text>
+    <text x="526" y="166">split-window -h</text>
+    <text x="526" y="206">select-pane -L</text>
+    <text x="118" y="334">1:zsh</text>
+    <text x="230" y="334">2:nvim</text>
+    <text x="356" y="334">3:logs</text>
+  </g>
+
+  <g fill="none" stroke="url(#accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".78">
+    <path d="M210 260v-34h165"/>
+    <path d="M375 226h105"/>
+    <path d="M480 226h142v-34"/>
+    <path d="M622 192h116"/>
+  </g>
+
+  <g fill="#9fb378">
+    <circle cx="210" cy="260" r="8"/>
+    <circle cx="375" cy="226" r="8"/>
+    <circle cx="622" cy="192" r="8"/>
+    <circle cx="738" cy="192" r="8"/>
+  </g>
+
+  <g opacity=".9">
+    <rect x="628" y="268" width="54" height="24" rx="6" fill="#324036" stroke="#9fb378"/>
+    <rect x="694" y="268" width="54" height="24" rx="6" fill="#324036" stroke="#9fb378"/>
+    <rect x="760" y="268" width="54" height="24" rx="6" fill="#324036" stroke="#9fb378"/>
+    <text x="655" y="285" text-anchor="middle" fill="#e7ebdc" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="700">h</text>
+    <text x="721" y="285" text-anchor="middle" fill="#e7ebdc" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="700">j</text>
+    <text x="787" y="285" text-anchor="middle" fill="#e7ebdc" font-family="ui-monospace, Menlo, monospace" font-size="13" font-weight="700">l</text>
+  </g>
+
+  <circle cx="830" cy="108" r="10" fill="#c1a06a"/>
 </svg>

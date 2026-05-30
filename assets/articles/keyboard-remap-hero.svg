@@ -1,79 +1,95 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
-  <title id="title">Minimal keyboard with highlighted remapped keys</title>
-  <desc id="desc">A flat two-dimensional keyboard illustration with ergonomic remap keys highlighted in the site color palette.</desc>
+  <title id="title">Keyboard remap abstract</title>
+  <desc id="desc">A clean abstract split keyboard with highlighted remapped keys and simple routing labels.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#141a15"/>
-      <stop offset="100%" stop-color="#1d2520"/>
+      <stop offset="0%" stop-color="#0f1713"/>
+      <stop offset="100%" stop-color="#17241e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#86a874"/>
+      <stop offset="100%" stop-color="#c1a06a"/>
     </linearGradient>
     <style>
-      .case{fill:#1d2520;stroke:#465247;stroke-width:2}.base{fill:#141a15}.key{fill:#1d2520;stroke:#465247;stroke-width:1.5}.hot{fill:#324036;stroke:#9fb378;stroke-width:2}.label{fill:#a8b09b;font:700 13px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.hotlabel{fill:#e7ebdc;font:800 13px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.note{fill:#d5d9c8;font:800 14px system-ui,-apple-system,BlinkMacSystemFont,sans-serif}.line{stroke:#8daa7f;stroke-width:3;stroke-linecap:round;fill:none}
+      .shell{fill:#121d18;stroke:#324038;stroke-width:2}.deck{fill:#101814;stroke:#2d4036;stroke-width:2}.key{fill:#1d2520;stroke:#324038;stroke-width:2}.hot{fill:#324036;stroke:#9fb378;stroke-width:2.5}.label{fill:#a8b09b;font:700 14px ui-monospace,Menlo,monospace}.hottext{fill:#e7ebdc;font:800 14px ui-monospace,Menlo,monospace}.route{fill:none;stroke:url(#accent);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.node{fill:#9fb378}.gold{fill:#c1a06a}.pill{fill:#17241e;stroke:#465247;stroke-width:2}.pilltext{fill:#d5d9c8;font:800 14px ui-monospace,Menlo,monospace}
     </style>
   </defs>
 
   <rect width="960" height="420" fill="url(#bg)"/>
-  <g opacity=".2" stroke="#465247" stroke-width="1">
-    <path d="M80 84h800M80 336h800M140 48v324M820 48v324"/>
-    <path d="M0 210h960"/>
+  <g opacity=".22" stroke="#2e4036" stroke-width="1">
+    <path d="M0 70h960M0 140h960M0 210h960M0 280h960M0 350h960"/>
+    <path d="M120 0v420M240 0v420M360 0v420M480 0v420M600 0v420M720 0v420M840 0v420"/>
   </g>
 
-  <rect class="case" x="106" y="116" width="748" height="188" rx="18"/>
-  <rect class="base" x="126" y="136" width="708" height="148" rx="10"/>
+  <rect class="shell" x="112" y="92" width="736" height="250" rx="22"/>
+  <path d="M480 122v190" stroke="#2d4036" stroke-width="2" opacity=".75"/>
+  <path d="M190 118h580" stroke="#2d4036" stroke-width="2" opacity=".65"/>
 
-  <g text-anchor="middle">
-    <!-- top row -->
-    <g transform="translate(146 152)">
-      <rect class="key" x="0" y="0" width="48" height="32" rx="6"/><text class="label" x="24" y="21">Q</text>
-      <rect class="key" x="56" y="0" width="48" height="32" rx="6"/><text class="label" x="80" y="21">W</text>
-      <rect class="key" x="112" y="0" width="48" height="32" rx="6"/><text class="label" x="136" y="21">E</text>
-      <rect class="key" x="168" y="0" width="48" height="32" rx="6"/><text class="label" x="192" y="21">R</text>
-      <rect class="key" x="224" y="0" width="48" height="32" rx="6"/><text class="label" x="248" y="21">T</text>
-      <rect class="key" x="280" y="0" width="48" height="32" rx="6"/><text class="label" x="304" y="21">Y</text>
-      <rect class="key" x="336" y="0" width="48" height="32" rx="6"/><text class="label" x="360" y="21">U</text>
-      <rect class="key" x="392" y="0" width="48" height="32" rx="6"/><text class="label" x="416" y="21">I</text>
-      <rect class="key" x="448" y="0" width="48" height="32" rx="6"/><text class="label" x="472" y="21">O</text>
-      <rect class="key" x="504" y="0" width="48" height="32" rx="6"/><text class="label" x="528" y="21">P</text>
-      <rect class="key" x="560" y="0" width="62" height="32" rx="6"/><text class="label" x="591" y="21">DEL</text>
-      <rect class="key" x="630" y="0" width="58" height="32" rx="6"/><text class="label" x="659" y="21">TAB</text>
-    </g>
+  <g transform="rotate(-4 308 224)">
+    <rect class="deck" x="148" y="142" width="310" height="156" rx="18"/>
+    <g>
+      <rect class="key" x="176" y="166" width="54" height="32" rx="7"/>
+      <rect class="key" x="242" y="166" width="54" height="32" rx="7"/>
+      <rect class="key" x="308" y="166" width="54" height="32" rx="7"/>
+      <rect class="key" x="374" y="166" width="54" height="32" rx="7"/>
 
-    <!-- home row -->
-    <g transform="translate(146 198)">
-      <rect class="hot" x="0" y="0" width="76" height="32" rx="6"/><text class="hotlabel" x="38" y="21">CAPS</text>
-      <rect class="key" x="84" y="0" width="48" height="32" rx="6"/><text class="label" x="108" y="21">A</text>
-      <rect class="key" x="140" y="0" width="48" height="32" rx="6"/><text class="label" x="164" y="21">S</text>
-      <rect class="key" x="196" y="0" width="48" height="32" rx="6"/><text class="label" x="220" y="21">D</text>
-      <rect class="key" x="252" y="0" width="48" height="32" rx="6"/><text class="label" x="276" y="21">F</text>
-      <rect class="key" x="308" y="0" width="48" height="32" rx="6"/><text class="label" x="332" y="21">G</text>
-      <rect class="key" x="364" y="0" width="48" height="32" rx="6"/><text class="label" x="388" y="21">H</text>
-      <rect class="key" x="420" y="0" width="48" height="32" rx="6"/><text class="label" x="444" y="21">J</text>
-      <rect class="key" x="476" y="0" width="48" height="32" rx="6"/><text class="label" x="500" y="21">K</text>
-      <rect class="key" x="532" y="0" width="48" height="32" rx="6"/><text class="label" x="556" y="21">L</text>
-      <rect class="hot" x="588" y="0" width="100" height="32" rx="6"/><text class="hotlabel" x="638" y="21">ENTER</text>
-    </g>
+      <rect class="hot" x="176" y="216" width="84" height="34" rx="8"/>
+      <rect class="key" x="276" y="216" width="54" height="34" rx="8"/>
+      <rect class="key" x="342" y="216" width="54" height="34" rx="8"/>
 
-    <!-- bottom row -->
-    <g transform="translate(146 244)">
-      <rect class="hot" x="0" y="0" width="88" height="32" rx="6"/><text class="hotlabel" x="44" y="21">SHIFT</text>
-      <rect class="key" x="96" y="0" width="48" height="32" rx="6"/><text class="label" x="120" y="21">Z</text>
-      <rect class="key" x="152" y="0" width="48" height="32" rx="6"/><text class="label" x="176" y="21">X</text>
-      <rect class="key" x="208" y="0" width="48" height="32" rx="6"/><text class="label" x="232" y="21">C</text>
-      <rect class="key" x="264" y="0" width="48" height="32" rx="6"/><text class="label" x="288" y="21">V</text>
-      <rect class="key" x="320" y="0" width="48" height="32" rx="6"/><text class="label" x="344" y="21">B</text>
-      <rect class="key" x="376" y="0" width="104" height="32" rx="6"/><text class="label" x="428" y="21">SPACE</text>
-      <rect class="hot" x="488" y="0" width="48" height="32" rx="6"/><text class="hotlabel" x="512" y="21">M</text>
-      <rect class="key" x="544" y="0" width="48" height="32" rx="6"/><text class="label" x="568" y="21">N</text>
-      <rect class="hot" x="600" y="0" width="48" height="32" rx="6"/><text class="hotlabel" x="624" y="21">,</text>
+      <rect class="hot" x="176" y="266" width="104" height="34" rx="8"/>
+      <rect class="key" x="296" y="266" width="54" height="34" rx="8"/>
+      <rect class="key" x="362" y="266" width="72" height="34" rx="8"/>
     </g>
+    <text class="hottext" x="218" y="238" text-anchor="middle">CAPS</text>
+    <text class="hottext" x="228" y="288" text-anchor="middle">SHIFT</text>
   </g>
 
-  <path class="line" d="M184 196c24-44 76-67 144-58"/>
-  <path class="line" d="M188 280c47 42 123 55 218 32"/>
-  <path class="line" d="M658 236c13-28 45-42 83-38"/>
+  <g transform="rotate(4 652 224)">
+    <rect class="deck" x="502" y="142" width="310" height="156" rx="18"/>
+    <g>
+      <rect class="key" x="532" y="166" width="54" height="32" rx="7"/>
+      <rect class="key" x="598" y="166" width="54" height="32" rx="7"/>
+      <rect class="key" x="664" y="166" width="54" height="32" rx="7"/>
+      <rect class="key" x="730" y="166" width="54" height="32" rx="7"/>
 
-  <g class="note">
-    <text x="342" y="132">tap Esc · hold Ctrl</text>
-    <text x="218" y="332">tap Backspace · hold Shift</text>
-    <text x="748" y="194">Ctrl+M → Enter</text>
+      <rect class="key" x="532" y="216" width="54" height="34" rx="8"/>
+      <rect class="key" x="598" y="216" width="54" height="34" rx="8"/>
+      <rect class="key" x="664" y="216" width="54" height="34" rx="8"/>
+      <rect class="hot" x="730" y="216" width="72" height="34" rx="8"/>
+
+      <rect class="key" x="532" y="266" width="76" height="34" rx="8"/>
+      <rect class="hot" x="624" y="266" width="54" height="34" rx="8"/>
+      <rect class="key" x="694" y="266" width="90" height="34" rx="8"/>
+    </g>
+    <text class="hottext" x="766" y="238" text-anchor="middle">↵</text>
+    <text class="hottext" x="651" y="288" text-anchor="middle">M</text>
+  </g>
+
+  <g opacity=".9">
+    <rect class="pill" x="342" y="70" width="82" height="30" rx="15"/>
+    <text class="pilltext" x="383" y="90" text-anchor="middle">Esc</text>
+    <rect class="pill" x="438" y="70" width="82" height="30" rx="15"/>
+    <text class="pilltext" x="479" y="90" text-anchor="middle">Ctrl</text>
+    <rect class="pill" x="356" y="330" width="144" height="30" rx="15"/>
+    <text class="pilltext" x="428" y="350" text-anchor="middle">Backspace</text>
+    <rect class="pill" x="704" y="330" width="94" height="30" rx="15"/>
+    <text class="pilltext" x="751" y="350" text-anchor="middle">Enter</text>
+  </g>
+
+  <g opacity=".82">
+    <path class="route" d="M230 218V86h112"/>
+    <path class="route" d="M250 218V86h188" opacity=".58"/>
+    <path class="route" d="M238 292v53h118"/>
+    <path class="route" d="M650 300v45h54"/>
+    <path class="route" d="M678 284h58v-34" opacity=".72"/>
+  </g>
+
+  <g>
+    <circle class="node" cx="342" cy="86" r="8"/>
+    <circle class="node" cx="438" cy="86" r="8" opacity=".72"/>
+    <circle class="node" cx="356" cy="345" r="8"/>
+    <circle class="node" cx="704" cy="345" r="8"/>
+    <circle class="gold" cx="736" cy="250" r="9"/>
   </g>
 </svg>
