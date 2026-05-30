@@ -455,20 +455,32 @@ function renderTopicsChips(topics) {
     .join('\n');
 }
 
-// Asset fingerprinting. Source HTML references assets without `?v=...`;
-// the build computes a content hash for each fingerprinted asset and rewrites
-// every reference to include `?v=<hash>`. Same bytes → same hash → cache stays
-// valid; changed bytes → new hash → automatic cache bust.
-const FINGERPRINTED_ASSETS = ['/assets/nav-audio.js'];
-
+// changed bytes → new hash → automatic cache bust even with immutable CDN caching.
 async function buildAssetFingerprints() {
   const map = new Map();
-  for (const url of FINGERPRINTED_ASSETS) {
-    const filePath = path.join(ROOT_DIR, url.replace(/^\//, ''));
-    const content = await fs.readFile(filePath);
-    const hash = crypto.createHash('sha256').update(content).digest('hex').slice(0, 10);
-    map.set(url, hash);
+  const assetsDir = path.join(ROOT_DIR, 'assets');
+
+  async function walk(dir) {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        await walk(fullPath);
+        continue;
+      }
+      if (!entry.isFile()) {
+        continue;
+      }
+
+      const rel = path.relative(ROOT_DIR, fullPath).split(path.sep).join('/');
+      const url = `/${rel}`;
+      const content = await fs.readFile(fullPath);
+      const hash = crypto.createHash('sha256').update(content).digest('hex').slice(0, 10);
+      map.set(url, hash);
+    }
   }
+
+  await walk(assetsDir);
   return map;
 }
 
@@ -685,13 +697,13 @@ function renderArticleHeaders(articles) {
     .join('\n\n');
 }
 
-async function buildHeadersFile(articles) {
+async function buildHeadersFile(articles, assetFingerprints) {
   const src = path.join(ROOT_DIR, '_headers');
   const dest = path.join(OUT_DIR, '_headers');
   const base = await fs.readFile(src, 'utf8');
   const articleHeaders = renderArticleHeaders(articles);
   const combined = articleHeaders ? `${base.trimEnd()}\n\n${articleHeaders}\n` : base;
-  await fs.writeFile(dest, combined);
+  await fs.writeFile(dest, fingerprintAssets(combined, assetFingerprints));
 }
 
 // Build a sitemap.xml from all generated HTML pages plus articles. Pages are
@@ -777,10 +789,10 @@ async function main() {
   ]);
 
   const articles = await loadArticles();
-  await buildHeadersFile(articles);
+  const assetFingerprints = await buildAssetFingerprints();
+  await buildHeadersFile(articles, assetFingerprints);
   const topics = collectTopics(articles);
   const htmlFiles = await gatherHtmlFiles();
-  const assetFingerprints = await buildAssetFingerprints();
 
   for (const src of htmlFiles) {
     const rel = path.relative(ROOT_DIR, src);
