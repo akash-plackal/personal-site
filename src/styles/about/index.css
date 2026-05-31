@@ -121,16 +121,29 @@ h1 {
   animation-delay: 180ms;
 }
 
-main>.hero~p {
-  animation: body-enter 450ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+.about-site h2 {
+  animation: title-enter 600ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  animation-delay: 300ms;
 }
 
-main>p:nth-of-type(1) {
-  animation-delay: 320ms;
+.about-site .about-note {
+  animation: lead-enter 550ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
 }
 
-main>p:nth-of-type(2) {
-  animation-delay: 370ms;
+.about-site .about-note:nth-of-type(1) {
+  animation-delay: 380ms;
+}
+
+.about-site .about-note:nth-of-type(2) {
+  animation-delay: 450ms;
+}
+
+.about-site .about-note:nth-of-type(3) {
+  animation-delay: 520ms;
+}
+
+.about-site .about-note:nth-of-type(4) {
+  animation-delay: 590ms;
 }
 
 .chips {
@@ -341,9 +354,31 @@ p {
   color: var(--muted);
 }
 
+.about-site {
+  margin: clamp(1.8rem, 4vw, 2.6rem) 0 1.35rem;
+}
+
+.about-site h2 {
+  margin: 0 0 1.05rem;
+  font-size: clamp(1.65rem, 3vw, 2.15rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
 .about-note {
-  font-size: clamp(1rem, 2vw, 1.35rem);
-  line-height: 1.35;
+  margin: 0;
+  max-width: 68ch;
+  font-size: clamp(1rem, 1.55vw, 1.13rem);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.about-note + .about-note {
+  margin-top: 0.42rem;
+}
+
+.about-note-lead {
+  color: var(--fg);
 }
 
 .chips {
@@ -351,7 +386,7 @@ p {
   flex-wrap: wrap;
   gap: 0.5rem;
   list-style: none;
-  margin: 1rem 0 1.4rem;
+  margin: 0.9rem 0 0;
   padding: 0;
 }
 
