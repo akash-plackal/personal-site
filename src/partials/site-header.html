@@ -5,9 +5,9 @@
     <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="14" stitchTiles="stitch"
       result="turbulence" />
     <feGaussianBlur in="turbulence" stdDeviation="1.4" result="smoothMap" />
-    <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="36" xChannelSelector="R" yChannelSelector="G"
+    <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="80" xChannelSelector="R" yChannelSelector="G"
       result="displaced" />
-    <feGaussianBlur in="displaced" stdDeviation="0.6" />
+    <feGaussianBlur in="displaced" stdDeviation="7" />
   </filter>
 </svg>
 
