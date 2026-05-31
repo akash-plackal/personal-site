@@ -21,6 +21,18 @@
 </head>
 
 <body>
+  <svg class="liquid-glass-defs" aria-hidden="true" focusable="false" width="0" height="0"
+    style="position: absolute; width: 0; height: 0; overflow: hidden">
+    <filter id="progress-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="11" stitchTiles="stitch"
+        result="turbulence" />
+      <feGaussianBlur in="turbulence" stdDeviation="1.2" result="smoothMap" />
+      <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="80" xChannelSelector="R" yChannelSelector="G"
+        result="displaced" />
+      <feGaussianBlur in="displaced" stdDeviation="7" />
+    </filter>
+  </svg>
+
   <div class="reading-progress" aria-hidden="true">
     <div class="reading-progress-indicator"></div>
     <div class="reading-progress-marker"></div>
@@ -46,7 +58,7 @@
 
     {{TOC}}
   </div>
-  <script>(function(){try{var b=document.querySelector("[data-back-link]");if(!b||!document.referrer)return;var r=new URL(document.referrer);if(r.origin!==window.location.origin||r.pathname===window.location.pathname)return;b.href=document.referrer;b.addEventListener("click",function(e){if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;if(window.history.length>1){e.preventDefault();window.history.back();}});}catch(e){}})();</script>
+  <script>(function () {try {var b = document.querySelector("[data-back-link]"); if (!b || !document.referrer) return; var r = new URL(document.referrer); if (r.origin !== window.location.origin || r.pathname === window.location.pathname) return; b.href = document.referrer; b.addEventListener("click", function (e) {if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return; if (window.history.length > 1) {e.preventDefault(); window.history.back();} });} catch (e) { } })();</script>
   <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>
   <script src="/assets/nav-audio.js" defer></script>
   <div class="giscus-wrap">

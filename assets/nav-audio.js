@@ -88,42 +88,6 @@
     e.stopImmediatePropagation();
   }, { capture: true });
 
-  // ── Reading progress ─────────────────────────────────────────
-  const setupReadingProgress = () => {
-    const track = document.querySelector(".reading-progress");
-    const indicator = document.querySelector(".reading-progress-indicator");
-    const marker = document.querySelector(".reading-progress-marker");
-    if (!(indicator instanceof HTMLElement)) return;
-    const SHOW_THRESHOLD_PX = 56;
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const value = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
-      if (track instanceof HTMLElement) {
-        track.style.setProperty("--progress", `${(value * 100).toFixed(2)}%`);
-        track.classList.toggle(
-          "is-visible",
-          max > 0 && window.scrollY > SHOW_THRESHOLD_PX,
-        );
-      }
-      indicator.style.width = `${(value * 100).toFixed(2)}%`;
-      if (marker instanceof HTMLElement) {
-        marker.style.left = `${(value * 100).toFixed(2)}%`;
-      }
-    };
-    const request = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(update);
-    };
-    request();
-    window.addEventListener("scroll", request, { passive: true });
-    window.addEventListener("resize", request);
-    window.addEventListener("pageshow", request);
-  };
-
-  setupReadingProgress();
-
   // ── Contact popover enhancements ─────────────────────────────
   // Opening, closing, Escape, and light-dismiss are native via the
   // Popover API. This JS only keeps the copy button and submit cleanup.
