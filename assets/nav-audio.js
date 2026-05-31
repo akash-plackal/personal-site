@@ -164,7 +164,7 @@
           io.disconnect();
           loadGiscus();
         }
-      }, { rootMargin: "600px 0px" });
+      }, { rootMargin: "900px 0px" });
       io.observe(giscusEl);
     } else {
       loadGiscus();
