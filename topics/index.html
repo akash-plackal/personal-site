@@ -42,8 +42,11 @@
       <form class="site-search" action="https://www.google.com/search" method="get" target="_blank"
         rel="noopener noreferrer">
         <label class="visually-hidden" for="topic-search">Search this site</label>
-        <input id="topic-search" type="search" name="q" placeholder="Search akashplackal.com" />
-        <input type="hidden" name="q" value="site:akashplackal.com" />
+        <!-- Google advanced-search params: one query field + site restriction (no duplicate name="q"). -->
+        <input id="topic-search" type="search" name="as_q" placeholder="Search akashplackal.com"
+          autocomplete="off" enterkeyhint="search" />
+        <input type="hidden" name="as_sitesearch" value="akashplackal.com" />
+        <input type="hidden" name="as_dt" value="i" />
         <button type="submit">Search</button>
       </form>
     </header>
