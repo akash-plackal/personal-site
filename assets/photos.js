@@ -18,7 +18,9 @@
   function show(i) {
     current = (i + photos.length) % photos.length;
     var thumb = photos[current].querySelector('img');
-    view.src = thumb.currentSrc || thumb.src;
+    // The grid loads a small thumbnail; the full-size original lives on
+    // data-full and is only fetched now, when the viewer actually opens it.
+    view.src = thumb.getAttribute('data-full') || thumb.currentSrc || thumb.src;
     view.alt = thumb.alt;
     caption.textContent = (current + 1) + ' / ' + photos.length;
   }

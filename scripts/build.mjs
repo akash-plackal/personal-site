@@ -9,6 +9,7 @@ import MarkdownIt from 'markdown-it';
 import posthtml from 'posthtml';
 import include from 'posthtml-include';
 import { bundle } from 'lightningcss';
+import sharp from 'sharp';
 
 const execFileAsync = promisify(execFile);
 const __filename = fileURLToPath(import.meta.url);
@@ -455,6 +456,45 @@ function renderTopicsChips(topics) {
     .join('\n');
 }
 
+// Photo gallery thumbnails. The /photos grid paints each tile at ~300px wide
+// (three columns inside a 50rem body), so shipping the multi-megapixel
+// originals as thumbnails wastes ~10× the bytes. We downscale each original
+// to a small AVIF the grid loads instead, and defer the full-size original to
+// the lightbox click. 640px covers a ~320px column at 2× DPR.
+const PHOTOS_SRC_DIR = path.join(ROOT_DIR, 'assets', 'squoosh');
+const PHOTOS_THUMB_DIR = path.join(PHOTOS_SRC_DIR, 'thumbs');
+const THUMB_WIDTH = 640;
+
+async function generatePhotoThumbnails() {
+  let entries;
+  try {
+    entries = await fs.readdir(PHOTOS_SRC_DIR, { withFileTypes: true });
+  } catch {
+    return; // No gallery on this build — nothing to do.
+  }
+
+  await fs.mkdir(PHOTOS_THUMB_DIR, { recursive: true });
+
+  await Promise.all(entries.map(async (entry) => {
+    if (!entry.isFile() || !entry.name.toLowerCase().endsWith('.avif')) return;
+
+    const srcPath = path.join(PHOTOS_SRC_DIR, entry.name);
+    const outPath = path.join(PHOTOS_THUMB_DIR, entry.name);
+
+    // Skip when the thumbnail is already up to date — keeps rebuilds fast and
+    // avoids re-hashing unchanged assets. A missing thumb throws → we build it.
+    try {
+      const [srcStat, outStat] = await Promise.all([fs.stat(srcPath), fs.stat(outPath)]);
+      if (outStat.mtimeMs >= srcStat.mtimeMs) return;
+    } catch { /* generate below */ }
+
+    await sharp(srcPath)
+      .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+      .avif({ quality: 55 })
+      .toFile(outPath);
+  }));
+}
+
 // changed bytes → new hash → automatic cache bust even with immutable CDN caching.
 async function buildAssetFingerprints() {
   const map = new Map();
@@ -780,6 +820,10 @@ async function main() {
 
   await fs.rm(OUT_DIR, { recursive: true, force: true });
   await fs.mkdir(OUT_DIR, { recursive: true });
+
+  // Must precede the asset copy + fingerprinting so generated thumbnails flow
+  // through the same copy/hash pipeline as hand-authored assets.
+  await generatePhotoThumbnails();
 
   await Promise.all([
     copyStaticAsset('assets'),

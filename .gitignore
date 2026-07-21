@@ -4,3 +4,6 @@ node_modules/
 todo.org
 .DS_Store
 **/.DS_Store
+
+# Generated photo-grid thumbnails (rebuilt by scripts/build.mjs)
+assets/squoosh/thumbs/
