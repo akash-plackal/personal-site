@@ -6,23 +6,11 @@
 html, body { margin: 0; background: var(--bg); color: var(--fg); }
 
 body {
-  max-width: 78rem;
+  max-width: 50rem;
   margin-inline: auto;
   padding: 1.25rem;
   min-height: 100vh;
   font: 16px/1.5 var(--font-main);
-}
-
-/* Soft accent glow so the frosted-glass surfaces have something to refract. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(60rem 42rem at 12% -12%, rgba(159, 179, 120, 0.12), transparent 60%),
-    radial-gradient(52rem 40rem at 112% 8%, rgba(141, 170, 127, 0.09), transparent 55%);
 }
 
 a {
@@ -184,7 +172,6 @@ html:active-view-transition .site-nav a::before {
 
 @media (min-width: 34rem) { .photo-grid { column-count: 2; } }
 @media (min-width: 52rem) { .photo-grid { column-count: 3; } }
-@media (min-width: 74rem) { .photo-grid { column-count: 4; } }
 
 .photo {
   display: block;
