@@ -635,7 +635,7 @@ main>p:last-of-type a:focus-visible {
 }
 
 .giscus-wrap {
-  max-width: 50rem;
+  max-width: 46rem;
   margin-inline: auto;
 }
 
