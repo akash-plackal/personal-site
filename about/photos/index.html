@@ -2,80 +2,145 @@
 <html lang="en">
 
 <head>
-  <include src="src/partials/head-base.html"></include>
-  <title>Photos | Akash</title>
-  <meta name="description" content="A gallery of photographs taken by Akash Plackal." />
-  <link rel="canonical" href="https://akashplackal.com/about/photos/" />
-  <meta property="og:title" content="Photos — Akash Plackal" />
-  <meta property="og:description" content="A gallery of photographs taken by Akash Plackal." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://akashplackal.com/about/photos/" />
-  <link rel="stylesheet" href="/src/styles/about/photos/index.css" data-inline />
+      <include src="src/partials/head-base.html"></include>
+      <title>Photos | Akash</title>
+      <meta name="description" content="A gallery of photographs taken by Akash Plackal." />
+      <link rel="canonical" href="https://akashplackal.com/about/photos/" />
+      <meta property="og:title" content="Photos — Akash Plackal" />
+      <meta property="og:description" content="A gallery of photographs taken by Akash Plackal." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://akashplackal.com/about/photos/" />
+      <link rel="stylesheet" href="/src/styles/about/photos/index.css" data-inline />
 </head>
 
 <body>
-  <include src="src/partials/site-header.html"></include>
+      <include src="src/partials/site-header.html"></include>
 
-  <svg class="liquid-glass-defs" aria-hidden="true" focusable="false" width="0" height="0"
-    style="position: absolute; width: 0; height: 0; overflow: hidden">
-    <filter id="photos-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="17" stitchTiles="stitch"
-        result="turbulence" />
-      <feGaussianBlur in="turbulence" stdDeviation="1.4" result="smoothMap" />
-      <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="70" xChannelSelector="R" yChannelSelector="G"
-        result="displaced" />
-      <feGaussianBlur in="displaced" stdDeviation="6" />
-    </filter>
-  </svg>
+      <svg class="liquid-glass-defs" aria-hidden="true" focusable="false" width="0" height="0"
+            style="position: absolute; width: 0; height: 0; overflow: hidden">
+            <filter id="photos-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="17"
+                        stitchTiles="stitch" result="turbulence" />
+                  <feGaussianBlur in="turbulence" stdDeviation="1.4" result="smoothMap" />
+                  <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="70" xChannelSelector="R"
+                        yChannelSelector="G" result="displaced" />
+                  <feGaussianBlur in="displaced" stdDeviation="6" />
+            </filter>
+      </svg>
 
-  <main>
-    <header class="photos-intro">
-      <h1>Photos</h1>
-      <p>A gallery of moments I've caught — cities, nights, and the odd panorama. Tap any frame to view it full size.</p>
-    </header>
+      <main>
+            <header class="photos-intro">
+                  <h1>Photos</h1>
+                  <p>A gallery of moments I've caught — cities, nights, and the odd panorama. Tap any frame to view it
+                        full size.</p>
+            </header>
 
-    <ul class="photo-grid" data-photo-grid aria-label="Photo gallery">
-      <li><button class="photo" type="button" aria-label="View photo 1 full size"><img src="/assets/squoosh/editedImage-5.avif" width="4064" height="3056" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 2 full size"><img src="/assets/squoosh/editedImage.avif" width="3056" height="4064" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 3 full size"><img src="/assets/squoosh/IMG_20231226_183723284.avif" width="4096" height="3072" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 4 full size"><img src="/assets/squoosh/IMG_20231228_115718136.avif" width="3072" height="4096" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 5 full size"><img src="/assets/squoosh/IMG_20240127_152245067.avif" width="4608" height="3456" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 6 full size"><img src="/assets/squoosh/IMG_20240831_195231539.avif" width="3072" height="4096" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 7 full size"><img src="/assets/squoosh/PXL_20250817_105509272.RAW-01.COVER.avif" width="4080" height="3072" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 8 full size"><img src="/assets/squoosh/IMG_4971.avif" width="4284" height="5712" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 9 full size"><img src="/assets/squoosh/IMG_5960.avif" width="4032" height="3024" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 10 full size"><img src="/assets/squoosh/IMG_20241102_105511545_HDR~2.avif" width="3072" height="4096" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 11 full size"><img src="/assets/squoosh/IMG_20241012_203848862.avif" width="4096" height="3072" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 12 full size"><img src="/assets/squoosh/PXL_20250921_085339666.RAW-01.COVER.avif" width="3072" height="4080" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 13 full size"><img src="/assets/squoosh/PXL_20240617_093644322.avif" width="4032" height="3024" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 14 full size"><img src="/assets/squoosh/PXL_20251001_070338860.RAW-02.ORIGINAL.avif" width="3056" height="4064" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 15 full size"><img src="/assets/squoosh/PXL_20250817_105630083.RAW-01.COVER.avif" width="4080" height="3072" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 16 full size"><img src="/assets/squoosh/PXL_20251002_112807379.RAW-01.COVER%20(1).avif" width="3072" height="4080" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 17 full size"><img src="/assets/squoosh/PXL_20251005_125544405.NIGHT.RAW-01.COVER.avif" width="4080" height="3072" alt="Night photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 18 full size"><img src="/assets/squoosh/PXL_20251002_142357829.RAW-01.COVER.avif" width="3072" height="4080" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 19 full size"><img src="/assets/squoosh/IMG_20251004_063940400_HDR_PORTRAIT.avif" width="3648" height="2736" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 20 full size"><img src="/assets/squoosh/PXL_20251003_030411595.RAW-01.COVER.avif" width="3072" height="4080" alt="Photograph by Akash Plackal." fetchpriority="high" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 21 full size"><img src="/assets/squoosh/PXL_20251005_135701407.NIGHT.RAW-01.COVER.avif" width="4080" height="3072" alt="Night photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 22 full size"><img src="/assets/squoosh/PXL_20251007_002001712.NIGHT.avif" width="3072" height="4080" alt="Night photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 23 full size"><img src="/assets/squoosh/editedImage-10.avif" width="3008" height="4000" alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 24 full size"><img src="/assets/squoosh/PXL_20250817_103343322.PANO.avif" width="2700" height="5590" alt="Panorama photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-      <li><button class="photo" type="button" aria-label="View photo 25 full size"><img src="/assets/squoosh/PXL_20260614_071113651.PANO.avif" width="3104" height="5120" alt="Panorama photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
-    </ul>
+            <ul class="photo-grid" data-photo-grid aria-label="Photo gallery">
+                  <li><button class="photo" type="button" aria-label="View photo 1 full size"><img
+                                    src="/assets/squoosh/editedImage-5.avif" width="4064" height="3056"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 2 full size"><img
+                                    src="/assets/squoosh/editedImage.avif" width="3056" height="4064"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 3 full size"><img
+                                    src="/assets/squoosh/IMG_20231226_183723284.avif" width="4096" height="3072"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 4 full size"><img
+                                    src="/assets/squoosh/IMG_20231228_115718136.avif" width="3072" height="4096"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 5 full size"><img
+                                    src="/assets/squoosh/IMG_20240127_152245067.avif" width="4608" height="3456"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 6 full size"><img
+                                    src="/assets/squoosh/IMG_20240831_195231539.avif" width="3072" height="4096"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 7 full size"><img
+                                    src="/assets/squoosh/PXL_20250817_105509272.RAW-01.COVER.avif" width="4080"
+                                    height="3072" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 8 full size"><img
+                                    src="/assets/squoosh/IMG_4971.avif" width="4284" height="5712"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 9 full size"><img
+                                    src="/assets/squoosh/IMG_5960.avif" width="4032" height="3024"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 10 full size"><img
+                                    src="/assets/squoosh/IMG_20241102_105511545_HDR~2.avif" width="3072" height="4096"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 11 full size"><img
+                                    src="/assets/squoosh/IMG_20241012_203848862.avif" width="4096" height="3072"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 12 full size"><img
+                                    src="/assets/squoosh/PXL_20250921_085339666.RAW-01.COVER.avif" width="3072"
+                                    height="4080" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 13 full size"><img
+                                    src="/assets/squoosh/PXL_20240617_093644322.avif" width="4032" height="3024"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 14 full size"><img
+                                    src="/assets/squoosh/PXL_20251001_070338860.RAW-02.ORIGINAL.avif" width="3056"
+                                    height="4064" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 15 full size"><img
+                                    src="/assets/squoosh/PXL_20250817_105630083.RAW-01.COVER.avif" width="4080"
+                                    height="3072" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 16 full size"><img
+                                    src="/assets/squoosh/PXL_20251002_112807379.RAW-01.COVER%20(1).avif" width="3072"
+                                    height="4080" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 17 full size"><img
+                                    src="/assets/squoosh/PXL_20251005_125544405.NIGHT.RAW-01.COVER.avif" width="4080"
+                                    height="3072" alt="Night photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 18 full size"><img
+                                    src="/assets/squoosh/PXL_20251002_142357829.RAW-01.COVER.avif" width="3072"
+                                    height="4080" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 19 full size"><img
+                                    src="/assets/squoosh/IMG_20251004_063940400_HDR_PORTRAIT.avif" width="3648"
+                                    height="2736" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 20 full size"><img
+                                    src="/assets/squoosh/PXL_20251003_030411595.RAW-01.COVER.avif" width="3072"
+                                    height="4080" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 21 full size"><img
+                                    src="/assets/squoosh/PXL_20251005_135701407.NIGHT.RAW-01.COVER.avif" width="4080"
+                                    height="3072" alt="Night photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 22 full size"><img
+                                    src="/assets/squoosh/PXL_20251007_002001712.NIGHT.avif" width="3072" height="4080"
+                                    alt="Night photograph by Akash Plackal." loading="lazy" decoding="async" /></button>
+                  </li>
+                  <li><button class="photo" type="button" aria-label="View photo 23 full size"><img
+                                    src="/assets/squoosh/editedImage-10.avif" width="3008" height="4000"
+                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 24 full size"><img
+                                    src="/assets/squoosh/PXL_20250817_103343322.PANO.avif" width="2700" height="5590"
+                                    alt="Panorama photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+                  <li><button class="photo" type="button" aria-label="View photo 25 full size"><img
+                                    src="/assets/squoosh/PXL_20260614_071113651.PANO.avif" width="3104" height="5120"
+                                    alt="Panorama photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
+            </ul>
 
-    <p class="photos-back"><a href="/about/more/">Back to more</a></p>
-  </main>
+            <p class="photos-back"><a href="/about/more/">Back to more</a></p>
+      </main>
 
-  <dialog class="lightbox" data-lightbox aria-label="Photo viewer">
-    <img class="lb-img" data-lb-img alt="" decoding="async" />
-    <button class="lb-btn lb-close" type="button" data-lb-close aria-label="Close viewer">&times;</button>
-    <button class="lb-btn lb-nav lb-prev" type="button" data-lb-prev aria-label="Previous photo">&#8249;</button>
-    <button class="lb-btn lb-nav lb-next" type="button" data-lb-next aria-label="Next photo">&#8250;</button>
-    <p class="lb-caption lb-glass" data-lb-caption aria-live="polite"></p>
-  </dialog>
+      <dialog class="lightbox" data-lightbox aria-label="Photo viewer">
+            <img class="lb-img" data-lb-img alt="" decoding="async" />
+            <button class="lb-btn lb-close" type="button" data-lb-close aria-label="Close viewer">&times;</button>
+            <button class="lb-btn lb-nav lb-prev" type="button" data-lb-prev
+                  aria-label="Previous photo">&#8249;</button>
+            <button class="lb-btn lb-nav lb-next" type="button" data-lb-next aria-label="Next photo">&#8250;</button>
+            <p class="lb-caption lb-glass" data-lb-caption aria-live="polite"></p>
+      </dialog>
 
-  <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>
-  <script src="/assets/nav-audio.js" defer></script>
-  <script src="/assets/photos.js" defer></script>
+      <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>
+      <script src="/assets/nav-audio.js" defer></script>
+      <script src="/assets/photos.js" defer></script>
 </body>
 
 </html>
