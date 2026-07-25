@@ -10,6 +10,7 @@ import posthtml from 'posthtml';
 import include from 'posthtml-include';
 import { bundle } from 'lightningcss';
 import sharp from 'sharp';
+import { rasterizeLensField, padWithNeutral, lensMapRegion } from './glass-map.mjs';
 
 const execFileAsync = promisify(execFile);
 const __filename = fileURLToPath(import.meta.url);
@@ -495,6 +496,70 @@ async function generatePhotoThumbnails() {
   }));
 }
 
+const GLASS_DIR = path.join(ROOT_DIR, 'assets', 'glass');
+const LENS_REGION_SCALE = 1.5;
+const LENS_REGION_SELECTOR = '#lg-lens';
+
+const LENS_MAPS = [
+  {
+    file: 'lens-circle.png',
+    size: 144,
+    margin: 36,
+    shape: {
+      lensHalfWidth: 24,
+      lensHalfHeight: 24,
+      borderRadius: 24,
+      depth: 0.65,
+      clipToShape: true,
+      softEdge: true,
+      curvature: 0.6,
+      bend: 0.5,
+      bendWidth: 0.16,
+      splay: 0,
+      sheen: 0.32,
+      sheenWidth: 3,
+      sheenFalloff: 1.5,
+      sheenAngle: 45,
+      glow: 0.12,
+      glowSpread: 1,
+      glowFalloff: 0.5,
+    },
+  },
+];
+
+async function generateGlassMaps() {
+  await fs.mkdir(GLASS_DIR, { recursive: true });
+  const generatorMtime = (await fs.stat(path.join(__dirname, 'glass-map.mjs'))).mtimeMs;
+  const buildMtime = (await fs.stat(__filename)).mtimeMs;
+  const newestSource = Math.max(generatorMtime, buildMtime);
+
+  await Promise.all(LENS_MAPS.map(async ({ file, size, margin, shape }) => {
+    const scale = (size + 2 * margin) / size;
+    if (Math.abs(scale - LENS_REGION_SCALE) > 1e-9) {
+      throw new Error(
+        `Lens map ${file}: padded/lens ratio is ${scale}, but the <filter> for `
+        + `${LENS_REGION_SELECTOR} spans ${LENS_REGION_SCALE}× the element box. `
+        + `Adjust size/margin, or update the filter region to `
+        + `${JSON.stringify(lensMapRegion(size, margin))}.`,
+      );
+    }
+
+    const outPath = path.join(GLASS_DIR, file);
+    // Skip when the map is newer than the code that produces it. The shape lives
+    // in this file, so `build.mjs`'s own mtime is part of the staleness check.
+    try {
+      const outStat = await fs.stat(outPath);
+      if (outStat.mtimeMs >= newestSource) return;
+    } catch { /* generate below */ }
+
+    const field = rasterizeLensField(shape, size);
+    const padded = padWithNeutral(field, size, margin);
+    await sharp(padded.data, { raw: { width: padded.size, height: padded.size, channels: 4 } })
+      .png({ compressionLevel: 9, effort: 10 })
+      .toFile(outPath);
+  }));
+}
+
 // changed bytes → new hash → automatic cache bust even with immutable CDN caching.
 async function buildAssetFingerprints() {
   const map = new Map();
@@ -821,9 +886,9 @@ async function main() {
   await fs.rm(OUT_DIR, { recursive: true, force: true });
   await fs.mkdir(OUT_DIR, { recursive: true });
 
-  // Must precede the asset copy + fingerprinting so generated thumbnails flow
-  // through the same copy/hash pipeline as hand-authored assets.
-  await generatePhotoThumbnails();
+  // Must precede the asset copy + fingerprinting so generated thumbnails and
+  // lens maps flow through the same copy/hash pipeline as hand-authored assets.
+  await Promise.all([generatePhotoThumbnails(), generateGlassMaps()]);
 
   await Promise.all([
     copyStaticAsset('assets'),

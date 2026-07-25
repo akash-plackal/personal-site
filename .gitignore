@@ -7,3 +7,5 @@ todo.org
 
 # Generated photo-grid thumbnails (rebuilt by scripts/build.mjs)
 assets/squoosh/thumbs/
+
+assets/glass/

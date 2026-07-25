@@ -18,13 +18,28 @@
 
       <svg class="liquid-glass-defs" aria-hidden="true" focusable="false" width="0" height="0"
             style="position: absolute; width: 0; height: 0; overflow: hidden">
-            <filter id="photos-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="17"
-                        stitchTiles="stitch" result="turbulence" />
-                  <feGaussianBlur in="turbulence" stdDeviation="1.4" result="smoothMap" />
-                  <feDisplacementMap in="SourceGraphic" in2="smoothMap" scale="70" xChannelSelector="R"
-                        yChannelSelector="G" result="displaced" />
-                  <feGaussianBlur in="displaced" stdDeviation="6" />
+            <filter id="lg-lens" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+                  <feFlood flood-color="rgb(128,128,128)" flood-opacity="1" result="mapBg" />
+                  <feImage data-lens-map="/assets/glass/lens-circle.png" preserveAspectRatio="none" result="rawMap" />
+                  <feComposite in="rawMap" in2="mapBg" operator="over" result="map" />
+
+                  <feDisplacementMap in="SourceGraphic" in2="map" scale="6.858" xChannelSelector="R"
+                        yChannelSelector="G" />
+                  <feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="refractR" />
+                  <feDisplacementMap in="SourceGraphic" in2="map" scale="6.5" xChannelSelector="R"
+                        yChannelSelector="G" />
+                  <feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="refractG" />
+                  <feDisplacementMap in="SourceGraphic" in2="map" scale="6.143" xChannelSelector="R"
+                        yChannelSelector="G" />
+                  <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="refractB" />
+                  <feComposite in="refractR" in2="refractG" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                        result="refractRG" />
+                  <feComposite in="refractRG" in2="refractB" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                        result="lensOut" />
+
+                  <feColorMatrix in="rawMap" type="matrix"
+                        values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 1 0 -0.501960784" result="sheenMask" />
+                  <feComposite in="sheenMask" in2="lensOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
             </filter>
       </svg>
 
@@ -39,18 +54,18 @@
                   <li><button class="photo" type="button" aria-label="View photo 1 full size"><img
                                     src="/assets/squoosh/thumbs/editedImage-5.avif"
                                     data-full="/assets/squoosh/editedImage-5.avif" width="4064" height="3056"
-                                    alt="Photograph by Akash Plackal." decoding="async"
-                                    fetchpriority="high" /></button></li>
+                                    alt="Photograph by Akash Plackal." decoding="async" fetchpriority="high" /></button>
+                  </li>
                   <li><button class="photo" type="button" aria-label="View photo 2 full size"><img
                                     src="/assets/squoosh/thumbs/editedImage.avif"
                                     data-full="/assets/squoosh/editedImage.avif" width="3056" height="4064"
-                                    alt="Photograph by Akash Plackal." decoding="async"
-                                    fetchpriority="high" /></button></li>
+                                    alt="Photograph by Akash Plackal." decoding="async" fetchpriority="high" /></button>
+                  </li>
                   <li><button class="photo" type="button" aria-label="View photo 3 full size"><img
                                     src="/assets/squoosh/thumbs/IMG_20231226_183723284.avif"
                                     data-full="/assets/squoosh/IMG_20231226_183723284.avif" width="4096" height="3072"
-                                    alt="Photograph by Akash Plackal." decoding="async"
-                                    fetchpriority="high" /></button></li>
+                                    alt="Photograph by Akash Plackal." decoding="async" fetchpriority="high" /></button>
+                  </li>
                   <li><button class="photo" type="button" aria-label="View photo 4 full size"><img
                                     src="/assets/squoosh/thumbs/IMG_20231228_115718136.avif"
                                     data-full="/assets/squoosh/IMG_20231228_115718136.avif" width="3072" height="4096"
@@ -69,13 +84,13 @@
                                     height="3072" alt="Photograph by Akash Plackal." loading="lazy"
                                     decoding="async" /></button></li>
                   <li><button class="photo" type="button" aria-label="View photo 8 full size"><img
-                                    src="/assets/squoosh/thumbs/IMG_4971.avif"
-                                    data-full="/assets/squoosh/IMG_4971.avif" width="4284" height="5712"
-                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                                    src="/assets/squoosh/thumbs/IMG_4971.avif" data-full="/assets/squoosh/IMG_4971.avif"
+                                    width="4284" height="5712" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
                   <li><button class="photo" type="button" aria-label="View photo 9 full size"><img
-                                    src="/assets/squoosh/thumbs/IMG_5960.avif"
-                                    data-full="/assets/squoosh/IMG_5960.avif" width="4032" height="3024"
-                                    alt="Photograph by Akash Plackal." loading="lazy" decoding="async" /></button></li>
+                                    src="/assets/squoosh/thumbs/IMG_5960.avif" data-full="/assets/squoosh/IMG_5960.avif"
+                                    width="4032" height="3024" alt="Photograph by Akash Plackal." loading="lazy"
+                                    decoding="async" /></button></li>
                   <li><button class="photo" type="button" aria-label="View photo 10 full size"><img
                                     src="/assets/squoosh/thumbs/IMG_20241102_105511545_HDR~2.avif"
                                     data-full="/assets/squoosh/IMG_20241102_105511545_HDR~2.avif" width="3072"
@@ -159,12 +174,24 @@
       </main>
 
       <dialog class="lightbox" data-lightbox aria-label="Photo viewer">
-            <img class="lb-img" data-lb-img alt="" decoding="async" />
-            <button class="lb-btn lb-close" type="button" data-lb-close aria-label="Close viewer">&times;</button>
-            <button class="lb-btn lb-nav lb-prev" type="button" data-lb-prev
-                  aria-label="Previous photo">&#8249;</button>
-            <button class="lb-btn lb-nav lb-next" type="button" data-lb-next aria-label="Next photo">&#8250;</button>
-            <p class="lb-caption lb-glass" data-lb-caption aria-live="polite"></p>
+            <!-- .lb-stage shrink-wraps the photo, so the controls are positioned against
+                 the IMAGE rather than the viewport. That keeps every control on the
+                 photo at any aspect ratio, which is what the lens needs: it refracts a
+                 copy of what sits behind it, and off the image there is nothing to bend.
+                 .lb-refract carries that copy; .lb-glyph is the crisp layer on top. -->
+            <div class="lb-stage">
+                  <img class="lb-img" data-lb-img alt="" decoding="async" />
+                  <button class="lb-btn lb-close" type="button" data-lb-close aria-label="Close viewer"><span
+                              class="lb-refract" aria-hidden="true"></span><span class="lb-glyph"
+                              aria-hidden="true">&times;</span></button>
+                  <button class="lb-btn lb-nav lb-prev" type="button" data-lb-prev aria-label="Previous photo"><span
+                              class="lb-refract" aria-hidden="true"></span><span class="lb-glyph"
+                              aria-hidden="true">&#8249;</span></button>
+                  <button class="lb-btn lb-nav lb-next" type="button" data-lb-next aria-label="Next photo"><span
+                              class="lb-refract" aria-hidden="true"></span><span class="lb-glyph"
+                              aria-hidden="true">&#8250;</span></button>
+                  <p class="lb-caption lb-glass" data-lb-caption aria-live="polite"></p>
+            </div>
       </dialog>
 
       <script>try {var k = "__click"; if (sessionStorage.getItem(k)) {sessionStorage.removeItem(k); var a = new Audio("data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE="); a.volume = .32; a.play().catch(function () { })} } catch (e) { }</script>

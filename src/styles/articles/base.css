@@ -578,14 +578,20 @@ main>p:last-of-type a:focus-visible {
 }
 
 @supports (animation-timeline: scroll()) {
+  /* Glass material — frost + a saturation veil + the specular edge. Same reasoning
+     as the site header (see assets/glass-header.css): `backdrop-filter: url()` is
+     Chromium-only and takes the whole declaration down with it elsewhere, and a
+     lens stretched across a viewport-wide 14px bar blooms an oval instead of
+     refracting. This renders identically in Chrome, Safari, and Firefox. */
   .reading-progress {
     background: rgba(255, 255, 255, 0.03);
     border: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-    -webkit-backdrop-filter: url(#progress-glass);
-    backdrop-filter: url(#progress-glass);
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+    backdrop-filter: blur(6px) saturate(1.15);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.165),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.036),
       0 6px 18px rgba(0, 0, 0, 0.28);
 
     animation: progress-reveal linear both;

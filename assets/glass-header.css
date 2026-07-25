@@ -20,13 +20,40 @@ html {
   box-shadow: none;
 }
 
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header {
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+    backdrop-filter: blur(6px) saturate(1.15);
+  }
+}
+
+/* The tint, border, and specular edge are scoped to engines that CANNOT reveal
+ * them on scroll. Where `animation-timeline: scroll()` works, the keyframes below
+ * own these properties and the bar starts fully transparent — declaring them
+ * statically as well painted a permanent bar at scroll-top whenever the timeline
+ * was inactive (a page too short to scroll, or mid view-transition), which is not
+ * the design. Firefox has no scroll timeline as of 153, so there the choice is a
+ * static edge or none at all, and static wins.
+ *
+ * Frost stays unconditional above: over a flat background a blur alone is
+ * invisible, so it costs nothing at rest and needs no reveal.
+ */
+@supports ((not (animation-timeline: scroll()))
+  and ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)))) {
+  .site-header {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.165),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.036),
+      0 6px 22px rgba(0, 0, 0, 0.18);
+  }
+}
+
 @supports (animation-timeline: scroll()) {
   .site-header {
     --mb-rest: 2rem;
     --mb-scroll: 1.6rem;
-
-    -webkit-backdrop-filter: url(#liquid-glass-header);
-    backdrop-filter: url(#liquid-glass-header);
 
     animation: site-header-glass linear both;
     animation-timeline: scroll(root);
@@ -48,16 +75,18 @@ html {
       border-bottom-color: transparent;
       box-shadow:
         inset 0 1px 0 transparent,
+        inset 0 0 0 1px transparent,
         0 6px 22px transparent;
     }
 
     to {
       padding-block: 0.3rem;
       margin-bottom: var(--mb-scroll);
-      background-color: rgba(255, 255, 255, 0.014);
+      background-color: rgba(255, 255, 255, 0.02);
       border-bottom-color: rgba(255, 255, 255, 0.06);
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.165),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.036),
         0 6px 22px rgba(0, 0, 0, 0.18);
     }
   }

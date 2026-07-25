@@ -1,7 +1,4 @@
-/* Photos lightbox — opens a full-size photo in a modal <dialog> with a
-   blurred, liquid-glass backdrop. Reads the existing grid thumbnails, so
-   there is no separate image list to keep in sync. No dependencies. */
-(function () {
+(function() {
   var grid = document.querySelector('[data-photo-grid]');
   var dlg = document.querySelector('[data-lightbox]');
   if (!grid || !dlg || typeof dlg.showModal !== 'function') return;
@@ -15,40 +12,63 @@
   var photos = Array.prototype.slice.call(grid.querySelectorAll('.photo'));
   var current = 0;
 
+  var lensMap = document.querySelector('feImage[data-lens-map]');
+
+  function armLens() {
+    if (!lensMap) return;
+    lensMap.setAttribute('href', lensMap.getAttribute('data-lens-map'));
+    lensMap = null;
+  }
+
+  function syncLens() {
+    if (!refracts.length) return;
+    var img = view.getBoundingClientRect();
+    if (!img.width || !img.height) return;
+
+    var src = view.currentSrc || view.src;
+    dlg.style.setProperty('--lb-src', 'url("' + src.replace(/["\\]/g, '\\$&') + '")');
+    dlg.style.setProperty('--lb-bw', img.width + 'px');
+    dlg.style.setProperty('--lb-bh', img.height + 'px');
+    dlg.setAttribute('data-lb-glass', '');
+
+    refracts.forEach(function(layer) {
+      var box = layer.getBoundingClientRect();
+      layer.style.setProperty('--lb-bx', (img.left - box.left) + 'px');
+      layer.style.setProperty('--lb-by', (img.top - box.top) + 'px');
+    });
+  }
+
+  view.addEventListener('load', syncLens);
+  window.addEventListener('resize', syncLens);
+
   function show(i) {
     current = (i + photos.length) % photos.length;
     var thumb = photos[current].querySelector('img');
-    // The grid loads a small thumbnail; the full-size original lives on
-    // data-full and is only fetched now, when the viewer actually opens it.
     view.src = thumb.getAttribute('data-full') || thumb.currentSrc || thumb.src;
     view.alt = thumb.alt;
     caption.textContent = (current + 1) + ' / ' + photos.length;
   }
 
-  photos.forEach(function (btn, i) {
-    btn.addEventListener('click', function () {
+  photos.forEach(function(btn, i) {
+    btn.addEventListener('click', function() {
+      armLens();
       show(i);
       dlg.showModal();
+      syncLens();
     });
   });
 
-  btnPrev.addEventListener('click', function () { show(current - 1); });
-  btnNext.addEventListener('click', function () { show(current + 1); });
-  btnClose.addEventListener('click', function () { dlg.close(); });
+  btnPrev.addEventListener('click', function() { show(current - 1); });
+  btnNext.addEventListener('click', function() { show(current + 1); });
+  btnClose.addEventListener('click', function() { dlg.close(); });
 
-  dlg.addEventListener('keydown', function (e) {
+  dlg.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); show(current + 1); }
   });
 
-  /* A click that lands on the dialog itself (the empty area around the
-     image and controls) dismisses the viewer. */
-  dlg.addEventListener('click', function (e) {
-    if (e.target === dlg) dlg.close();
-  });
-
-  /* Return focus to the photo that opened the viewer. */
-  dlg.addEventListener('close', function () {
+  dlg.addEventListener('close', function() {
+    dlg.removeAttribute('data-lb-glass');
     var btn = photos[current];
     if (btn) btn.focus();
   });

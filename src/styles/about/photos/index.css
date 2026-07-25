@@ -1,9 +1,16 @@
 @import "../../shared/tokens.css";
 @import "../../shared/contact.css";
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body { margin: 0; background: var(--bg); color: var(--fg); }
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
 
 body {
   max-width: 50rem;
@@ -138,8 +145,12 @@ html:active-view-transition .site-nav a::before {
 
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .photos-intro {
-    -webkit-backdrop-filter: url(#photos-glass);
-    backdrop-filter: url(#photos-glass);
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+    backdrop-filter: blur(6px) saturate(1.15);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.275),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 12px 34px rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -170,8 +181,17 @@ html:active-view-transition .site-nav a::before {
   break-inside: avoid;
 }
 
-@media (min-width: 34rem) { .photo-grid { column-count: 2; } }
-@media (min-width: 52rem) { .photo-grid { column-count: 3; } }
+@media (min-width: 34rem) {
+  .photo-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 52rem) {
+  .photo-grid {
+    column-count: 3;
+  }
+}
 
 .photo {
   display: block;
@@ -215,10 +235,14 @@ html:active-view-transition .site-nav a::before {
 }
 
 .photo:hover img,
-.photo:focus-visible img { transform: scale(1.05); }
+.photo:focus-visible img {
+  transform: scale(1.05);
+}
 
 .photo:hover::after,
-.photo:focus-visible::after { opacity: 1; }
+.photo:focus-visible::after {
+  opacity: 1;
+}
 
 .photo:focus-visible {
   outline: 2px solid var(--ring-outer);
@@ -256,7 +280,16 @@ html:active-view-transition .site-nav a::before {
   backdrop-filter: blur(16px) saturate(118%);
 }
 
+/* Shrink-wraps the photo so the controls anchor to the IMAGE, not the viewport.
+   `line-height: 0` keeps the inline-image baseline gap from padding the box out
+   past the photo, which would drift the controls off its edges. */
+.lb-stage {
+  position: relative;
+  line-height: 0;
+}
+
 .lb-img {
+  display: block;
   max-width: min(94vw, 1400px);
   max-height: 90vh;
   width: auto;
@@ -288,21 +321,118 @@ html:active-view-transition .site-nav a::before {
   font: inherit;
   line-height: 1;
   cursor: pointer;
+  /* Clips the refracting copy to the pill; isolate so the layer z-indexes below
+     are ordered against each other and not against the dialog. */
+  overflow: hidden;
+  isolation: isolate;
   transition: background-color 160ms ease-out, border-color 160ms ease-out, transform 160ms ease-out;
 }
 
+.lb-glyph {
+  position: relative;
+  z-index: 2;
+}
+
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .lb-btn,
+
+  /* The caption is frost-only: a wide, thin pill stretches a single lens into an
+     oval rather than refracting, so it gets the material and not the bend. */
+  .lb-glass {
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+    backdrop-filter: blur(6px) saturate(1.15);
+  }
+
+  /* Buttons frost only until the lens takes over. Once the refracting copy is up
+     it covers the button opaquely, so a backdrop root underneath would cost a
+     compositing pass to paint something nothing can see. */
+  .lightbox:not([data-lb-glass]) .lb-btn {
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+    backdrop-filter: blur(6px) saturate(1.15);
+  }
+
   .lb-glass {
     background: rgba(255, 255, 255, 0.05);
-    -webkit-backdrop-filter: url(#photos-glass);
-    backdrop-filter: url(#photos-glass);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.275),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.34);
+  }
+
+  /* The tint and specular edge move to a layer so they paint ABOVE the refracting
+     copy. A background on the button itself would paint underneath it and be
+     hidden, since the copy is opaque. */
+  .lb-btn {
+    background: transparent;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.34);
+  }
+
+  .lb-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.275),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    transition: background-color 160ms ease-out;
+  }
+
+  /* Hover tint rides the same layer, for the same reason. */
+  .lb-btn:hover::after,
+  .lb-btn:focus-visible::after {
+    background: rgba(255, 255, 255, 0.16);
   }
 }
 
+/* ── The refracting copy ───────────────────────────────────────────────
+   `filter: url()` bends an element's OWN pixels — that is exactly why it works in
+   Safari and Firefox where `backdrop-filter: url()` does not exist, and also why
+   the control has to be handed a copy of what sits behind it. The copy is a plain
+   background: `--lb-src` is the open photo, sized and offset per control by
+   assets/photos.js, and `--lb-behind` fills any sliver where the inflated copy
+   overhangs the photo (the library calls this the bleed fill). The controls are
+   anchored to .lb-stage precisely so that sliver stays outside displacement
+   reach — the bend samples ~3px past the control's rim, the inflation gives it
+   ~12px, and the control sits ~10px inside the photo.
+
+   `inset: -25%` inflates the copy to 150% of the control — the same 1.5× the
+   displacement map is padded to (LENS_REGION_SCALE in scripts/build.mjs). The
+   filter region is 100% of THIS box, so the map's lens lands precisely on the
+   control, and the surplus gives the displacement real pixels to reach into
+   instead of transparent black, which is what fringes a lens with a dark rim.
+
+   Hidden until photos.js has measured, so a no-JS visit keeps the frosted pill
+   rather than showing an opaque disc. */
+.lb-refract {
+  display: none;
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--lb-behind, #0e120f);
+  background-image: var(--lb-src, none);
+  background-repeat: no-repeat;
+  background-position: var(--lb-bx, 0) var(--lb-by, 0);
+  background-size: var(--lb-bw, auto) var(--lb-bh, auto);
+  filter: blur(0.5px) url(#lg-lens);
+}
+
+.lightbox[data-lb-glass] .lb-refract {
+  display: block;
+}
+
+/* Insets are relative to .lb-stage, i.e. to the photo. They are fixed rem rather
+   than the old viewport-derived clamps: anchored to the image, a vw-scaled inset
+   would drift the controls across the photo as the window resized, and past its
+   edge on a narrow portrait shot. 0.7rem keeps each control clear of the photo's
+   0.6rem corner radius while staying well inside the frame, which is what the
+   lens needs — off the image there is nothing to refract. */
 .lb-close {
-  top: clamp(1rem, 3vw, 2rem);
-  right: clamp(1rem, 3vw, 2rem);
+  top: 0.7rem;
+  right: 0.7rem;
   width: 2.9rem;
   height: 2.9rem;
   font-size: 1.7rem;
@@ -316,8 +446,13 @@ html:active-view-transition .site-nav a::before {
   transform: translateY(-50%);
 }
 
-.lb-prev { left: clamp(0.5rem, 3vw, 2rem); }
-.lb-next { right: clamp(0.5rem, 3vw, 2rem); }
+.lb-prev {
+  left: 0.7rem;
+}
+
+.lb-next {
+  right: 0.7rem;
+}
 
 .lb-close:hover,
 .lb-close:focus-visible {
@@ -336,7 +471,7 @@ html:active-view-transition .site-nav a::before {
 }
 
 .lb-caption {
-  bottom: clamp(1rem, 3vw, 2rem);
+  bottom: 0.7rem;
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
@@ -347,19 +482,38 @@ html:active-view-transition .site-nav a::before {
 }
 
 @media (max-width: 34rem) {
-  .lb-nav { width: 2.8rem; height: 2.8rem; font-size: 1.7rem; }
+  .lb-nav {
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: 1.7rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .photo,
   .photo img,
-  .lb-btn { transition: none; }
+  .lb-btn {
+    transition: none;
+  }
+
   .photo:hover,
-  .photo:focus-visible { transform: none; }
+  .photo:focus-visible {
+    transform: none;
+  }
+
   .photo:hover img,
-  .photo:focus-visible img { transform: none; }
+  .photo:focus-visible img {
+    transform: none;
+  }
+
   .lb-close:hover,
-  .lb-close:focus-visible { transform: none; }
+  .lb-close:focus-visible {
+    transform: none;
+  }
+
   .lb-nav:hover,
-  .lb-nav:focus-visible { transform: translateY(-50%); }
+  .lb-nav:focus-visible {
+    transform: translateY(-50%);
+  }
 }
