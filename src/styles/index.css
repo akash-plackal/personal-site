@@ -159,7 +159,11 @@ h1 {
 .hero-portrait {
   view-transition-name: hero-avatar;
   will-change: transform;
-  width: clamp(11rem, 19vw, 21rem);
+  width: clamp(11rem, 19vw, 19rem);
+  min-width: 10rem;
+  min-height: 10rem;
+  max-width: 18rem;
+  max-height: 18rem;
   aspect-ratio: 1 / 1;
   position: relative;
   isolation: isolate;
