@@ -77,7 +77,8 @@
         It also doubles as my personal knowledge base and a source of context for AI.
       </p>
       <p class="about-note">
-        Some of what I write here may feel embarrassing in hindsight, but that's a small price to pay for having a corner
+        Some of what I write here may feel embarrassing in hindsight, but that's a small price to pay for having a
+        corner
         of the internet that's truly my own.
       </p>
     </section>
@@ -240,19 +241,25 @@
         </div>
       </details>
 
-      <div class="accordion-cta">
-
-        <a class="accordion-button" href="/about/more/">
-          <span class="accordion-button-cap">
-            <span class="accordion-button-face">
-              <span class="accordion-button-kicker">Next page</span>
-              <span class="accordion-button-label">know more about me</span>
-            </span>
-          </span>
-        </a>
-
-      </div>
     </section>
+
+    <!-- Outside .accordion-group: that section paint-contains its children,
+         which would clip this button's shadow and hover glow. -->
+    <div class="accordion-cta">
+      <a class="accordion-button" href="/about/more/">
+        <span class="accordion-button-cap">
+          <span class="deco" aria-hidden="true">$</span>
+          <span class="deco" aria-hidden="true">[</span>
+          <span class="deco" aria-hidden="true">&amp;</span>
+          <span class="deco" aria-hidden="true">}</span>
+          <span class="deco" aria-hidden="true">#</span>
+          <span class="accordion-button-face">
+            <span class="accordion-button-kicker">Next page</span>
+            <span class="accordion-button-label">know more about me</span>
+          </span>
+        </span>
+      </a>
+    </div>
 
     <p><a href="/">Back to home</a></p>
   </main>

@@ -23,7 +23,7 @@ html {
   0% {
     opacity: 0;
     transform: translateY(26px) scale(0.97);
-    filter: blur(2px);
+    filter: blur(2.5px);
   }
 
   100% {
@@ -373,7 +373,7 @@ p {
   color: var(--muted);
 }
 
-.about-note + .about-note {
+.about-note+.about-note {
   margin-top: 0.42rem;
 }
 
@@ -830,7 +830,10 @@ p {
 }
 
 .accordion-cta {
-  margin-top: 1.15rem;
+  /* Collapses against .accordion-group's 1.5rem bottom margin; the larger
+     value keeps the gap the old in-grid placement produced. */
+  margin-top: 2.05rem;
+  margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
 }
@@ -849,8 +852,16 @@ p {
     filter 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
+/* Soft bloom behind the key. Reuses the shared halo pseudo, but blurred and
+   pushed below the shadow slab so it reads as light, not a second border. */
 .accordion-button::before {
-  display: none;
+  --shape-radius: calc(var(--button-radius) + 0.3rem);
+  --shape-pad-inline: 0.2rem;
+  --shape-pad-block: 0.2rem;
+  background: rgba(159, 179, 120, 0.5);
+  box-shadow: none;
+  filter: blur(13px);
+  z-index: -3;
 }
 
 .accordion-button::after {
@@ -875,6 +886,7 @@ p {
 }
 
 .accordion-button-cap {
+  position: relative;
   display: grid;
   gap: 0.18rem;
   justify-items: center;
@@ -973,6 +985,101 @@ p {
 .accordion-button:active .accordion-button-face {
   background:
     linear-gradient(180deg, rgba(35, 41, 36, 0.96), rgba(53, 59, 54, 0.96));
+}
+
+.deco {
+  display: none;
+}
+
+@supports (offset-path: border-box) {
+  .accordion-button .deco {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    offset-path: border-box;
+    offset-rotate: 0deg;
+    offset-distance: var(--deco-from, 0%);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: calc(1.25rem * var(--deco-scale, 1));
+    font-weight: 700;
+    line-height: 1;
+    color: var(--deco-color, var(--link));
+    text-shadow: 0 0 8px currentcolor;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .deco:nth-child(1) {
+    --deco-color: #cfe0a2;
+    --deco-from: 4%;
+    --deco-to: 26%;
+    --deco-drift: 0 18px;
+  }
+
+  .deco:nth-child(2) {
+    --deco-color: #e7ebdc;
+    --deco-scale: 0.85;
+    --deco-from: 46%;
+    --deco-to: 62%;
+  }
+
+  .deco:nth-child(3) {
+    --deco-color: #d9e8ae;
+    --deco-scale: 1.15;
+    --deco-speed: 0.85;
+    --deco-from: 72%;
+    --deco-to: 88%;
+    --deco-drift: 0 -8px;
+  }
+
+  .deco:nth-child(4) {
+    --deco-color: #b8d0a0;
+    --deco-scale: 0.7;
+    --deco-speed: 1.2;
+    --deco-from: 30%;
+    --deco-to: 44%;
+    --deco-drift: -14px 28px;
+  }
+
+  .deco:nth-child(5) {
+    --deco-color: #a8d4c2;
+    --deco-scale: 0.9;
+    --deco-speed: 1.1;
+    --deco-from: 90%;
+    --deco-to: 99%;
+    --deco-drift: 12px -14px;
+  }
+
+  .accordion-button:hover .deco,
+  .accordion-button:focus-visible .deco {
+    offset-distance: var(--deco-to);
+    translate: var(--deco-drift, 0 -18px);
+    transition:
+      translate calc(1.5s * var(--deco-speed, 1)),
+      offset-distance calc(1.5s * var(--deco-speed, 1));
+    animation: deco-life calc(1.28s * var(--deco-speed, 1)) both;
+  }
+}
+
+@keyframes deco-life {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  20%,
+  70% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-button .deco {
+    display: none;
+  }
 }
 
 .setup-card {

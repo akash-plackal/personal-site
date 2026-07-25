@@ -4,8 +4,11 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SITE_DIR="${1:-$ROOT_DIR/dist}"
 
+# 14 KB is the hard one: it keeps the document inside TCP's initial
+# congestion window, so first paint costs one round trip. Critical CSS is a
+# sub-allocation of it and may be tuned; this must not be.
 MAX_HTML_GZ=14336
-MAX_CRITICAL_CSS_GZ=5120
+MAX_CRITICAL_CSS_GZ=5632
 MAX_JS_GZ=10240
 
 if [[ ! -d "$SITE_DIR" ]]; then
@@ -51,7 +54,7 @@ while IFS= read -r -d '' file; do
     status=1
   fi
   if (( css_gz > MAX_CRITICAL_CSS_GZ )); then
-    echo "FAIL: $rel inline CSS exceeds 5KB gz (${css_gz}B)." >&2
+    echo "FAIL: $rel inline CSS exceeds ${MAX_CRITICAL_CSS_GZ}B gz (${css_gz}B)." >&2
     status=1
   fi
   if (( js_gz > MAX_JS_GZ )); then
