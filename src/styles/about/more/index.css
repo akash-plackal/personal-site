@@ -299,52 +299,88 @@ a {
   transform: translateY(-1px);
 }
 
-/* Hero mosaic: one featured photo beside a block of smaller tiles. */
-.photo-mosaic {
+/* Filmstrip: equal portrait tiles, no featured crop fighting the rest. */
+.photo-strip {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.18rem;
-  background: #0d120e;
-  padding: 0.18rem;
+  /* Narrow screens show three tiles; five would shrink them to stamps. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  padding: 0.55rem 0.55rem 0;
 }
 
-.photo-mosaic img {
+.photo-strip img {
   display: block;
   width: 100%;
-  height: 100%;
-  min-width: 0;
-  aspect-ratio: 1 / 1;
+  height: auto;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
+  border-radius: 0.55rem;
   background: #0d120e;
+  transition: opacity 200ms ease-out, transform 220ms ease-out;
 }
 
-/* Mobile: the hero spans the full width, tiles line up in a row beneath it. */
-.photo-hero {
-  grid-column: 1 / -1;
-  height: auto;
-  aspect-ratio: 16 / 10;
+.photo-strip img:nth-child(n + 4) {
+  display: none;
+}
+
+@media (min-width: 30rem) {
+  .photo-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .photo-strip img:nth-child(4) {
+    display: block;
+  }
 }
 
 @media (min-width: 40rem) {
-  .photo-mosaic {
-    grid-template-columns: 1.7fr 1fr 1fr;
-    grid-template-rows: auto auto;
+  .photo-strip {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .photo-hero {
-    grid-column: 1;
-    grid-row: 1 / 3;
-    aspect-ratio: auto;
-    height: 100%;
+  .photo-strip img:nth-child(n + 4) {
+    display: block;
+  }
+}
+
+/* Pointer over one frame recedes the others, so the strip reads as a set. */
+@media (hover: hover) {
+  .photo-strip:hover img {
+    opacity: 0.5;
+  }
+
+  .photo-strip img:hover {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-strip img {
+    transition: opacity 200ms ease-out;
+  }
+
+  .photo-strip img:hover {
+    transform: none;
   }
 }
 
 .photo-meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.82rem 0.9rem 0.9rem;
+  gap: 0.6rem 0.8rem;
+  /* Inline padding tracks .photo-strip so copy lines up with the tile edges. */
+  padding: 0.8rem 0.55rem 0.75rem;
+}
+
+.photo-count {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .photo-title {
@@ -355,6 +391,13 @@ a {
   font-size: 0.92rem;
   font-weight: 500;
   line-height: 1.4;
+}
+
+/* Narrow: caption takes its own line so the count and CTA stay paired. */
+@media (max-width: 34rem) {
+  .photo-title {
+    flex: 1 0 100%;
+  }
 }
 
 .photo-cta {
