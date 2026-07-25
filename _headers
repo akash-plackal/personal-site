@@ -17,7 +17,6 @@
 
 /about/
   Link: </assets/hero-about-720.avif>; rel=preload; as=image; type=image/avif
-  Link: <https://giscus.app>; rel=preconnect; crossorigin
 
 /about/photos/*
   Link: </assets/squoosh/editedImage-5.avif>; rel=preload; as=image; type=image/avif

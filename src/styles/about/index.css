@@ -1101,29 +1101,6 @@ p {
   white-space: pre;
 }
 
-.giscus {
-  margin-top: 2rem;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font-family: var(--font-main);
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
-  color: var(--fg);
-}
-
-.giscus-frame {
-  width: 100%;
-  border: none;
-  background: transparent;
-  color-scheme: dark;
-}
-
-.giscus-frame:focus-visible {
-  outline: 2px solid var(--ring-outer);
-  outline-offset: 2px;
-}
-
 ::selection {
   color: var(--selection-fg);
   background: var(--selection-bg);
