@@ -80,6 +80,7 @@ html {
 ::view-transition-old(root) {
   animation: none;
   mix-blend-mode: normal;
+  opacity: 0;
 }
 
 ::view-transition-new(root) {

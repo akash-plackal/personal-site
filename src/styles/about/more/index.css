@@ -65,9 +65,14 @@ html {
   animation: none;
 }
 
+/* Hidden for the same reason as on /about: the 4px offset that starts
+ * `vt-page-in` exposes the outgoing page along the top edge, and a scrolled
+ * glass header puts a near-white specular line exactly there.
+ */
 ::view-transition-old(root) {
   animation: none;
   mix-blend-mode: normal;
+  opacity: 0;
 }
 
 ::view-transition-new(root) {
