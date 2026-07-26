@@ -11,6 +11,10 @@
   --selection-fg: #e7ebdc;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 @view-transition {
   navigation: auto;
 }
