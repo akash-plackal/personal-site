@@ -274,34 +274,24 @@ a {
   contain-intrinsic-height: auto 420px;
 }
 
-.card,
-.photo-card {
+.card {
   border: 1px solid var(--line);
   border-radius: 1rem;
   background: rgba(29, 37, 32, 0.6);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-}
-
-.card {
   padding: 1rem;
 }
 
 .photo-card {
-  padding: 0;
-  overflow: clip;
+  display: block;
   text-decoration: none;
   color: inherit;
-  display: block;
-  transition: transform 180ms ease-out, border-color 160ms ease-out, background-color 160ms ease-out, box-shadow 180ms ease-out;
+  border-radius: 0.55rem;
 }
 
-.photo-card:hover,
 .photo-card:focus-visible {
-  border-color: var(--ring-outer);
-  background: rgba(29, 37, 32, 0.76);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 0 0 1px rgba(141, 170, 127, 0.12);
-  outline: none;
-  transform: translateY(-1px);
+  outline: 2px solid var(--ring-outer);
+  outline-offset: 3px;
 }
 
 /* Filmstrip: equal portrait tiles, no featured crop fighting the rest. */
@@ -310,7 +300,6 @@ a {
   /* Narrow screens show three tiles; five would shrink them to stamps. */
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.4rem;
-  padding: 0.55rem 0.55rem 0;
 }
 
 .photo-strip img {
@@ -376,8 +365,7 @@ a {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.6rem 0.8rem;
-  /* Inline padding tracks .photo-strip so copy lines up with the tile edges. */
-  padding: 0.8rem 0.55rem 0.75rem;
+  padding: 0.8rem 0 0;
 }
 
 .photo-count {
