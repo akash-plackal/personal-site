@@ -26,18 +26,12 @@
     );
   };
 
-  const isSamePageAnchor = (anchor) => {
-    const href = anchor.getAttribute("href");
-    if (!href) return false;
-    if (!href.startsWith("#")) return false;
-    return true;
-  };
-
   const isSameOriginNavigation = (anchor, event) => {
     const href = anchor.getAttribute("href");
     if (!href) return false;
     if (href.startsWith("#")) return false;
     if (href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("javascript:")) return false;
+    if (anchor.hasAttribute("download")) return false;
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return false;
     if (anchor.target && anchor.target !== "_self") return false;
     try {
@@ -48,44 +42,70 @@
     }
   };
 
-  const earlyActivated = new WeakSet();
+  // Mouse users get immediate pointerdown feedback: same-origin navigations
+  // start there, and local controls play the sound there. Touch users wait for
+  // click, which the browser cancels when the gesture becomes a scroll or
+  // swipe — otherwise every swipe across a link would click.
+  const earlyNavigated = new WeakSet();
+  let lastMousePointerDown = null;
+  let lastMousePointerDownAt = 0;
 
-  const canEarlyActivate = (el, event) => {
-    if (event.pointerType !== "mouse" || event.button !== 0) return false;
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return false;
-    if (el.matches?.(':disabled, [aria-disabled="true"]')) return false;
-    if (el instanceof HTMLAnchorElement) {
-      const href = el.getAttribute("href") || "";
-      return href && !href.startsWith("#") && !/^(mailto|tel|javascript):/i.test(href);
-    }
-    return el.matches?.('button, input[type="button"], input[type="submit"], input[type="reset"], [role="button"]');
+  const flagNextPageSound = () => {
+    try { sessionStorage.setItem("__click", "1"); } catch { }
   };
 
-  const activateEarly = (el, event) => {
-    if (!canEarlyActivate(el, event)) return false;
-    event.preventDefault();
-    earlyActivated.add(el);
-    window.setTimeout(() => earlyActivated.delete(el), 700);
-
-    if (el instanceof HTMLAnchorElement) {
-      if (isSameOriginNavigation(el, event)) {
-        try { sessionStorage.setItem("__click", "1"); } catch { }
-      }
-      if (el.target && el.target !== "_self") window.open(el.href, el.target, "noopener");
-      else window.location.assign(el.href);
-    } else {
-      el.click();
+  const handleActivation = (clickable, event) => {
+    if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
+      flagNextPageSound();
+      return;
     }
-    return true;
+    playClickSound();
   };
+
+  document.addEventListener("pointerdown", (e) => {
+    if (!e.isTrusted || !e.isPrimary || e.pointerType !== "mouse" || e.button !== 0) return;
+    const clickable = findClickable(e.target);
+    if (!clickable) return;
+
+    if (clickable instanceof HTMLAnchorElement) {
+      // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,
+      // modifier- and new-tab clicks) keep native behaviour and sound on click.
+      if (!isSameOriginNavigation(clickable, e)) return;
+      e.preventDefault();
+      earlyNavigated.add(clickable);
+      window.setTimeout(() => earlyNavigated.delete(clickable), 700);
+      flagNextPageSound();
+      window.location.assign(clickable.href);
+      return;
+    }
+
+    lastMousePointerDown = clickable;
+    lastMousePointerDownAt = performance.now();
+    playClickSound();
+  }, { capture: true });
 
   document.addEventListener("click", (e) => {
-    if (!e.isTrusted || !(e.target instanceof Element)) return;
-    const el = e.target.closest('a[href], button, input[type="button"], input[type="submit"], input[type="reset"], [role="button"]');
-    if (!el || !earlyActivated.has(el)) return;
-    earlyActivated.delete(el);
-    e.preventDefault();
-    e.stopImmediatePropagation();
+    if (!e.isTrusted) return;
+    const clickable = findClickable(e.target);
+    if (!clickable) return;
+
+    // pointerdown already navigated; swallow the trailing click so the
+    // navigation is not started a second time.
+    if (earlyNavigated.has(clickable)) {
+      earlyNavigated.delete(clickable);
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
+
+    // pointerdown already played for this element — consume the marker so a
+    // press held longer than the window does not play twice.
+    if (clickable === lastMousePointerDown && performance.now() - lastMousePointerDownAt < 1000) {
+      lastMousePointerDown = null;
+      return;
+    }
+
+    handleActivation(clickable, e);
   }, { capture: true });
 
   // ── Contact popover enhancements ─────────────────────────────
@@ -171,60 +191,4 @@
     }
   }
 
-  // ── Pointer handling ─────────────────────────────────────────
-  // On pointerdown: play the sound for local controls immediately.
-  // For same-origin navigations, flag sessionStorage so the next
-  // page can replay the sound during parsing as well.
-  document.addEventListener(
-    "pointerdown",
-    (e) => {
-      if (!e.isPrimary) return;
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      const clickable = findClickable(e.target);
-      if (!clickable) return;
-
-      const soundOnNextPage = clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, e);
-      if (activateEarly(clickable, e)) {
-        if (!soundOnNextPage) playClickSound();
-        return;
-      }
-
-      if (clickable instanceof HTMLAnchorElement) {
-        if (isSameOriginNavigation(clickable, e)) {
-          try {
-            sessionStorage.setItem("__click", "1");
-          } catch { }
-          return;
-        }
-        playClickSound();
-        if (isSamePageAnchor(clickable)) return;
-        return;
-      }
-
-      playClickSound();
-    },
-    { capture: true },
-  );
-
-  document.addEventListener(
-    "keydown",
-    (e) => {
-      if (e.repeat) return;
-      const clickable = findClickable(e.target);
-      if (!clickable) return;
-      if (e.key !== "Enter" && e.key !== " ") return;
-      if (clickable instanceof HTMLAnchorElement) {
-        if (isSameOriginNavigation(clickable, e)) {
-          try {
-            sessionStorage.setItem("__click", "1");
-          } catch { }
-          return;
-        }
-        playClickSound();
-        return;
-      }
-      playClickSound();
-    },
-    { capture: true },
-  );
 })();
