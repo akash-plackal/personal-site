@@ -20,15 +20,12 @@
   };
 
   // ── View Transition Haptic Tuning ──────────────────────────
-  // Haptics tuned specifically for cross-document view transitions.
-  // Plays exclusively during page transitions to give a tangible,
-  // kinetic feel as elements morph and the new page settles (~300-420ms).
-  // Profiles:
-  //   "morph"   : [25, 55, 20]          // Launch pulse -> Glide -> Dock snap (Recommended)
-  //   "ripple"  : [28, 45, 18, 35, 12]  // Kinetic decelerating ripple (matches 420ms spring)
-  //   "firm"    : [35, 45, 25]          // Deep, punchy two-stage transition
-  //   "hum"     : 45                    // Single smooth substantial hum
-  const TRANSITION_HAPTIC = [25, 55, 20];
+  // Three-phase decelerating wave:
+  //   1. Launch pulse (28ms)  -> Departure as old view detaches
+  //   2. Apex pulse   (18ms)  -> Kinetic mid-point as elements morph
+  //   3. Dock snap    (14ms)  -> Settle & lock into final position
+  // Matches the ~420ms spring physics of the hero/root view transition.
+  const TRANSITION_HAPTIC = [28, 45, 18, 35, 14];
 
   let lastTransitionHapticAt = 0;
 
