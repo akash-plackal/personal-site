@@ -19,10 +19,26 @@
     } catch { }
   };
 
-  const vibrateFeedback = () => {
+  // ── Haptic feedback tuning ─────────────────────────────────
+  // Tuned for linear resonant actuators (LRA) and modern mobile haptics.
+  // Instant tactile feedback on touch contact (pointerdown), NOT release (click).
+  // Profiles:
+  //   8  = Ultra-crisp, light "tick" (iPhone/Pixel keyboard style)
+  //   12 = Balanced mechanical click (distinct switch click)
+  //   16 = Firmer tactile snap
+  //   [8, 24, 6] = Mechanical switch double-tick (actuation + bottom-out)
+  const HAPTIC_PROFILE = 12;
+
+  let lastVibratedAt = 0;
+  let lastVibratedElement = null;
+
+  const triggerHaptic = (pattern = HAPTIC_PROFILE) => {
     try {
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        navigator.vibrate(10);
+        const now = performance.now();
+        if (now - lastVibratedAt < 60) return;
+        lastVibratedAt = now;
+        navigator.vibrate(pattern);
       }
     } catch { }
   };
@@ -63,7 +79,6 @@
   };
 
   const handleActivation = (clickable, event) => {
-    vibrateFeedback();
     if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
       flagNextPageSound();
       return;
@@ -72,11 +87,22 @@
   };
 
   document.addEventListener("pointerdown", (e) => {
-    if (!e.isTrusted || !e.isPrimary || e.pointerType !== "mouse" || e.button !== 0) return;
+    if (!e.isTrusted || !e.isPrimary) return;
     const clickable = findClickable(e.target);
     if (!clickable) return;
 
-    vibrateFeedback();
+    // Trigger haptics on physical contact (pointerdown) so the vibration
+    // is felt directly under the fingertip at 0ms, not after finger release.
+    if (e.pointerType === "touch" || e.pointerType === "pen") {
+      triggerHaptic();
+      lastVibratedElement = clickable;
+      return; // Do NOT preventDefault, preserve fluid native touch scrolling!
+    }
+
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+
+    triggerHaptic();
+    lastVibratedElement = clickable;
 
     if (clickable instanceof HTMLAnchorElement) {
       // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,
@@ -115,6 +141,12 @@
       lastMousePointerDown = null;
       return;
     }
+
+    // If pointerdown didn't already vibrate (e.g. keyboard navigation), trigger it now
+    if (clickable !== lastVibratedElement || performance.now() - lastVibratedAt > 500) {
+      triggerHaptic();
+    }
+    lastVibratedElement = null;
 
     handleActivation(clickable, e);
   }, { capture: true });
