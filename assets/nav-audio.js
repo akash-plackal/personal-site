@@ -19,25 +19,25 @@
     } catch { }
   };
 
-  // ── Haptic feedback tuning ─────────────────────────────────
-  // Tuned for linear resonant actuators (LRA) and modern mobile haptics.
-  // Instant tactile feedback on touch contact (pointerdown), NOT release (click).
+  // ── View Transition Haptic Tuning ──────────────────────────
+  // Haptics tuned specifically for cross-document view transitions.
+  // Plays exclusively during page transitions to give a tangible,
+  // kinetic feel as elements morph and the new page settles (~300-420ms).
   // Profiles:
-  //   8  = Ultra-crisp, light "tick" (iPhone/Pixel keyboard style)
-  //   12 = Balanced mechanical click (distinct switch click)
-  //   16 = Firmer tactile snap
-  //   [8, 24, 6] = Mechanical switch double-tick (actuation + bottom-out)
-  const HAPTIC_PROFILE = 12;
+  //   "morph"   : [25, 55, 20]          // Launch pulse -> Glide -> Dock snap (Recommended)
+  //   "ripple"  : [28, 45, 18, 35, 12]  // Kinetic decelerating ripple (matches 420ms spring)
+  //   "firm"    : [35, 45, 25]          // Deep, punchy two-stage transition
+  //   "hum"     : 45                    // Single smooth substantial hum
+  const TRANSITION_HAPTIC = [25, 55, 20];
 
-  let lastVibratedAt = 0;
-  let lastVibratedElement = null;
+  let lastTransitionHapticAt = 0;
 
-  const triggerHaptic = (pattern = HAPTIC_PROFILE) => {
+  const triggerTransitionHaptic = (pattern = TRANSITION_HAPTIC) => {
     try {
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         const now = performance.now();
-        if (now - lastVibratedAt < 60) return;
-        lastVibratedAt = now;
+        if (now - lastTransitionHapticAt < 500) return;
+        lastTransitionHapticAt = now;
         navigator.vibrate(pattern);
       }
     } catch { }
@@ -81,28 +81,16 @@
   const handleActivation = (clickable, event) => {
     if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
       flagNextPageSound();
+      triggerTransitionHaptic();
       return;
     }
     playClickSound();
   };
 
   document.addEventListener("pointerdown", (e) => {
-    if (!e.isTrusted || !e.isPrimary) return;
+    if (!e.isTrusted || !e.isPrimary || e.pointerType !== "mouse" || e.button !== 0) return;
     const clickable = findClickable(e.target);
     if (!clickable) return;
-
-    // Trigger haptics on physical contact (pointerdown) so the vibration
-    // is felt directly under the fingertip at 0ms, not after finger release.
-    if (e.pointerType === "touch" || e.pointerType === "pen") {
-      triggerHaptic();
-      lastVibratedElement = clickable;
-      return; // Do NOT preventDefault, preserve fluid native touch scrolling!
-    }
-
-    if (e.pointerType !== "mouse" || e.button !== 0) return;
-
-    triggerHaptic();
-    lastVibratedElement = clickable;
 
     if (clickable instanceof HTMLAnchorElement) {
       // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,
@@ -112,6 +100,7 @@
       earlyNavigated.add(clickable);
       window.setTimeout(() => earlyNavigated.delete(clickable), 700);
       flagNextPageSound();
+      triggerTransitionHaptic();
       window.location.assign(clickable.href);
       return;
     }
@@ -142,14 +131,14 @@
       return;
     }
 
-    // If pointerdown didn't already vibrate (e.g. keyboard navigation), trigger it now
-    if (clickable !== lastVibratedElement || performance.now() - lastVibratedAt > 500) {
-      triggerHaptic();
-    }
-    lastVibratedElement = null;
-
     handleActivation(clickable, e);
   }, { capture: true });
+
+  window.addEventListener("pageswap", (e) => {
+    if (e && e.viewTransition) {
+      triggerTransitionHaptic();
+    }
+  });
 
   // ── Contact popover enhancements ─────────────────────────────
   // Opening, closing, Escape, and light-dismiss are native via the
