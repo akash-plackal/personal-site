@@ -19,6 +19,14 @@
     } catch { }
   };
 
+  const vibrateFeedback = () => {
+    try {
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate(10);
+      }
+    } catch { }
+  };
+
   const findClickable = (target) => {
     if (!(target instanceof Element)) return null;
     return target.closest(
@@ -55,6 +63,7 @@
   };
 
   const handleActivation = (clickable, event) => {
+    vibrateFeedback();
     if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
       flagNextPageSound();
       return;
@@ -66,6 +75,8 @@
     if (!e.isTrusted || !e.isPrimary || e.pointerType !== "mouse" || e.button !== 0) return;
     const clickable = findClickable(e.target);
     if (!clickable) return;
+
+    vibrateFeedback();
 
     if (clickable instanceof HTMLAnchorElement) {
       // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,

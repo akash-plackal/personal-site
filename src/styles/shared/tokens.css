@@ -16,6 +16,17 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+html,
+a,
+button,
+input,
+textarea,
+select,
+summary,
+[role="button"] {
+  touch-action: manipulation;
+}
+
 @view-transition {
   navigation: auto;
 }
