@@ -20,12 +20,15 @@
   };
 
   // ── View Transition Haptic Tuning ──────────────────────────
-  // Three-phase decelerating wave:
-  //   1. Launch pulse (28ms)  -> Departure as old view detaches
-  //   2. Apex pulse   (18ms)  -> Kinetic mid-point as elements morph
-  //   3. Dock snap    (14ms)  -> Settle & lock into final position
-  // Matches the ~420ms spring physics of the hero/root view transition.
-  const TRANSITION_HAPTIC = [28, 45, 18, 35, 14];
+  // Three-phase wave with wide pauses for distinct physical separation:
+  //   1. Launch pulse (32ms)  -> Departure as old view uncouples
+  //   Pause (90ms)            -> Motor comes to a complete physical stop
+  //   2. Apex pulse   (24ms)  -> Mid-point inflection as view morphs
+  //   Pause (90ms)            -> Motor comes to a complete physical stop
+  //   3. Dock snap    (18ms)  -> Settling pulse as new page locks in
+  // Pauses MUST be >= 80ms, otherwise motor inertia causes the
+  // pulses to physically blur into one continuous vibration.
+  const TRANSITION_HAPTIC = [32, 90, 24, 90, 18];
 
   let lastTransitionHapticAt = 0;
 
@@ -33,7 +36,7 @@
     try {
       if (typeof navigator !== "undefined" && "vibrate" in navigator) {
         const now = performance.now();
-        if (now - lastTransitionHapticAt < 500) return;
+        if (now - lastTransitionHapticAt < 400) return;
         lastTransitionHapticAt = now;
         navigator.vibrate(pattern);
       }
@@ -78,6 +81,7 @@
   const handleActivation = (clickable, event) => {
     if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
       flagNextPageSound();
+      try { sessionStorage.setItem("__vt_wave", "1"); } catch { }
       triggerTransitionHaptic();
       return;
     }
@@ -97,6 +101,7 @@
       earlyNavigated.add(clickable);
       window.setTimeout(() => earlyNavigated.delete(clickable), 700);
       flagNextPageSound();
+      try { sessionStorage.setItem("__vt_wave", "1"); } catch { }
       triggerTransitionHaptic();
       window.location.assign(clickable.href);
       return;
@@ -132,6 +137,22 @@
   }, { capture: true });
 
   window.addEventListener("pageswap", (e) => {
+    if (e && e.viewTransition) {
+      triggerTransitionHaptic();
+    }
+  });
+
+  // On the incoming page during a view transition, trigger the waveform
+  // so the incoming document actively executes the waves while the
+  // animation is visible and rendering on screen.
+  try {
+    if (sessionStorage.getItem("__vt_wave")) {
+      sessionStorage.removeItem("__vt_wave");
+      triggerTransitionHaptic();
+    }
+  } catch { }
+
+  window.addEventListener("pagereveal", (e) => {
     if (e && e.viewTransition) {
       triggerTransitionHaptic();
     }
