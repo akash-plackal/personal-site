@@ -19,50 +19,6 @@
     } catch { }
   };
 
-  // ── View-transition haptics ──────────────────────────────
-  // A multi-pulse navigator.vibrate([...]) cannot survive a cross-document
-  // navigation: Blink walks the pattern on a document-bound timer, and this
-  // document dies ~25-35ms after the tap. The incoming document cannot finish
-  // it either — sticky user activation is reset across the navigation, so
-  // vibrate() there is a no-op. Full reasoning in AGENTS.md › Haptics.
-  //
-  // So the wave is independent single pulses at real milestones, each one
-  // Vibrate(ms) that reaches the OS immediately and is over before teardown:
-  //
-  //   pointerdown → launch   the tap registers
-  //   click       → commit   navigation is dispatched
-  //   pageswap    → dock     the view transition starts capturing
-  const HAPTIC_LAUNCH = 24;
-  const HAPTIC_COMMIT = 18;
-  const HAPTIC_DOCK = 14;
-
-  // Motor spin-down. A pulse landing inside this of the previous one is
-  // dropped rather than smeared — the motor has not stopped, so the two would
-  // be felt as one longer buzz. 80ms is conservative (ERM); LRA phones
-  // separate nearer 45-55ms. Lower it only against a real device.
-  const MIN_GAP = 80;
-
-  // Hold navigation at click to widen the wave's window. The free window is
-  // one press (~60-140ms), which fits two pulses (24+80+18) but not three
-  // (216ms) — so at 0 the dock pulse is dropped and the wave is two-phase.
-  // ~60 buys the third pulse for 60ms of added latency on every internal tap.
-  const NAV_HOLD_MS = 0;
-
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  const canVibrate = typeof navigator.vibrate === "function";
-
-  // -Infinity, not 0: performance.now() is small on a freshly loaded document,
-  // so a 0 baseline swallows the first pulse of every page.
-  let lastPulseAt = -Infinity;
-
-  const pulse = (ms) => {
-    if (!canVibrate || reducedMotion.matches) return;
-    const now = performance.now();
-    if (now - lastPulseAt < MIN_GAP) return;
-    lastPulseAt = now;
-    try { navigator.vibrate(ms); } catch { }
-  };
-
   const findClickable = (target) => {
     if (!(target instanceof Element)) return null;
     return target.closest(
@@ -101,45 +57,24 @@
   const handleActivation = (clickable, event) => {
     if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
       flagNextPageSound();
-      pulse(HAPTIC_COMMIT);
-      if (NAV_HOLD_MS) {
-        // Widen the pre-commit window so the dock pulse clears MIN_GAP.
-        const { href } = clickable;
-        event.preventDefault();
-        window.setTimeout(() => window.location.assign(href), NAV_HOLD_MS);
-      }
       return;
     }
     playClickSound();
   };
 
   document.addEventListener("pointerdown", (e) => {
-    if (!e.isTrusted || !e.isPrimary) return;
-    const isMouse = e.pointerType === "mouse";
-    if (isMouse && e.button !== 0) return;
+    if (!e.isTrusted || !e.isPrimary || e.pointerType !== "mouse" || e.button !== 0) return;
     const clickable = findClickable(e.target);
     if (!clickable) return;
-
-    const isNav =
-      clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, e);
-
-    // Touch and pen: the press is the free window the wave lives in, so the
-    // launch pulse fires here. Navigation still waits for click, which the
-    // browser withholds when the gesture turns into a scroll or swipe.
-    if (!isMouse) {
-      if (isNav) pulse(HAPTIC_LAUNCH);
-      return;
-    }
 
     if (clickable instanceof HTMLAnchorElement) {
       // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,
       // modifier- and new-tab clicks) keep native behaviour and sound on click.
-      if (!isNav) return;
+      if (!isSameOriginNavigation(clickable, e)) return;
       e.preventDefault();
       earlyNavigated.add(clickable);
       window.setTimeout(() => earlyNavigated.delete(clickable), 700);
       flagNextPageSound();
-      pulse(HAPTIC_COMMIT);
       window.location.assign(clickable.href);
       return;
     }
@@ -172,14 +107,6 @@
 
     handleActivation(clickable, e);
   }, { capture: true });
-
-  // Last moment this document is alive: the old view is captured after this and
-  // teardown follows a frame or two later, so only a pulse short enough to
-  // finish before teardown's Cancel() survives. No incoming-document
-  // counterpart exists — see the activation note above.
-  window.addEventListener("pageswap", (e) => {
-    if (e && e.viewTransition) pulse(HAPTIC_DOCK);
-  });
 
   // ── Contact popover enhancements ─────────────────────────────
   // Opening, closing, Escape, and light-dismiss are native via the
