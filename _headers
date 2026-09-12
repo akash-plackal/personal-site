@@ -12,7 +12,7 @@
   X-Robots-Tag: index, follow
 
 /
-  Link: </assets/hero-avatar-384.avif>; rel=preload; as=image; type=image/avif
+  Link: </assets/hero-avatar-384.avif>; rel=preload; as=image; type=image/avif; imagesrcset="/assets/hero-avatar-384.avif 384w, /assets/hero-avatar-640.avif 640w"; imagesizes="(min-width: 94.75rem) 18rem, (min-width: 57.9rem) 19vw, 11rem"
   Link: <https://giscus.app>; rel=preconnect; crossorigin
 
 /about/

@@ -15,9 +15,16 @@
     try {
       const audio = getClickAudio();
       audio.currentTime = 0;
-      void audio.play().catch(() => { });
-    } catch { }
+      void audio.play().catch(() => {});
+    } catch {}
   };
+
+  try {
+    if (sessionStorage.getItem("__click")) {
+      sessionStorage.removeItem("__click");
+      playClickSound();
+    }
+  } catch {}
 
   const findClickable = (target) => {
     if (!(target instanceof Element)) return null;
@@ -30,9 +37,15 @@
     const href = anchor.getAttribute("href");
     if (!href) return false;
     if (href.startsWith("#")) return false;
-    if (href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("javascript:")) return false;
+    if (
+      href.startsWith("mailto:") ||
+      href.startsWith("tel:") ||
+      href.startsWith("javascript:")
+    )
+      return false;
     if (anchor.hasAttribute("download")) return false;
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return false;
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+      return false;
     if (anchor.target && anchor.target !== "_self") return false;
     try {
       const url = new URL(anchor.href, window.location.href);
@@ -51,62 +64,84 @@
   let lastMousePointerDownAt = 0;
 
   const flagNextPageSound = () => {
-    try { sessionStorage.setItem("__click", "1"); } catch { }
+    try {
+      sessionStorage.setItem("__click", "1");
+    } catch {}
   };
 
   const handleActivation = (clickable, event) => {
-    if (clickable instanceof HTMLAnchorElement && isSameOriginNavigation(clickable, event)) {
+    if (
+      clickable instanceof HTMLAnchorElement &&
+      isSameOriginNavigation(clickable, event)
+    ) {
       flagNextPageSound();
       return;
     }
     playClickSound();
   };
 
-  document.addEventListener("pointerdown", (e) => {
-    if (!e.isTrusted || !e.isPrimary || e.pointerType !== "mouse" || e.button !== 0) return;
-    const clickable = findClickable(e.target);
-    if (!clickable) return;
+  document.addEventListener(
+    "pointerdown",
+    (e) => {
+      if (
+        !e.isTrusted ||
+        !e.isPrimary ||
+        e.pointerType !== "mouse" ||
+        e.button !== 0
+      )
+        return;
+      const clickable = findClickable(e.target);
+      if (!clickable) return;
 
-    if (clickable instanceof HTMLAnchorElement) {
-      // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,
-      // modifier- and new-tab clicks) keep native behaviour and sound on click.
-      if (!isSameOriginNavigation(clickable, e)) return;
-      e.preventDefault();
-      earlyNavigated.add(clickable);
-      window.setTimeout(() => earlyNavigated.delete(clickable), 700);
-      flagNextPageSound();
-      window.location.assign(clickable.href);
-      return;
-    }
+      if (clickable instanceof HTMLAnchorElement) {
+        // Anchors we cannot navigate early (#fragments, mailto/tel, downloads,
+        // modifier- and new-tab clicks) keep native behaviour and sound on click.
+        if (!isSameOriginNavigation(clickable, e)) return;
+        e.preventDefault();
+        earlyNavigated.add(clickable);
+        window.setTimeout(() => earlyNavigated.delete(clickable), 700);
+        flagNextPageSound();
+        window.location.assign(clickable.href);
+        return;
+      }
 
-    lastMousePointerDown = clickable;
-    lastMousePointerDownAt = performance.now();
-    playClickSound();
-  }, { capture: true });
+      lastMousePointerDown = clickable;
+      lastMousePointerDownAt = performance.now();
+      playClickSound();
+    },
+    { capture: true },
+  );
 
-  document.addEventListener("click", (e) => {
-    if (!e.isTrusted) return;
-    const clickable = findClickable(e.target);
-    if (!clickable) return;
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (!e.isTrusted) return;
+      const clickable = findClickable(e.target);
+      if (!clickable) return;
 
-    // pointerdown already navigated; swallow the trailing click so the
-    // navigation is not started a second time.
-    if (earlyNavigated.has(clickable)) {
-      earlyNavigated.delete(clickable);
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      return;
-    }
+      // pointerdown already navigated; swallow the trailing click so the
+      // navigation is not started a second time.
+      if (earlyNavigated.has(clickable)) {
+        earlyNavigated.delete(clickable);
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
 
-    // pointerdown already played for this element — consume the marker so a
-    // press held longer than the window does not play twice.
-    if (clickable === lastMousePointerDown && performance.now() - lastMousePointerDownAt < 1000) {
-      lastMousePointerDown = null;
-      return;
-    }
+      // pointerdown already played for this element — consume the marker so a
+      // press held longer than the window does not play twice.
+      if (
+        clickable === lastMousePointerDown &&
+        performance.now() - lastMousePointerDownAt < 1000
+      ) {
+        lastMousePointerDown = null;
+        return;
+      }
 
-    handleActivation(clickable, e);
-  }, { capture: true });
+      handleActivation(clickable, e);
+    },
+    { capture: true },
+  );
 
   // ── Contact popover enhancements ─────────────────────────────
   // Opening, closing, Escape, and light-dismiss are native via the
@@ -146,7 +181,9 @@
     const form = popover.querySelector(".contact-form");
     if (form instanceof HTMLFormElement) {
       form.addEventListener("submit", () => {
-        try { popover.hidePopover(); } catch { }
+        try {
+          popover.hidePopover();
+        } catch {}
       });
     }
   };
@@ -179,16 +216,18 @@
     };
 
     if ("IntersectionObserver" in window) {
-      const io = new IntersectionObserver((entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          io.disconnect();
-          loadGiscus();
-        }
-      }, { rootMargin: "900px 0px" });
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            io.disconnect();
+            loadGiscus();
+          }
+        },
+        { rootMargin: "900px 0px" },
+      );
       io.observe(giscusEl);
     } else {
       loadGiscus();
     }
   }
-
 })();
