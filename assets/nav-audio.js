@@ -1,4 +1,5 @@
 (() => {
+  return;
   const CLICK_SOUND_DATA =
     "data:audio/ogg;base64,T2dnUwACAAAAAAAAAACk4ALfAAAAAJIizQoBE09wdXNIZWFkAQF4AMBdAAAAAABPZ2dTAAAAAAAAAAAAAKTgAt8BAAAASNgoLwE9T3B1c1RhZ3MMAAAATGF2ZjYxLjcuMTAwAQAAAB0AAABlbmNvZGVyPUxhdmM2MS4xOS4xMDEgbGlib3B1c09nZ1MABAIsAAAAAAAApOAC3wIAAAAuiuulDDZYKiIeMFQjICEoNtj1QN5eO51zYK9Vl95H0pqyRi64bIU4rMf4b+FNFrMmHTGPO2ZgaZky+5G8FBTKfRop2ttnt9h+7smTJzI5U2ESke9vGcj/3qBN9767cdgyGSxBNdht/dw/TmbPoetHsPy2p8vMeqWXNu4Y/aa+BdRNYraV32dy/i/G5e093jPWDepACmCs9akXrnkCCgHYiGbYF8V/QXwm9D1jFo5VKAVzu+gSGEssN/3CXT3BOAZtA7x7QCjOl7DYBZbZTWSzBm+C0DWDPC3+qdDxkPaBKC8REeCZK04/hrH22DuHQzkkZxpc9G3TxCP5m7LnXEvgilemMf5aeNaI2Gep6vN9lOcsiGu9NzD8+oxF4ic6CYRFV8deNnT87kS5bQTYT+yiBmm2B/ZSSeox2H45FrfkF0/f2MITxI9mDNUa7ErObYMKDnQtshFjGTu816pRIouHxM1u4+K9eUT18e3rNjJhzhs+f1lLDtEi29ZI7o/1vejSqcMlAgoLJKPze9sF2CB2wNdt5QGM66Dwtzj08sGSf2zm371KKdq0u27Z4bipk1/YIcnnDmgOgGj/0fTJZVkwzF5kc9bqkwdUBfj0jw+IztjFAwETIMbY7msaYRaigBCyj3LGE5UR8xclD1D0KLY9ctjFVgw0cT4uSx5JfmQ5xr/U3j3sAf+ioSposeMTIs722aoJqYbm6WzYeWIYao+FoBbYitZNEaJ1t2CBhDe0T6OwjSKqX0G1KW6GgmlRVfZFjppzDUuoLGlqzARBZoE=";
   let clickAudio;
@@ -317,10 +318,11 @@
     document.addEventListener("prerenderingchange", fn, { once: true });
   };
 
-  const speculate = () => whenActive(() => {
-    setupPrerender();
-    warmAboutHero();
-  });
+  const speculate = () =>
+    whenActive(() => {
+      setupPrerender();
+      warmAboutHero();
+    });
 
   // `load` is the cheap, reliable proxy for "the LCP image has arrived": it
   // waits on every non-lazy subresource in the document, the hero preload
@@ -345,26 +347,27 @@
     // fold, so a prerendered page can trip it and pull giscus + the GitHub API
     // for a page the visitor only hovered. Third-party requests wait for a
     // real visit.
-    const loadGiscus = () => whenActive(() => {
-      if (giscusLoaded) return;
-      giscusLoaded = true;
-      const s = document.createElement("script");
-      s.src = "https://giscus.app/client.js";
-      s.dataset.repo = "akash-plackal/personal-site";
-      s.dataset.repoId = "R_kgDORJxwdQ";
-      s.dataset.category = "General";
-      s.dataset.categoryId = "DIC_kwDORJxwdc4C2xrV";
-      s.dataset.mapping = "pathname";
-      s.dataset.strict = "0";
-      s.dataset.reactionsEnabled = "1";
-      s.dataset.emitMetadata = "0";
-      s.dataset.inputPosition = "bottom";
-      s.dataset.theme = "dark_dimmed";
-      s.dataset.lang = "en";
-      s.crossOrigin = "anonymous";
-      s.async = true;
-      giscusEl.appendChild(s);
-    });
+    const loadGiscus = () =>
+      whenActive(() => {
+        if (giscusLoaded) return;
+        giscusLoaded = true;
+        const s = document.createElement("script");
+        s.src = "https://giscus.app/client.js";
+        s.dataset.repo = "akash-plackal/personal-site";
+        s.dataset.repoId = "R_kgDORJxwdQ";
+        s.dataset.category = "General";
+        s.dataset.categoryId = "DIC_kwDORJxwdc4C2xrV";
+        s.dataset.mapping = "pathname";
+        s.dataset.strict = "0";
+        s.dataset.reactionsEnabled = "1";
+        s.dataset.emitMetadata = "0";
+        s.dataset.inputPosition = "bottom";
+        s.dataset.theme = "dark_dimmed";
+        s.dataset.lang = "en";
+        s.crossOrigin = "anonymous";
+        s.async = true;
+        giscusEl.appendChild(s);
+      });
 
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver(
