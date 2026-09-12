@@ -190,6 +190,40 @@
 
   setupContactPopover();
 
+  // ── Back link points at where you actually came from ─────────
+  // No-ops on pages without [data-back-link], so it costs article pages
+  // nothing to carry it here. It used to be inline in the article template,
+  // which duplicated it across all 7 article documents and was the last
+  // executable inline script on the site — the only reason the CSP needed a
+  // sha256 allowlist at all.
+  //
+  // Running at `defer` time instead of parse time means a click landing in
+  // that window falls back to the template's static href, which is the
+  // correct destination anyway — just without the history-aware back.
+  const setupBackLink = () => {
+    try {
+      const b = document.querySelector("[data-back-link]");
+      if (!b || !document.referrer) return;
+      const r = new URL(document.referrer);
+      if (
+        r.origin !== window.location.origin ||
+        r.pathname === window.location.pathname
+      )
+        return;
+      b.href = document.referrer;
+      b.addEventListener("click", (e) => {
+        if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey)
+          return;
+        if (window.history.length > 1) {
+          e.preventDefault();
+          window.history.back();
+        }
+      });
+    } catch {}
+  };
+
+  setupBackLink();
+
   // ── Lazy-load Giscus ─────────────────────────────────────────
   const giscusEl = document.querySelector(".giscus");
   if (giscusEl && !giscusEl.querySelector("iframe")) {

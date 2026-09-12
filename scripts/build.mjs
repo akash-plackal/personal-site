@@ -956,10 +956,6 @@ async function main() {
 
   await writeSitemap(htmlFiles, articles);
 
-  await execFileAsync(path.join(ROOT_DIR, 'scripts', 'csp-hashes.sh'), [OUT_DIR], {
-    cwd: ROOT_DIR,
-    maxBuffer: 10 * 1024 * 1024,
-  });
 
   console.log(`Build completed: ${OUT_DIR}`);
 }
