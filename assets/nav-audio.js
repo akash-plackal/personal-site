@@ -224,11 +224,128 @@
 
   setupBackLink();
 
+  // ── Prerender before intent, gated on the LCP image ─────────
+  // Two tiers, and the split is about *when*, not *whether*:
+  //
+  //   speculationrules.json   every internal link, `moderate` — hover or
+  //   (Speculation-Rules      pointerdown. Nothing leaves the wire until the
+  //    response header)       pointer says so, so it is safe to apply from
+  //                          parse time.
+  //
+  //   here                    /about/ and /about/photos/, `immediate` — the
+  //                          pages worth having ready before the pointer
+  //                          moves, which is exactly why they have to wait
+  //                          for the LCP image.
+  //
+  // `immediate` starts during parse, which is when the hero AVIF is in
+  // flight. The old `prefetch /* immediate` rule pulled ~92 KB of documents
+  // before the user had expressed any intent — ~500 ms of a 1.45 Mbps link
+  // bidding against the LCP image. Chrome de-prioritises speculative fetches,
+  // but priority reorders a queue; it does not create bandwidth. Waiting for
+  // `load` spends an idle link instead of a contended one.
+  //
+  // Prerender rather than prefetch at both tiers because the fallback is
+  // free: when Chrome declines to allocate a renderer it keeps the
+  // speculative fetch and the navigation arrives as
+  // `deliveryType: "navigational-prefetch"`. A separate prefetch rule would
+  // buy nothing a failed prerender does not already give back.
+  //
+  // `sel` is the cheap local test for "does this document actually contain a
+  // link the rule could act on" — only /about/more/ links to the photo page,
+  // so every other document would carry a rule that can never fire.
+  const PRERENDER = [
+    { href_matches: "/about/", sel: 'a[href="/about/"]' },
+    { href_matches: "/about/photos/*", sel: 'a[href^="/about/photos/"]' },
+  ];
+
+  const setupPrerender = () => {
+    if (!HTMLScriptElement.supports?.("speculationrules")) return;
+
+    // Someone on a metered or genuinely slow link is the person least able to
+    // absorb a speculative document they may never open. Prefetch-on-intent
+    // still covers them.
+    const conn = navigator.connection;
+    if (conn?.saveData) return;
+    if (conn && /^(slow-)?2g$/.test(conn.effectiveType || "")) return;
+    if (window.matchMedia?.("(prefers-reduced-data: reduce)").matches) return;
+
+    const rules = PRERENDER.filter((r) => document.querySelector(r.sel)).map(
+      (r) => ({
+        source: "document",
+        where: { href_matches: r.href_matches },
+        eagerness: "immediate",
+      }),
+    );
+    if (!rules.length) return;
+
+    const el = document.createElement("script");
+    el.type = "speculationrules";
+    el.textContent = JSON.stringify({ prerender: rules });
+    document.head.appendChild(el);
+  };
+
+  // /about/'s hero used to be a <link rel=prefetch> in head-base.html, which
+  // put 43 KB of a page the visitor may never open into head parsing — on
+  // every document on the site, in the same window as that document's own LCP
+  // image. Same bytes, moved past the LCP; the prerender above reuses it from
+  // the HTTP cache (immutable, so the two never race for a second copy), and
+  // browsers that decline to prerender still get the warm image.
+  const warmAboutHero = () => {
+    if (!document.querySelector('a[href="/about/"]')) return;
+    const l = document.createElement("link");
+    l.rel = "prefetch";
+    l.as = "image";
+    l.type = "image/avif";
+    l.href = "/assets/hero-about-720.avif";
+    l.imageSrcset =
+      "/assets/hero-about-720.avif 720w, /assets/hero-about-1080.avif 1080w";
+    l.imageSizes = "(min-width: 54rem) 22rem, 88vw";
+    document.head.appendChild(l);
+  };
+
+  // A prerendered document still fires `load`, so without this every page
+  // speculated from another page would immediately speculate in turn —
+  // warming /about/'s hero and chaining rules outward from a page nobody has
+  // opened yet. Chrome already defers speculation rules found in a prerendered
+  // document, but not the <link rel=prefetch>, and the fan-out is the point:
+  // speculation should cost one hop, not a spreading tree.
+  const whenActive = (fn) => {
+    if (!document.prerendering) {
+      fn();
+      return;
+    }
+    document.addEventListener("prerenderingchange", fn, { once: true });
+  };
+
+  const speculate = () => whenActive(() => {
+    setupPrerender();
+    warmAboutHero();
+  });
+
+  // `load` is the cheap, reliable proxy for "the LCP image has arrived": it
+  // waits on every non-lazy subresource in the document, the hero preload
+  // included. The idle callback after it keeps the rule insertion off the
+  // tail of any work the load event itself kicked off.
+  const afterLoad = () => {
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(speculate, { timeout: 2000 });
+    } else {
+      window.setTimeout(speculate, 200);
+    }
+  };
+
+  if (document.readyState === "complete") afterLoad();
+  else window.addEventListener("load", afterLoad, { once: true });
+
   // ── Lazy-load Giscus ─────────────────────────────────────────
   const giscusEl = document.querySelector(".giscus");
   if (giscusEl && !giscusEl.querySelector("iframe")) {
     let giscusLoaded = false;
-    const loadGiscus = () => {
+    // The observer's 900px rootMargin reaches well past a short article's
+    // fold, so a prerendered page can trip it and pull giscus + the GitHub API
+    // for a page the visitor only hovered. Third-party requests wait for a
+    // real visit.
+    const loadGiscus = () => whenActive(() => {
       if (giscusLoaded) return;
       giscusLoaded = true;
       const s = document.createElement("script");
@@ -247,7 +364,7 @@
       s.crossOrigin = "anonymous";
       s.async = true;
       giscusEl.appendChild(s);
-    };
+    });
 
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver(

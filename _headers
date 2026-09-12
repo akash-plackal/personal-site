@@ -32,7 +32,7 @@
 
 /speculationrules.json
   Content-Type: application/speculationrules+json
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=60, s-maxage=60, stale-while-revalidate=86400
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
