@@ -19,12 +19,68 @@
     } catch {}
   };
 
-  try {
-    if (sessionStorage.getItem("__click")) {
-      sessionStorage.removeItem("__click");
-      playClickSound();
+  // The previous page flags the click; this page plays it. A prerendered page
+  // runs this script before the click exists, so it must wait for activation —
+  // Chrome swaps in the referrer's sessionStorage at that moment.
+  const playIfFlagged = () => {
+    try {
+      if (sessionStorage.getItem("__click")) {
+        sessionStorage.removeItem("__click");
+        playClickSound();
+      }
+    } catch {}
+  };
+
+  if (document.prerendering) {
+    // Decode the data URI during prerender so activation plays on frame one.
+    getClickAudio();
+    document.addEventListener("prerenderingchange", playIfFlagged, {
+      once: true,
+    });
+  } else {
+    playIfFlagged();
+  }
+
+  // ── Eager speculation, after the page is done ────────────────
+  // /about/ and its hero are likely next stops, so prerender them at
+  // `immediate` — but only once load + idle, so they never bid against this
+  // page's LCP image. Everything else is covered by the moderate (hover)
+  // rule in /speculationrules.json.
+  const addEagerSpeculation = () => {
+    if (document.prerendering) {
+      document.addEventListener("prerenderingchange", scheduleEagerSpeculation, {
+        once: true,
+      });
+      return;
     }
-  } catch {}
+    if (!HTMLScriptElement.supports?.("speculationrules")) return;
+    const s = document.createElement("script");
+    s.type = "speculationrules";
+    s.textContent = JSON.stringify({
+      prerender: [
+        {
+          source: "list",
+          urls: ["/about/", "/about/photos/"],
+          eagerness: "immediate",
+        },
+      ],
+    });
+    // Speculation rules only take documents; the hero goes through a plain
+    // prefetch so it is cached even when Chrome declines the prerender.
+    const hero = document.createElement("link");
+    hero.rel = "prefetch";
+    hero.as = "image";
+    hero.href = "/assets/hero-about-720.avif";
+    document.head.append(s, hero);
+  };
+
+  const scheduleEagerSpeculation = () => {
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+    idle(addEagerSpeculation, { timeout: 2000 });
+  };
+
+  if (document.readyState === "complete") scheduleEagerSpeculation();
+  else window.addEventListener("load", scheduleEagerSpeculation, { once: true });
 
   const findClickable = (target) => {
     if (!(target instanceof Element)) return null;

@@ -3,25 +3,9 @@
     {
       "source": "document",
       "where": {
-        "href_matches": "/about/photos/*"
-      },
-      "eagerness": "immediate"
-    },
-    {
-      "source": "document",
-      "where": {
-        "href_matches": "/about"
-      },
-      "eagerness": "immediate"
-    }
-  ],
-  "prefetch": [
-    {
-      "source": "document",
-      "where": {
         "href_matches": "/*"
       },
-      "eagerness": "immediate"
+      "eagerness": "moderate"
     }
   ]
 }
