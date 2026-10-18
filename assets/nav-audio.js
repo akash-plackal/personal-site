@@ -19,58 +19,30 @@
     } catch {}
   };
 
-  // The previous page plays nothing — navigation would cut the sound off — so
-  // the incoming page plays it. A normal load learns about the click from a
-  // sessionStorage flag. A prerendered page cannot: its storage is a clone
-  // taken when the prerender started (for /about/, seconds before the click),
-  // and Chrome only re-syncs it at some point around activation. Activation
-  // itself is the signal instead — a speculation-rules prerender is only ever
-  // activated by a navigation from the page that started it, so a same-origin
-  // referrer means the user just clicked through. Omnibox prerenders carry no
-  // referrer and stay silent.
-  const FLAG_TTL_MS = 3000;
-
-  const clearFlag = () => {
-    try {
-      sessionStorage.removeItem("__click");
-    } catch {}
-  };
-
+  // The previous page flags the click; this page plays it. A prerendered page
+  // runs this script before the click exists, so it must wait for activation —
+  // Chrome swaps in the referrer's sessionStorage at that moment.
   const playIfFlagged = () => {
     try {
-      const t = Number(sessionStorage.getItem("__click"));
-      clearFlag();
-      // Timestamped so a flag left behind by a prerender activation (cleared
-      // against the clone, not the real storage) cannot fire on a later reload.
-      if (t && Date.now() - t < FLAG_TTL_MS) playClickSound();
+      if (sessionStorage.getItem("__click")) {
+        sessionStorage.removeItem("__click");
+        playClickSound();
+      }
     } catch {}
-  };
-
-  const cameFromThisSite = () => {
-    try {
-      return new URL(document.referrer).origin === window.location.origin;
-    } catch {
-      return false;
-    }
   };
 
   if (document.prerendering) {
     // Decode the data URI during prerender so activation plays on frame one.
     getClickAudio();
-    document.addEventListener(
-      "prerenderingchange",
-      () => {
-        if (cameFromThisSite()) playClickSound();
-        clearFlag();
-      },
-      { once: true },
-    );
+    document.addEventListener("prerenderingchange", playIfFlagged, {
+      once: true,
+    });
   } else {
     playIfFlagged();
   }
 
   // ── Eager speculation, after the page is done ────────────────
-  // /about/ and /about/photos/ are likely next stops, so prerender them at
+  // /about/ and its hero are likely next stops, so prerender them at
   // `immediate` — but only once load + idle, so they never bid against this
   // page's LCP image. Everything else is covered by the moderate (hover)
   // rule in /speculationrules.json.
@@ -93,10 +65,13 @@
         },
       ],
     });
-    // No separate hero prefetch: the build fingerprints asset URLs only in
-    // HTML, so a URL written here would miss the `?v=` the page requests and
-    // download the image twice. The prerender fetches the real one.
-    document.head.append(s);
+    // Speculation rules only take documents; the hero goes through a plain
+    // prefetch so it is cached even when Chrome declines the prerender.
+    const hero = document.createElement("link");
+    hero.rel = "prefetch";
+    hero.as = "image";
+    hero.href = "/assets/hero-about-720.avif";
+    document.head.append(s, hero);
   };
 
   const scheduleEagerSpeculation = () => {
@@ -146,7 +121,7 @@
 
   const flagNextPageSound = () => {
     try {
-      sessionStorage.setItem("__click", String(Date.now()));
+      sessionStorage.setItem("__click", "1");
     } catch {}
   };
 
