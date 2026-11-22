@@ -30,3 +30,11 @@ summary,
 @view-transition {
   navigation: auto;
 }
+
+/* /about/ names its text blocks for its entrance animation. When leaving
+   /about/, drop their old snapshots instantly like the old root, instead of
+   the default 250ms fade-out over the next page. */
+::view-transition-old(.about-enter) {
+  animation: none;
+  opacity: 0;
+}
