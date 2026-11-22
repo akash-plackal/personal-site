@@ -10,7 +10,7 @@
     {
       "source": "document",
       "where": {
-        "href_matches": "/about"
+        "href_matches": "/about/"
       },
       "eagerness": "immediate"
     }

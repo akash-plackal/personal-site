@@ -7,7 +7,7 @@
   Cross-Origin-Resource-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Speculation-Rules: "/speculationrules.json"
-  Cache-Control: public, max-age=60, s-maxage=60, stale-while-revalidate=86400, stale-if-error=604800
+  Cache-Control: public, max-age=60, stale-while-revalidate=86400, stale-if-error=604800
   X-Robots-Tag: index, follow
 
 /
@@ -17,22 +17,17 @@
 /about/
   Link: </assets/hero-about-720.avif>; rel=preload; as=image; type=image/avif
 
-/about/photos/*
-  Link: </assets/squoosh/editedImage-5.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/editedImage.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/IMG_4971.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/IMG_20241102_105511545_HDR~2.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/PXL_20251001_070338860.RAW-02.ORIGINAL.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/PXL_20250817_105630083.RAW-01.COVER.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/PXL_20251002_142357829.RAW-01.COVER.avif>; rel=preload; as=image; type=image/avif
-  Link: </assets/squoosh/PXL_20251003_030411595.RAW-01.COVER.avif>; rel=preload; as=image; type=image/avif
-
 /articles/*
   Link: <https://giscus.app>; rel=preconnect; crossorigin
 
+# Pages merges every matching block, joining repeated headers with ", ".
+# `! Cache-Control` detaches the /* value so a block's own policy stands alone.
+# speculationrules.json is deliberately left on the /* (HTML) policy: it is
+# named by fixed path in the Speculation-Rules header, so it must never be
+# immutable.
 /speculationrules.json
   Content-Type: application/speculationrules+json
-  Cache-Control: public, max-age=31536000, immutable
 
 /assets/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
