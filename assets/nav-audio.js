@@ -19,12 +19,27 @@
     } catch {}
   };
 
-  try {
-    if (sessionStorage.getItem("__click")) {
+  const playPendingNavigationSound = () => {
+    try {
+      if (sessionStorage.getItem("__click") !== "1") return;
       sessionStorage.removeItem("__click");
       playClickSound();
-    }
-  } catch {}
+    } catch {}
+  };
+
+  // A prerender starts with a clone of the tab's sessionStorage. When the
+  // document is activated, Chrome swaps in the live storage containing the
+  // flag written by the outgoing page. Recheck after that swap so prerendered
+  // navigations play the same click sound as ordinary navigations.
+  if (document.prerendering) {
+    document.addEventListener(
+      "prerenderingchange",
+      playPendingNavigationSound,
+      { once: true },
+    );
+  } else {
+    playPendingNavigationSound();
+  }
 
   const findClickable = (target) => {
     if (!(target instanceof Element)) return null;
