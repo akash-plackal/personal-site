@@ -190,6 +190,35 @@
 
   setupBackLink();
 
+  // ── Native article sharing ───────────────────────────────────
+  const shareButton = document.querySelector("[data-share]");
+  if (shareButton instanceof HTMLButtonElement) {
+    const shareLabel = shareButton.querySelector("[data-share-label]");
+    let shareResetTimer;
+    shareButton.addEventListener("click", async () => {
+      const shareData = {
+        title: `${document.querySelector("h1")?.textContent?.trim() || document.title} | Akash Plackal`,
+        text: document.querySelector('meta[name="description"]')?.content || "",
+        url: document.querySelector('link[rel="canonical"]')?.href || window.location.href,
+      };
+      try {
+        if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
+          await navigator.share(shareData);
+          return;
+        }
+        await navigator.clipboard.writeText(shareData.url);
+        if (shareLabel) shareLabel.textContent = "Link copied";
+        window.clearTimeout(shareResetTimer);
+        shareResetTimer = window.setTimeout(() => {
+          if (shareLabel) shareLabel.textContent = "Share";
+        }, 1800);
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        shareButton.setAttribute("aria-label", "Sharing unavailable");
+      }
+    });
+  }
+
   // ── Lazy-load Giscus ─────────────────────────────────────────
   const giscusEl = document.querySelector(".giscus");
   if (giscusEl) {

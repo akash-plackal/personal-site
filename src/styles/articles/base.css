@@ -246,6 +246,46 @@ main {
   font-size: 1.12rem;
 }
 
+.article-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  min-height: 2.2rem;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--fg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 5px 16px rgba(0, 0, 0, 0.2);
+  font: 600 0.86rem/1 var(--font-main);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px) saturate(1.15);
+  backdrop-filter: blur(6px) saturate(1.15);
+  transition: background-color 160ms ease-out, transform 160ms ease-out;
+}
+
+.share-button:hover,
+.share-button:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.share-button:focus-visible {
+  outline: 2px solid var(--ring-outer);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .share-button { transition: none; }
+}
+
 .back {
   color: var(--link);
   font-weight: 600;
