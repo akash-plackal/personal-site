@@ -4,6 +4,7 @@
   if (!grid || !dlg || typeof dlg.showModal !== 'function') return;
 
   var view = dlg.querySelector('[data-lb-img]');
+  var status = dlg.querySelector('[data-lb-status]');
   var caption = dlg.querySelector('[data-lb-caption]');
   var btnPrev = dlg.querySelector('[data-lb-prev]');
   var btnNext = dlg.querySelector('[data-lb-next]');
@@ -11,50 +12,35 @@
 
   var photos = Array.prototype.slice.call(grid.querySelectorAll('.photo'));
   var current = 0;
+  var request = 0;
+  var opener;
 
-  var lensMap = document.querySelector('feImage[data-lens-map]');
-
-  function armLens() {
-    if (!lensMap) return;
-    lensMap.setAttribute('href', lensMap.getAttribute('data-lens-map'));
-    lensMap = null;
+  function finish(id, loaded) {
+    if (id !== request || !dlg.open) return;
+    view.hidden = !loaded;
+    status.removeAttribute('data-loading');
+    status.textContent = loaded ? '' : 'Couldn’t load this photo.';
   }
-
-  function syncLens() {
-    if (!refracts.length) return;
-    var img = view.getBoundingClientRect();
-    if (!img.width || !img.height) return;
-
-    var src = view.currentSrc || view.src;
-    dlg.style.setProperty('--lb-src', 'url("' + src.replace(/["\\]/g, '\\$&') + '")');
-    dlg.style.setProperty('--lb-bw', img.width + 'px');
-    dlg.style.setProperty('--lb-bh', img.height + 'px');
-    dlg.setAttribute('data-lb-glass', '');
-
-    refracts.forEach(function(layer) {
-      var box = layer.getBoundingClientRect();
-      layer.style.setProperty('--lb-bx', (img.left - box.left) + 'px');
-      layer.style.setProperty('--lb-by', (img.top - box.top) + 'px');
-    });
-  }
-
-  view.addEventListener('load', syncLens);
-  window.addEventListener('resize', syncLens);
 
   function show(i) {
     current = (i + photos.length) % photos.length;
     var thumb = photos[current].querySelector('img');
-    view.src = thumb.getAttribute('data-full') || thumb.currentSrc || thumb.src;
-    view.alt = thumb.alt;
+    var id = ++request;
+    view.hidden = true;
+    status.setAttribute('data-loading', '');
+    status.textContent = 'Loading photo…';
     caption.textContent = (current + 1) + ' / ' + photos.length;
+    view.alt = thumb.alt;
+    view.src = thumb.getAttribute('data-full') || thumb.currentSrc || thumb.src;
+    // Wait for pixels to be ready, and ignore stale results when paging quickly.
+    view.decode().then(function() { finish(id, true); }, function() { finish(id, false); });
   }
 
   photos.forEach(function(btn, i) {
     btn.addEventListener('click', function() {
-      armLens();
-      show(i);
+      opener = btn;
       dlg.showModal();
-      syncLens();
+      show(i);
     });
   });
 
@@ -68,8 +54,12 @@
   });
 
   dlg.addEventListener('close', function() {
-    dlg.removeAttribute('data-lb-glass');
-    var btn = photos[current];
-    if (btn) btn.focus();
+    if (dlg.open) return;
+    request++;
+    view.hidden = true;
+    view.removeAttribute('src');
+    status.removeAttribute('data-loading');
+    status.textContent = '';
+    if (opener) opener.focus({ preventScroll: true });
   });
 })();
