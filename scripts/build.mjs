@@ -8,7 +8,8 @@ import matter from 'gray-matter';
 import MarkdownIt from 'markdown-it';
 import posthtml from 'posthtml';
 import include from 'posthtml-include';
-import { bundle } from 'lightningcss';
+import { bundle, transform as transformCss } from 'lightningcss';
+import { minify as minifyJs } from 'terser';
 import sharp from 'sharp';
 
 const execFileAsync = promisify(execFile);
@@ -715,7 +716,41 @@ async function copyStaticAsset(relPath) {
   const src = path.join(ROOT_DIR, relPath);
   const dest = path.join(OUT_DIR, relPath);
   await fs.mkdir(path.dirname(dest), { recursive: true });
-  await fs.cp(src, dest, { recursive: true });
+  await fs.cp(src, dest, {
+    recursive: true,
+    filter: (source) => !source.includes(`${path.sep}assets${path.sep}glass${path.sep}`)
+      && !source.endsWith(`${path.sep}assets${path.sep}glass`),
+  });
+}
+
+// Static JS/CSS are fingerprinted after minification, so immutable URLs always
+// identify the exact optimized bytes that will be served.
+async function optimizeStaticAssets() {
+  const assetsDir = path.join(OUT_DIR, 'assets');
+
+  async function walk(dir) {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    await Promise.all(entries.map(async (entry) => {
+      const filename = path.join(dir, entry.name);
+      if (entry.isDirectory()) return walk(filename);
+      if (!entry.isFile()) return;
+
+      const source = await fs.readFile(filename);
+      if (filename.endsWith('.css')) {
+        const { code } = transformCss({ filename, code: source, minify: true });
+        await fs.writeFile(filename, code);
+      } else if (filename.endsWith('.js')) {
+        const { code } = await minifyJs(source.toString(), {
+          compress: true,
+          mangle: true,
+          format: { comments: false },
+        });
+        if (code) await fs.writeFile(filename, code);
+      }
+    }));
+  }
+
+  await walk(assetsDir);
 }
 
 // Generate per-article `Link:` headers for 103 Early Hints. Cloudflare Pages
@@ -827,6 +862,8 @@ async function main() {
     copyStaticAsset('speculationrules.json'),
     copyStaticAsset('robots.txt'),
   ]);
+
+  await optimizeStaticAssets();
 
   const articles = await loadArticles();
   const assetFingerprints = await buildAssetFingerprints();
