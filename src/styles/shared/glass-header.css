@@ -1,0 +1,55 @@
+html {
+  overflow-x: clip;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding-inline: max(1.25rem, calc(50vw - 23.75rem));
+  padding-block: 0.25rem;
+}
+
+/* Glass surface lives on a pseudo-element so scroll reveal animates only
+ * opacity on the GPU compositor instead of padding/margin/box-shadow.
+ * Keeping the static box dimensions fixed avoids layout thrash on every
+ * scroll frame. Without scroll-driven animation (e.g. Firefox), the surface
+ * stays at opacity: 1 as a subtle static edge. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+    backdrop-filter: blur(6px) saturate(1.15);
+    background-color: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.165),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.036),
+      0 6px 22px rgba(0, 0, 0, 0.18);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .site-header::before {
+    opacity: 0;
+    animation: site-header-glass linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 72px;
+  }
+
+  @keyframes site-header-glass {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}

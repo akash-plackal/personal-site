@@ -1,5 +1,6 @@
 @import "../shared/tokens.css";
 @import "../shared/contact.css";
+@import "../shared/glass-header.css";
 
 html {
   background: var(--bg);
@@ -8,40 +9,24 @@ html {
 @keyframes title-enter {
   0% {
     opacity: 0;
-    transform: translateY(30px);
-    filter: blur(4px);
+    transform: translateY(24px);
   }
 
   100% {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
 @keyframes lead-enter {
   0% {
     opacity: 0;
-    transform: translateY(26px) scale(0.97);
-    filter: blur(2.5px);
+    transform: translateY(20px) scale(0.98);
   }
 
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes body-enter {
-  0% {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 

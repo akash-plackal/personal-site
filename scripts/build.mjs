@@ -721,8 +721,6 @@ async function copyStaticAsset(relPath) {
 // Generate per-article `Link:` headers for 103 Early Hints. Cloudflare Pages
 // promotes any `Link: <url>; rel=preload` header to a 103 response, so the
 // browser starts fetching the hero image before the HTML body even arrives.
-// Matching `_headers` blocks merge (repeated headers are joined with ", "),
-// so the giscus preconnect here duplicates the /articles/* block's; harmless.
 function renderArticleHeaders(articles) {
   return articles
     .map((a) => ({ article: a, preload: articleHeroPreload(a) }))
@@ -731,7 +729,6 @@ function renderArticleHeaders(articles) {
       return [
         `/articles/${article.slug}/`,
         `  Link: <${preload.url}>; rel=preload; as=${preload.as}; type=${preload.type}`,
-        `  Link: <https://giscus.app>; rel=preconnect; crossorigin`,
       ].join('\n');
     })
     .join('\n\n');
